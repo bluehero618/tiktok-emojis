@@ -880,11 +880,32 @@ document.addEventListener('DOMContentLoaded', function() {
         createEmojiCards(filteredEmojis);
     }
 
-    // 更新形状过滤器显示
-    function updateShapeFilterDisplay() {
+    // 更新分类和形状过滤器显示
+    function updateFilterDisplay() {
+        // 计算各个分类的表情数量
+        const categoryCount = {
+            all: emojiData.length,
+            trending: emojiData.filter(emoji => emoji.trending).length,
+            happy: emojiData.filter(emoji => emoji.category === 'happy').length,
+            sad: emojiData.filter(emoji => emoji.category === 'sad').length,
+            angry: emojiData.filter(emoji => emoji.category === 'angry').length,
+            love: emojiData.filter(emoji => emoji.category === 'love').length,
+            special: emojiData.filter(emoji => emoji.category === 'special').length
+        };
+        
+        // 计算各个形状的表情数量
         const specialCount = emojiData.filter(emoji => emoji.shape === 'special').length;
         const squareCount = emojiData.filter(emoji => emoji.shape === 'square').length;
         const roundCount = emojiData.filter(emoji => emoji.shape === 'round').length;
+        
+        // 更新分类按钮上的数字
+        document.querySelector('.category-btn[data-category="all"]').textContent = `All Categories (${categoryCount.all})`;
+        document.querySelector('.category-btn[data-category="trending"]').textContent = `Trending (${categoryCount.trending})`;
+        document.querySelector('.category-btn[data-category="happy"]').textContent = `Happy (${categoryCount.happy})`;
+        document.querySelector('.category-btn[data-category="sad"]').textContent = `Sad (${categoryCount.sad})`;
+        document.querySelector('.category-btn[data-category="angry"]').textContent = `Angry (${categoryCount.angry})`;
+        document.querySelector('.category-btn[data-category="love"]').textContent = `Love (${categoryCount.love})`;
+        document.querySelector('.category-btn[data-category="special"]').textContent = `Special (${categoryCount.special})`;
         
         // 更新形状按钮上的数字
         document.querySelector('.shape-btn[data-shape="all"]').textContent = `All Shapes (${emojiData.length})`;
@@ -1580,8 +1601,8 @@ document.addEventListener('DOMContentLoaded', function() {
         // 加载表情数据
         initializeEmojis(categorizedEmojiData);
         
-        // 更新筛选器
-        updateShapeFilterDisplay();
+        // 更新筛选器显示
+        updateFilterDisplay();
         
         // 检查URL参数
         checkUrlForEmojiParam();
@@ -1589,17 +1610,40 @@ document.addEventListener('DOMContentLoaded', function() {
         // 从本地存储加载使用统计
         updateTrendingEmojis();
         
-        // 事件监听
-        searchInput.addEventListener('input', handleSearch);
+        // 搜索输入事件监听
+        document.getElementById('search').addEventListener('input', function() {
+            searchQuery = this.value.toLowerCase();
+            filterEmojis();
+        });
         
         // 添加类别按钮点击事件
         document.querySelectorAll('.category-btn').forEach(btn => {
-            btn.addEventListener('click', handleCategoryClick);
+            btn.addEventListener('click', function() {
+                currentCategory = this.getAttribute('data-category');
+                
+                // 更新活动按钮
+                document.querySelectorAll('.category-btn').forEach(b => {
+                    b.classList.remove('active');
+                });
+                this.classList.add('active');
+                
+                filterEmojis();
+            });
         });
         
         // 添加形状按钮点击事件
         document.querySelectorAll('.shape-btn').forEach(btn => {
-            btn.addEventListener('click', handleShapeClick);
+            btn.addEventListener('click', function() {
+                currentShape = this.getAttribute('data-shape');
+                
+                // 更新活动按钮
+                document.querySelectorAll('.shape-btn').forEach(b => {
+                    b.classList.remove('active');
+                });
+                this.classList.add('active');
+                
+                filterEmojis();
+            });
         });
         
         // 懒加载图片
