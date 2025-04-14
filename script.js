@@ -7,6 +7,7 @@ document.addEventListener('DOMContentLoaded', function() {
     let currentCategory = 'all';
     let currentShape = 'all';
     let searchQuery = '';
+    let lastUpdated = '2023年12月更新'; // 添加更新时间
     
     // DOM Elements
     const emojiGrid = document.getElementById('emoji-grid');
@@ -14,9 +15,27 @@ document.addEventListener('DOMContentLoaded', function() {
     const emojiCountElement = document.getElementById('emoji-count');
     const categoryButtons = document.querySelectorAll('.category-btn');
     const shapeButtons = document.querySelectorAll('.shape-btn');
+    const lastUpdatedElement = document.getElementById('last-updated'); // 获取更新时间元素
     let toast = document.getElementById('toast');
     let toastTimeout;
 
+    // 如果存在更新时间元素，则更新其内容
+    if (lastUpdatedElement) {
+        lastUpdatedElement.textContent = lastUpdated;
+    } else {
+        // 如果元素不存在，则创建一个
+        const updatedInfo = document.createElement('div');
+        updatedInfo.id = 'last-updated';
+        updatedInfo.className = 'text-sm text-gray-500 mt-2';
+        updatedInfo.textContent = lastUpdated;
+        
+        // 插入到合适的位置（例如搜索框下方）
+        const searchContainer = document.querySelector('.search-container') || document.querySelector('header');
+        if (searchContainer) {
+            searchContainer.appendChild(updatedInfo);
+        }
+    }
+    
     // 检查emoji_png文件夹是否存在, 如果不存在则创建
     checkAndCreateEmojiFolder();
 
@@ -619,33 +638,37 @@ document.addEventListener('DOMContentLoaded', function() {
     // 添加分类并初始化数据
     const categorizedEmojiData = assignCategoriesAndShape(combinedEmojiData);
 
-    // 创建emoji图片的函数 - 修改以支持自定义表情图片
+    // 创建emoji图片的函数 - 修改为优先使用PNG图片
     function createEmojiImage(emoji, name) {
-        // 尝试加载本地图片
-        const img = new Image();
-        img.src = `emoji_png/${name}.png`;
+        // 优先使用本地PNG图片
+        const imagePath = `emoji_png/${name}.png`;
         
-        // 如果本地图片存在则直接返回
-        if (img.complete) {
-            return img.src;
-        }
-        
-        // 否则使用Canvas生成emoji图片
-        const canvas = document.createElement('canvas');
-        const ctx = canvas.getContext('2d');
-        canvas.width = 128;
-        canvas.height = 128;
-        
-        // 设置emoji字体
-        ctx.font = "90px Arial";
-        ctx.textAlign = "center";
-        ctx.textBaseline = "middle";
-        
-        // 绘制emoji到canvas
-        ctx.fillText(emoji, canvas.width/2, canvas.height/2);
-        
-        // 生成图片数据
-        return canvas.toDataURL('image/png');
+        // 检查图片是否可以加载
+        return new Promise((resolve) => {
+            const img = new Image();
+            img.onload = function() {
+                resolve(imagePath);
+            };
+            img.onerror = function() {
+                // 如果图片不存在，则使用Canvas生成emoji图片
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+                canvas.width = 128;
+                canvas.height = 128;
+                
+                // 设置emoji字体
+                ctx.font = "90px Arial";
+                ctx.textAlign = "center";
+                ctx.textBaseline = "middle";
+                
+                // 绘制emoji到canvas
+                ctx.fillText(emoji, canvas.width/2, canvas.height/2);
+                
+                // 生成图片数据
+                resolve(canvas.toDataURL('image/png'));
+            };
+            img.src = imagePath;
+        });
     }
 
     // Create emoji card elements
@@ -681,19 +704,50 @@ document.addEventListener('DOMContentLoaded', function() {
             sortedEmojis = roundEmojis;
         }
         
-        sortedEmojis.forEach(emoji => {
-            // 确保图片路径正确，如果是特殊表情则确保路径完整
-            let imagePath = emoji.image;
-            if (!imagePath.startsWith('http')) {
-                // 检查图片是否存在，如果不存在则使用emoji字符作为备用
+        const createEmojisPromises = sortedEmojis.map(emoji => {
+            return new Promise((resolve) => {
+                // 优先使用emoji.image中指定的PNG图片
+                let imagePath = emoji.image;
+                
+                // 检查图片是否存在
                 const img = new Image();
+                img.onload = function() {
+                    // 图片加载成功，使用该图片
+                    createAndAppendEmojiCard(emoji, imagePath);
+                    resolve();
+                };
+                img.onerror = function() {
+                    // 图片加载失败，对于特殊表情尝试使用动态生成
+                    if (emoji.name.includes('_') || emoji.shape === 'special') {
+                        // 特殊表情使用动态生成
+                        const canvas = createDynamicEmojiImage(emoji);
+                        createAndAppendEmojiCard(emoji, canvas.toDataURL('image/png'));
+                    } else {
+                        // 普通表情使用文字渲染
+                        const canvas = document.createElement('canvas');
+                        const ctx = canvas.getContext('2d');
+                        canvas.width = 128;
+                        canvas.height = 128;
+                        
+                        ctx.font = "90px Arial";
+                        ctx.textAlign = "center";
+                        ctx.textBaseline = "middle";
+                        ctx.fillText(emoji.emoji, canvas.width/2, canvas.height/2);
+                        
+                        createAndAppendEmojiCard(emoji, canvas.toDataURL('image/png'));
+                    }
+                    resolve();
+                };
                 img.src = imagePath;
-                if (!img.complete || img.naturalWidth === 0) {
-                    // 为特殊表情创建动态Canvas图像
-                    imagePath = createDynamicEmojiImage(emoji.emoji, emoji.name);
-                }
-            }
-            
+            });
+        });
+        
+        Promise.all(createEmojisPromises).then(() => {
+            // 所有表情卡片加载完成后执行懒加载
+            lazyLoadImages();
+        });
+        
+        function createAndAppendEmojiCard(emoji, imagePath) {
             // 确定卡片的样式类
             let cardClass = 'emoji-card';
             if (emoji.shape === 'round') {
@@ -715,7 +769,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 </div>
                 <div class="emoji-info">
                     <div class="emoji-name">${emoji.name.replace(/_/g, ' ')}</div>
-                    <div class="emoji-unicode">${emoji.unicode}</div>
+                    <div class="emoji-unicode font-mono text-sm">${emoji.unicode}</div>
                     <div class="emoji-category">${emoji.category}</div>
                 </div>
                 <div class="emoji-actions">
@@ -742,10 +796,7 @@ document.addEventListener('DOMContentLoaded', function() {
             
             // 添加到网格
             emojiGrid.appendChild(card);
-        });
-        
-        // Lazy load images
-        lazyLoadImages();
+        }
     }
 
     // Initialize emojis
@@ -857,26 +908,94 @@ document.addEventListener('DOMContentLoaded', function() {
         const unicode = e.currentTarget.getAttribute('data-unicode');
         const description = e.currentTarget.getAttribute('data-description');
         
-        let message = name;
+        // 创建模态对话框
+        const modal = document.createElement('div');
+        modal.className = 'fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50';
         
-        // 添加Unicode信息
-        if (unicode) {
-            message += ` (${unicode})`;
-        }
-        
-        // 添加描述信息
+        // 创建模态内容
+        let modalContent = `
+            <div class="bg-gray-800 rounded-lg p-6 max-w-md w-full mx-4">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-xl font-bold">${name.replace(/_/g, ' ')}</h3>
+                    <button class="text-gray-400 hover:text-white" id="close-modal">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="mb-4">
+                    <div class="text-sm text-gray-400 mb-1">Unicode:</div>
+                    <div class="font-mono bg-gray-700 p-2 rounded">${unicode}</div>
+                </div>`;
+                
+        // 添加描述信息（如果存在）
         if (description) {
-            message += `: ${description}`;
+            modalContent += `
+                <div class="mb-4">
+                    <div class="text-sm text-gray-400 mb-1">TikTok 含义:</div>
+                    <div class="bg-gray-700 p-2 rounded">${description}</div>
+                </div>`;
         } else {
             // 如果没有描述，添加通用描述
             if (name.includes('_')) {
-                message += `: 这是一个TikTok特殊组合表情`;
+                modalContent += `
+                    <div class="mb-4">
+                        <div class="text-sm text-gray-400 mb-1">TikTok 含义:</div>
+                        <div class="bg-gray-700 p-2 rounded">这是一个TikTok特殊组合表情，在评论和视频中很流行。</div>
+                    </div>`;
             } else {
-                message += `: 可用于TikTok评论和个人资料`;
+                modalContent += `
+                    <div class="mb-4">
+                        <div class="text-sm text-gray-400 mb-1">TikTok 含义:</div>
+                        <div class="bg-gray-700 p-2 rounded">标准表情，可用于TikTok评论和个人资料。</div>
+                    </div>`;
             }
         }
         
-        showToast(message, false, 5000); // 显示5秒
+        // 添加使用提示
+        modalContent += `
+                <div class="mb-4">
+                    <div class="text-sm text-gray-400 mb-1">使用提示:</div>
+                    <div class="bg-gray-700 p-2 rounded">
+                        <p>- 点击<i class="fas fa-copy ml-1 mr-1"></i>复制表情</p>
+                        <p>- 点击<i class="fas fa-download ml-1 mr-1"></i>下载PNG图片</p>
+                    </div>
+                </div>
+                <button class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                    复制表情
+                </button>
+            </div>
+        `;
+        
+        modal.innerHTML = modalContent;
+        document.body.appendChild(modal);
+        
+        // 关闭按钮事件
+        modal.querySelector('#close-modal').addEventListener('click', () => {
+            document.body.removeChild(modal);
+        });
+        
+        // 点击模态外部区域关闭
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                document.body.removeChild(modal);
+            }
+        });
+        
+        // 复制按钮事件
+        modal.querySelector('button.w-full').addEventListener('click', () => {
+            // 找到相应的emoji对象
+            const emojiObj = allEmojis.find(e => e.name === name);
+            if (emojiObj) {
+                navigator.clipboard.writeText(emojiObj.emoji)
+                    .then(() => {
+                        document.body.removeChild(modal);
+                        showToast('表情已复制到剪贴板！');
+                    })
+                    .catch(err => {
+                        console.error('复制失败: ', err);
+                        showToast('复制表情失败', true);
+                    });
+            }
+        });
     }
 
     // Show toast notification
@@ -925,27 +1044,180 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    // 为特殊表情创建动态图像
-    function createDynamicEmojiImage(emojiChar, name) {
+    // 创建动态表情图片
+    function createDynamicEmojiImage(emoji) {
         const canvas = document.createElement('canvas');
         const ctx = canvas.getContext('2d');
         canvas.width = 128;
         canvas.height = 128;
         
-        // 设置背景色
-        ctx.fillStyle = '#36393f';
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        // 特殊表情处理
+        if (emoji.name.includes('_')) {
+            const parts = emoji.emoji.split('');
+            
+            // 根据不同的特殊表情设置不同的布局
+            switch (emoji.name) {
+                case 'fairy_blessing': // ✨🤖✨
+                    ctx.font = 'bold 40px Arial';
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'middle';
+                    ctx.fillText(parts[0], 30, 64); // 左侧✨
+                    ctx.font = 'bold 70px Arial';
+                    ctx.fillText(parts[1], 64, 64); // 中间🤖
+                    ctx.font = 'bold 40px Arial';
+                    ctx.fillText(parts[2], 98, 64); // 右侧✨
+                    break;
+                    
+                case 'shocked_expression': // 👁️👄👁️
+                    ctx.font = 'bold 40px Arial';
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'middle';
+                    ctx.fillText(parts[0], 30, 45); // 左眼
+                    ctx.font = 'bold 50px Arial';
+                    ctx.fillText(parts[1], 64, 90); // 嘴
+                    ctx.font = 'bold 40px Arial';
+                    ctx.fillText(parts[2], 98, 45); // 右眼
+                    break;
+                    
+                case 'queen_flick': // 💅👑💅
+                    ctx.font = 'bold 35px Arial';
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'middle';
+                    ctx.fillText(parts[0], 30, 85); // 左手
+                    ctx.font = 'bold 60px Arial';
+                    ctx.fillText(parts[1], 64, 45); // 皇冠
+                    ctx.font = 'bold 35px Arial';
+                    ctx.fillText(parts[2], 98, 85); // 右手
+                    break;
+                    
+                case 'italian_gesture': // 🤌🤌🤌
+                    ctx.font = 'bold 40px Arial';
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'middle';
+                    ctx.fillText(parts[0], 32, 64); // 左手
+                    ctx.fillText(parts[1], 64, 64); // 中间手
+                    ctx.fillText(parts[2], 96, 64); // 右手
+                    break;
+                    
+                case 'stop_crying': // 🛑😭🛑
+                    ctx.font = 'bold 35px Arial';
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'middle';
+                    ctx.fillText(parts[0], 32, 64); // 左边停止
+                    ctx.font = 'bold 55px Arial';
+                    ctx.fillText(parts[1], 64, 64); // 中间哭脸
+                    ctx.font = 'bold 35px Arial';
+                    ctx.fillText(parts[2], 96, 64); // 右边停止
+                    break;
+                    
+                case 'shy_bashful': // 👉👈😳
+                    ctx.font = 'bold 35px Arial';
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'middle';
+                    ctx.fillText(parts[0], 32, 85); // 左手
+                    ctx.fillText(parts[1], 96, 85); // 右手
+                    ctx.font = 'bold 60px Arial';
+                    ctx.fillText(parts[2], 64, 45); // 脸
+                    break;
+                    
+                default:
+                    // 默认布局 - 水平排列
+                    const totalWidth = parts.length * 40;
+                    const startX = (canvas.width - totalWidth) / 2 + 20;
+                    
+                    ctx.font = 'bold 40px Arial';
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'middle';
+                    
+                    parts.forEach((part, index) => {
+                        const x = startX + index * 40;
+                        ctx.fillText(part, x, 64);
+                    });
+                    break;
+            }
+        } else {
+            // 单个表情居中显示
+            ctx.font = 'bold 80px Arial';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText(emoji.emoji, 64, 64);
+        }
         
-        // 设置emoji字体
-        ctx.font = "64px Arial";
-        ctx.textAlign = "center";
-        ctx.textBaseline = "middle";
+        return canvas;
+    }
+
+    // 获取特殊表情图片路径 - 修改为优先检查PNG文件
+    function getSpecialEmojiImagePath(emoji) {
+        // 首先尝试加载PNG图片
+        const pngPath = `emoji_png/${emoji.name}.png`;
         
-        // 绘制emoji到canvas
-        ctx.fillText(emojiChar, canvas.width/2, canvas.height/2);
-        
-        // 生成图片数据
-        return canvas.toDataURL('image/png');
+        return new Promise((resolve) => {
+            const img = new Image();
+            img.onload = function() {
+                // PNG图片存在，使用它
+                resolve(pngPath);
+            };
+            img.onerror = function() {
+                // PNG图片不存在，动态创建
+                if (emoji.name.includes('_') || emoji.shape === 'special') {
+                    const canvas = createDynamicEmojiImage(emoji);
+                    resolve(canvas.toDataURL('image/png'));
+                } else {
+                    // 普通表情使用默认图片
+                    resolve(`emoji_png/${emoji.name}.png`);
+                }
+            };
+            img.src = pngPath;
+        });
+    }
+
+    // 创建和显示表情卡片 - 修改为使用异步加载
+    function createAndDisplayEmojiCard(emoji, cardContainerClass, cardClass) {
+        try {
+            // 获取表情图片路径
+            getSpecialEmojiImagePath(emoji).then(imagePath => {
+                // 创建表情卡片HTML
+                const card = document.createElement('div');
+                card.className = cardClass;
+                
+                // 创建表情图片和信息HTML
+                card.innerHTML = `
+                    <div class="emoji-image">
+                        <img src="${imagePath}" alt="${emoji.name}" loading="lazy" class="lazy-load">
+                    </div>
+                    <div class="emoji-info">
+                        <div class="emoji-name">${emoji.name.replace(/_/g, ' ')}</div>
+                        <div class="emoji-unicode font-mono text-sm">${emoji.unicode}</div>
+                        <div class="emoji-category">${emoji.category}</div>
+                    </div>
+                    <div class="emoji-actions">
+                        <button class="emoji-btn copy-btn" data-emoji="${emoji.emoji}" aria-label="Copy emoji">
+                            <i class="fas fa-copy"></i>
+                        </button>
+                        <button class="emoji-btn download-btn" data-image="${imagePath}" data-name="${emoji.name}" aria-label="Download emoji">
+                            <i class="fas fa-download"></i>
+                        </button>
+                        <button class="emoji-btn info-btn" data-name="${emoji.name}" data-unicode="${emoji.unicode}" data-description="${emoji.description || ''}" aria-label="Show emoji info">
+                            <i class="fas fa-info-circle"></i>
+                        </button>
+                    </div>
+                `;
+                
+                // 添加事件监听器
+                const copyBtn = card.querySelector('.copy-btn');
+                const downloadBtn = card.querySelector('.download-btn');
+                const infoBtn = card.querySelector('.info-btn');
+                
+                copyBtn.addEventListener('click', copyEmoji);
+                downloadBtn.addEventListener('click', downloadEmoji);
+                infoBtn.addEventListener('click', showEmojiInfo);
+                
+                // 添加到网格
+                emojiGrid.appendChild(card);
+            });
+        } catch (error) {
+            console.error('Error creating emoji card: ', error);
+        }
     }
 
     // Initialize app
@@ -953,6 +1225,11 @@ document.addEventListener('DOMContentLoaded', function() {
     function initApp() {
         initializeEmojis(categorizedEmojiData);
         updateShapeFilterDisplay();
+        
+        // 显示更新时间
+        if (lastUpdatedElement) {
+            lastUpdatedElement.textContent = lastUpdated;
+        }
         
         // Search input event listener
         searchInput.addEventListener('input', function() {
@@ -1004,4 +1281,4 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 }); 
-// Updated script - 2023 
+// Updated script - 2023-12 
