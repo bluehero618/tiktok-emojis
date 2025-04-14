@@ -46,12 +46,19 @@ document.addEventListener('DOMContentLoaded', function() {
             'chair', 'sparkles', 'clown_face', 'birthday_cake', 'skull', 'person_standing', 'shy_bashful'
         ];
         
+        // 明确指定为方形的表情
+        const squareEmojis = [
+            'facewithrollingeyes', 'greedy'
+        ];
+        
         if (roundEmojis.includes(name)) {
             return 'round';
         } else if (specialEmojis.includes(name)) {
             return 'special';
-        } else {
+        } else if (squareEmojis.includes(name)) {
             return 'square';
+        } else {
+            return 'square'; // 默认为方形
         }
     }
 
