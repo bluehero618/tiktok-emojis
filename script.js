@@ -946,3 +946,4 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 }); 
+// Updated script - 2023 
