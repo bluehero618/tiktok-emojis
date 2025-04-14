@@ -14,7 +14,7 @@
     --success: #4BB543;
     --gradient-start: #0071E3;
     --gradient-end: #42A5F5;
-    --colorful-gradient: linear-gradient(135deg, #ff5b79, #e942ff, #8b42ff, #4287ff, #42ddff);
+    --title-gradient: linear-gradient(to right, #ff5b79, #e942ff, #8b42ff, #4287ff, #42ddff);
 }
 
 body {
@@ -22,6 +22,15 @@ body {
     background-color: #000;
     color: #fff;
     line-height: 1.6;
+}
+
+/* 全局标题渐变样式 */
+.gradient-title {
+    background: var(--title-gradient);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    display: inline-block;
 }
 
 /* Container adjustments for better responsiveness */
@@ -57,7 +66,7 @@ button,
 
 /* 添加炫彩渐变效果 */
 .hero-gradient {
-    background: var(--colorful-gradient);
+    background: var(--title-gradient);
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
@@ -83,7 +92,7 @@ button,
     background-repeat: no-repeat;
     background-size: 50% 50%, 50% 50%;
     background-position: 0 0, 100% 0, 100% 100%, 0 100%;
-    background-image: linear-gradient(#3b82f6, #3b82f6), linear-gradient(#8b5cf6, #8b5cf6), linear-gradient(#ec4899, #ec4899), linear-gradient(#06b6d4, #06b6d4);
+    background-image: linear-gradient(#ff5b79, #e942ff), linear-gradient(#8b42ff, #4287ff), linear-gradient(#42ddff, #4287ff), linear-gradient(#e942ff, #ff5b79);
     animation: rotate 4s linear infinite;
 }
 
@@ -108,16 +117,32 @@ button,
 .feature-icon {
     font-size: 24px;
     margin-bottom: 16px;
-    color: #4f46e5;
     height: 48px;
     width: 48px;
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: rgba(79, 70, 229, 0.1);
     border-radius: 50%;
     margin-left: auto;
     margin-right: auto;
+    background: linear-gradient(135deg, rgba(255, 91, 121, 0.15), rgba(233, 66, 255, 0.15));
+    color: #e942ff;
+}
+
+/* Feature icons specific colors */
+.feature-icon.copy-icon {
+    background: linear-gradient(135deg, rgba(255, 91, 121, 0.15), rgba(233, 66, 255, 0.15));
+    color: #ff5b79;
+}
+
+.feature-icon.download-icon {
+    background: linear-gradient(135deg, rgba(139, 66, 255, 0.15), rgba(66, 135, 255, 0.15));
+    color: #8b42ff;
+}
+
+.feature-icon.info-icon {
+    background: linear-gradient(135deg, rgba(66, 135, 255, 0.15), rgba(66, 221, 255, 0.15));
+    color: #42ddff;
 }
 
 /* Category Navigation */
@@ -132,27 +157,25 @@ button,
     display: none; /* Chrome, Safari, Opera */
 }
 
-.category-tab {
+/* Category buttons and shape buttons styles */
+.category-btn, .shape-btn {
     color: var(--white);
     padding: 0.5rem 1rem;
     font-size: 0.9rem;
     font-weight: 500;
-    white-space: nowrap;
-    border-radius: 0.25rem;
+    border-radius: 9999px;
     transition: all 0.2s ease;
+    background-color: #333;
+    border: none;
 }
 
-.category-tab:hover {
-    background-color: rgba(255, 255, 255, 0.1);
+.category-btn:hover, .shape-btn:hover {
+    background-color: #444;
 }
 
-.category-tab.active {
-    background: var(--colorful-gradient);
+.category-btn.active, .shape-btn.active {
+    background: var(--title-gradient);
     color: var(--white);
-}
-
-.category-tab.trending {
-    color: var(--accent);
 }
 
 /* Feature Cards */
@@ -249,47 +272,40 @@ button,
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: #333;
-    color: #fff;
     border: none;
     cursor: pointer;
-    transition: background-color 0.2s;
+    transition: all 0.2s;
 }
 
 .emoji-btn:hover {
-    background-color: #444;
+    transform: translateY(-2px);
 }
 
 .copy-btn {
-    background-color: var(--dark-gray);
-    color: var(--white);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    transition: all 0.3s ease;
+    background-color: rgba(255, 91, 121, 0.2);
+    color: #ff5b79;
 }
 
 .copy-btn:hover {
-    background-color: #2563eb;
+    background-color: rgba(255, 91, 121, 0.3);
 }
 
 .download-btn {
-    background-color: var(--dark-gray);
-    color: var(--white);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    transition: all 0.3s ease;
+    background-color: rgba(139, 66, 255, 0.2);
+    color: #8b42ff;
 }
 
 .download-btn:hover {
-    background-color: #059669;
+    background-color: rgba(139, 66, 255, 0.3);
 }
 
 .info-btn {
-    background-color: var(--dark-gray);
-    color: var(--white);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    background-color: rgba(66, 221, 255, 0.2);
+    color: #42ddff;
 }
 
 .info-btn:hover {
-    background-color: #7c3aed;
+    background-color: rgba(66, 221, 255, 0.3);
 }
 
 /* 形状过滤器样式 */
@@ -298,29 +314,6 @@ button,
     gap: 1rem;
     margin-bottom: 1.5rem;
     justify-content: center;
-}
-
-.shape-btn {
-    color: #fff;
-    font-weight: 500;
-    font-size: 14px;
-    transition: all 0.2s;
-}
-
-.shape-btn:hover, .shape-btn.active {
-    background-color: #4f46e5;
-    color: #fff;
-}
-
-/* 添加special形状按钮 */
-.shape-filter .shape-btn[data-shape="special"] {
-    background-color: var(--dark-gray);
-    border: 1px solid rgba(163, 163, 255, 0.3);
-}
-
-.shape-filter .shape-btn[data-shape="special"]:hover, 
-.shape-filter .shape-btn[data-shape="special"].active {
-    background: linear-gradient(135deg, #a3a3ff, #6a5acd);
 }
 
 /* Secret Emoji Cards */

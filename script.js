@@ -7,7 +7,6 @@ document.addEventListener('DOMContentLoaded', function() {
     let currentCategory = 'all';
     let currentShape = 'all';
     let searchQuery = '';
-    let lastUpdated = '2023年12月更新'; // 添加更新时间
     
     // DOM Elements
     const emojiGrid = document.getElementById('emoji-grid');
@@ -15,26 +14,8 @@ document.addEventListener('DOMContentLoaded', function() {
     const emojiCountElement = document.getElementById('emoji-count');
     const categoryButtons = document.querySelectorAll('.category-btn');
     const shapeButtons = document.querySelectorAll('.shape-btn');
-    const lastUpdatedElement = document.getElementById('last-updated'); // 获取更新时间元素
     let toast = document.getElementById('toast');
     let toastTimeout;
-
-    // 如果存在更新时间元素，则更新其内容
-    if (lastUpdatedElement) {
-        lastUpdatedElement.textContent = lastUpdated;
-    } else {
-        // 如果元素不存在，则创建一个
-        const updatedInfo = document.createElement('div');
-        updatedInfo.id = 'last-updated';
-        updatedInfo.className = 'text-sm text-gray-500 mt-2';
-        updatedInfo.textContent = lastUpdated;
-        
-        // 插入到合适的位置（例如搜索框下方）
-        const searchContainer = document.querySelector('.search-container') || document.querySelector('header');
-        if (searchContainer) {
-            searchContainer.appendChild(updatedInfo);
-        }
-    }
     
     // 检查emoji_png文件夹是否存在, 如果不存在则创建
     checkAndCreateEmojiFolder();
@@ -1274,11 +1255,6 @@ document.addEventListener('DOMContentLoaded', function() {
         initializeEmojis(categorizedEmojiData);
         updateShapeFilterDisplay();
         
-        // 显示更新时间
-        if (lastUpdatedElement) {
-            lastUpdatedElement.textContent = lastUpdated;
-        }
-        
         // Search input event listener
         searchInput.addEventListener('input', function() {
             searchQuery = this.value.toLowerCase();
@@ -1329,4 +1305,4 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 }); 
-// Updated script - 2023-12 
+// Updated script - 2023 
