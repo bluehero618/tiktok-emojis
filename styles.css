@@ -1,0 +1,573 @@
+/* TikTok Emojis - Main Stylesheet */
+
+/* Base Styles */
+:root {
+    --primary-color: #0071E3; /* 苹果蓝色按钮 */
+    --secondary-color: #86C1FF;
+    --black: #000000;
+    --dark-gray: #1D1D1F;
+    --mid-gray: #86868B;
+    --light-gray: #2D2D33; /* 更新为浅灰色 */
+    --lighter-gray: #33333A; /* 新增更浅的灰色 */
+    --white: #FFFFFF;
+    --accent: #06C;
+    --success: #4BB543;
+    --gradient-start: #0071E3;
+    --gradient-end: #42A5F5;
+    --colorful-gradient: linear-gradient(135deg, #ff5b79, #e942ff, #8b42ff, #4287ff, #42ddff);
+}
+
+body {
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', sans-serif;
+    color: var(--white);
+    line-height: 1.6;
+    background-color: var(--black);
+}
+
+/* Container adjustments for better responsiveness */
+.container {
+    width: 100%;
+    max-width: 1280px;
+    margin: 0 auto;
+}
+
+/* Button & Input Styles */
+button, 
+.btn-primary {
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-primary {
+    background-color: var(--primary-color);
+    color: var(--white);
+    font-weight: 600;
+    padding: 0.5rem 1.5rem;
+    border-radius: 0.5rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+}
+
+.btn-primary:hover {
+    background-color: #2989FF;
+    transform: translateY(-2px);
+}
+
+/* 添加炫彩渐变效果 */
+.hero-gradient {
+    background: var(--colorful-gradient);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    display: inline-block;
+}
+
+.gradient-border {
+    position: relative;
+    border-radius: 1rem;
+    overflow: hidden;
+}
+
+.gradient-border::before {
+    content: "";
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    background: var(--colorful-gradient);
+    z-index: -1;
+    border-radius: 1.1rem;
+}
+
+/* Category Navigation */
+.category-tabs {
+    display: flex;
+    overflow-x: auto;
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none;  /* IE and Edge */
+}
+
+.category-tabs::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera */
+}
+
+.category-tab {
+    color: var(--white);
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+    font-weight: 500;
+    white-space: nowrap;
+    border-radius: 0.25rem;
+    transition: all 0.2s ease;
+}
+
+.category-tab:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.category-tab.active {
+    background: var(--colorful-gradient);
+    color: var(--white);
+}
+
+.category-tab.trending {
+    color: var(--accent);
+}
+
+/* Feature Cards */
+.feature-card {
+    background-color: var(--light-gray);
+    border-radius: 1rem;
+    padding: 2rem 1.5rem;
+    text-align: center;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.feature-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+}
+
+.feature-icon {
+    width: 60px;
+    height: 60px;
+    background: var(--colorful-gradient);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1.25rem;
+    color: var(--white);
+    font-size: 1.5rem;
+}
+
+/* Emoji Grid & Cards */
+#emoji-grid {
+    margin-bottom: 2rem;
+}
+
+.emoji-card {
+    background-color: var(--light-gray);
+    border-radius: 1rem;
+    overflow: hidden;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    position: relative;
+}
+
+.emoji-card::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: var(--colorful-gradient);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.emoji-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+}
+
+.emoji-card:hover::after {
+    opacity: 1;
+}
+
+/* 圆形表情卡片样式 */
+.emoji-card.round-emoji {
+    border-radius: 1.25rem;
+}
+
+.emoji-card.round-emoji .emoji-image {
+    padding: 1.2rem;
+}
+
+.emoji-card.round-emoji .emoji-image img {
+    border-radius: 50%;
+}
+
+/* 方形表情卡片样式 */
+.emoji-card.square-emoji {
+    border-radius: 0.8rem;
+}
+
+.emoji-emoji.square-emoji .emoji-image img {
+    border-radius: 0.4rem;
+}
+
+/* 特殊组合表情卡片样式 */
+.emoji-card.special-emoji {
+    border-radius: 0.8rem;
+    background: linear-gradient(to bottom, var(--light-gray), #25262c);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.emoji-card.special-emoji .emoji-image {
+    padding: 1rem;
+    height: 120px;
+    background-color: var(--lighter-gray);
+}
+
+.emoji-card.special-emoji .emoji-image img {
+    max-width: 100%;
+    max-height: 70px;
+    object-fit: contain;
+}
+
+.emoji-card.special-emoji .emoji-name {
+    font-size: 1.1rem;
+    text-transform: capitalize;
+    margin-bottom: 0.5rem;
+}
+
+.emoji-card.special-emoji .emoji-category {
+    color: #a3a3ff;
+    background-color: rgba(163, 163, 255, 0.1);
+}
+
+.special-image {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.emoji-image {
+    background-color: var(--lighter-gray); /* 使用更浅的灰色背景 */
+    height: 140px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 1.5rem;
+}
+
+.emoji-image img {
+    max-width: 80px;
+    max-height: 80px;
+    transition: transform 0.3s ease;
+}
+
+.emoji-card:hover .emoji-image img {
+    transform: scale(1.1);
+}
+
+.emoji-info {
+    padding: 1rem;
+    flex-grow: 1;
+}
+
+.emoji-name {
+    font-weight: 600;
+    font-size: 1rem;
+    margin-bottom: 0.25rem;
+    color: var(--white);
+}
+
+.emoji-unicode {
+    font-family: monospace;
+    font-size: 0.8rem;
+    color: var(--mid-gray);
+    margin-bottom: 0.5rem;
+    background-color: rgba(255, 255, 255, 0.1);
+    padding: 0.15rem 0.5rem;
+    border-radius: 0.25rem;
+    display: inline-block;
+}
+
+.emoji-category {
+    font-size: 0.7rem;
+    color: var(--mid-gray);
+    background-color: rgba(255, 255, 255, 0.1);
+    padding: 0.1rem 0.5rem;
+    border-radius: 1rem;
+    display: inline-block;
+}
+
+.emoji-actions {
+    display: flex;
+    padding: 0.75rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    gap: 0.5rem;
+    justify-content: center;
+}
+
+.emoji-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    padding: 0;
+}
+
+.emoji-btn i {
+    margin: 0;
+}
+
+.copy-btn {
+    background-color: var(--dark-gray);
+    color: var(--white);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: all 0.3s ease;
+}
+
+.copy-btn:hover {
+    background: var(--colorful-gradient);
+    border: none;
+}
+
+.download-btn {
+    background-color: var(--dark-gray);
+    color: var(--white);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: all 0.3s ease;
+}
+
+.download-btn:hover {
+    background: var(--colorful-gradient);
+    border: none;
+}
+
+.info-btn {
+    background-color: var(--dark-gray);
+    color: var(--white);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.info-btn:hover {
+    background-color: #3A3A3C;
+}
+
+/* 形状过滤器样式 */
+.shape-filter {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    justify-content: center;
+}
+
+.shape-btn {
+    background-color: var(--dark-gray);
+    color: var(--white);
+    padding: 0.5rem 1.5rem;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.shape-btn:hover, .shape-btn.active {
+    background: var(--colorful-gradient);
+}
+
+/* 添加special形状按钮 */
+.shape-filter .shape-btn[data-shape="special"] {
+    background-color: var(--dark-gray);
+    border: 1px solid rgba(163, 163, 255, 0.3);
+}
+
+.shape-filter .shape-btn[data-shape="special"]:hover, 
+.shape-filter .shape-btn[data-shape="special"].active {
+    background: linear-gradient(135deg, #a3a3ff, #6a5acd);
+}
+
+/* Secret Emoji Cards */
+.secret-emoji-card {
+    background-color: var(--white);
+    border-radius: 1rem;
+    overflow: hidden;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    transition: transform 0.3s ease;
+}
+
+.secret-emoji-card:hover {
+    transform: translateY(-5px);
+}
+
+.secret-emoji-img {
+    background-color: var(--light-gray);
+    height: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 1rem;
+}
+
+.secret-emoji-img img {
+    max-width: 60px;
+    max-height: 60px;
+}
+
+.secret-emoji-code {
+    font-family: monospace;
+    padding: 0.75rem;
+    text-align: center;
+    font-weight: 500;
+    border-top: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.view-all-card {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.view-all-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.75rem 1rem;
+    background-color: var(--primary-color);
+    color: var(--black);
+    font-weight: 600;
+    border-radius: 0.5rem;
+    transition: all 0.2s ease;
+}
+
+.view-all-btn:hover {
+    background-color: #FFD43B;
+    transform: translateY(-2px);
+}
+
+/* FAQ Section */
+.faq-item {
+    background-color: var(--white);
+    border-radius: 0.75rem;
+    overflow: hidden;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+}
+
+.faq-question {
+    width: 100%;
+    padding: 1.25rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    text-align: left;
+    font-weight: 600;
+    background-color: var(--white);
+    border: none;
+    cursor: pointer;
+}
+
+.faq-question i {
+    transition: transform 0.3s ease;
+}
+
+.faq-question.active i {
+    transform: rotate(180deg);
+}
+
+.faq-answer {
+    padding: 0;
+    max-height: 0;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.faq-answer.show {
+    padding: 0 1.25rem 1.25rem;
+    max-height: 300px;
+}
+
+/* Toast Notification */
+#toast {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    display: flex;
+    align-items: center;
+    background-color: var(--black);
+    color: var(--white);
+    padding: 0.75rem 1rem;
+    border-radius: 0.5rem;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    transform: translateY(100px);
+    opacity: 0;
+    transition: all 0.3s ease;
+}
+
+#toast.show {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+.toast-icon {
+    width: 24px;
+    height: 24px;
+    background-color: var(--success);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 0.75rem;
+}
+
+/* Spinner */
+.spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid rgba(0, 0, 0, 0.1);
+    border-radius: 50%;
+    border-top-color: var(--primary-color);
+    animation: spin 1s ease-in-out infinite;
+    margin: 0 auto;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* Ad Container */
+.ad-container {
+    max-width: 100%;
+    overflow: hidden;
+}
+
+/* Media Queries */
+@media (max-width: 768px) {
+    .emoji-image {
+        height: 120px;
+    }
+    
+    .emoji-image img {
+        max-width: 60px;
+        max-height: 60px;
+    }
+    
+    .feature-card {
+        padding: 1.5rem 1rem;
+    }
+    
+    .feature-icon {
+        width: 50px;
+        height: 50px;
+        font-size: 1.25rem;
+        margin-bottom: 1rem;
+    }
+}
+
+@media (max-width: 640px) {
+    .emoji-actions {
+        flex-direction: column;
+    }
+    
+    .emoji-btn {
+        padding: 0.5rem;
+    }
+} 
