@@ -34,10 +34,10 @@ document.addEventListener('DOMContentLoaded', function() {
     function determineEmojiShape(name) {
         // 圆形表情列表 - 基于截图中的表情形状
         const roundEmojis = [
-            'angry', 'embarrassed', 'evil', 'flushed', 'funnyface', 'happy', 
+            'angry', 'embarrassed', 'flushed', 'funnyface', 'happy', 
             'laughwithtears', 'lovely', 'scream', 'shout', 'smile', 'speechless', 
             'sulk', 'surprised', 'thinking', 'weep', 'wicked', 'wronged', 'yummy',
-            'cry', 'drool', 'complacent'
+            'cry', 'drool', 'complacent', 'facewithrollingeyes', 'greedy'
         ];
         
         // 特殊组合表情通常使用方形布局
@@ -48,15 +48,16 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // 明确指定为方形的表情
         const squareEmojis = [
-            'facewithrollingeyes', 'greedy'
+            'evil', 'cool'
         ];
         
-        if (roundEmojis.includes(name)) {
+        // 首先检查确切的名称匹配
+        if (squareEmojis.includes(name)) {
+            return 'square';
+        } else if (roundEmojis.includes(name)) {
             return 'round';
         } else if (specialEmojis.includes(name)) {
             return 'special';
-        } else if (squareEmojis.includes(name)) {
-            return 'square';
         } else {
             return 'square'; // 默认为方形
         }
@@ -680,54 +681,61 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         
         sortedEmojis.forEach(emoji => {
-            const card = document.createElement('div');
-            card.className = `emoji-card ${emoji.shape}-emoji`;
-            
-            // 为特殊组合表情使用不同的卡片结构
-            if (emoji.shape === 'special') {
-                card.innerHTML = `
-                    <div class="emoji-image special-image">
-                        <img src="${emoji.image}" alt="${emoji.name}" class="lazy-load">
-                    </div>
-                    <div class="emoji-info">
-                        <div class="emoji-name">${emoji.name.replace(/_/g, ' ')}</div>
-                        <div class="emoji-category">TikTok Features</div>
-                    </div>
-                    <div class="emoji-actions">
-                        <button class="emoji-btn copy-btn" data-emoji="${emoji.emoji}" title="Copy Emoji">
-                            <i class="fas fa-copy"></i> Copy
-                        </button>
-                        <button class="emoji-btn download-btn" data-image="${emoji.image}" data-name="${emoji.name}" title="Download PNG">
-                            <i class="fas fa-download"></i> Download
-                        </button>
-                    </div>
-                `;
-            } else {
-                card.innerHTML = `
-                    <div class="emoji-image">
-                        <img src="${emoji.image}" alt="${emoji.name}" class="lazy-load">
-                    </div>
-                    <div class="emoji-info">
-                        <div class="emoji-name">${emoji.name.replace(/_/g, ' ')}</div>
-                        <div class="emoji-unicode">${emoji.unicode}</div>
-                        <div class="emoji-category">${emoji.categories ? emoji.categories[0] : emoji.category}</div>
-                    </div>
-                    <div class="emoji-actions">
-                        <button class="emoji-btn copy-btn" data-emoji="${emoji.emoji}" title="Copy Emoji">
-                            <i class="fas fa-copy"></i> Copy
-                        </button>
-                        <button class="emoji-btn download-btn" data-image="${emoji.image}" data-name="${emoji.name}" title="Download PNG">
-                            <i class="fas fa-download"></i> Download
-                        </button>
-                    </div>
-                `;
+            // 确保图片路径正确，如果是特殊表情则确保路径完整
+            let imagePath = emoji.image;
+            if (!imagePath.startsWith('http') && !imagePath.startsWith('./')) {
+                imagePath = (emoji.category === 'special' || emoji.shape === 'special') ? 
+                    `${imagePath}` : imagePath;
             }
             
-            emojiGrid.appendChild(card);
+            // 确定卡片的样式类
+            let cardClass = 'emoji-card';
+            if (emoji.shape === 'round') {
+                cardClass += ' round-emoji';
+            } else if (emoji.shape === 'square') {
+                cardClass += ' square-emoji';
+            } else if (emoji.shape === 'special') {
+                cardClass += ' special-emoji';
+            }
             
-            // Add event listeners to buttons
-            card.querySelector('.copy-btn').addEventListener('click', copyEmoji);
-            card.querySelector('.download-btn').addEventListener('click', downloadEmoji);
+            // 创建表情卡片HTML
+            const card = document.createElement('div');
+            card.className = cardClass;
+            
+            // 创建表情图片和信息HTML
+            card.innerHTML = `
+                <div class="emoji-image">
+                    <img src="${imagePath}" alt="${emoji.name}" loading="lazy" class="lazy-load">
+                </div>
+                <div class="emoji-info">
+                    <div class="emoji-name">${emoji.name.replace(/_/g, ' ')}</div>
+                    <div class="emoji-unicode">${emoji.unicode}</div>
+                    <div class="emoji-category">${emoji.category}</div>
+                </div>
+                <div class="emoji-actions">
+                    <button class="emoji-btn copy-btn" data-emoji="${emoji.emoji}" aria-label="Copy emoji">
+                        <i class="fas fa-copy"></i>
+                    </button>
+                    <button class="emoji-btn download-btn" data-image="${imagePath}" data-name="${emoji.name}" aria-label="Download emoji">
+                        <i class="fas fa-download"></i>
+                    </button>
+                    <button class="emoji-btn info-btn" data-name="${emoji.name}" data-unicode="${emoji.unicode}" data-description="${emoji.description || ''}" aria-label="Show emoji info">
+                        <i class="fas fa-info-circle"></i>
+                    </button>
+                </div>
+            `;
+            
+            // 添加事件监听器
+            const copyBtn = card.querySelector('.copy-btn');
+            const downloadBtn = card.querySelector('.download-btn');
+            const infoBtn = card.querySelector('.info-btn');
+            
+            copyBtn.addEventListener('click', copyEmoji);
+            downloadBtn.addEventListener('click', downloadEmoji);
+            infoBtn.addEventListener('click', showEmojiInfo);
+            
+            // 添加到网格
+            emojiGrid.appendChild(card);
         });
         
         // Lazy load images
