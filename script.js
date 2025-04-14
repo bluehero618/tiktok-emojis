@@ -39,7 +39,18 @@ document.addEventListener('DOMContentLoaded', function() {
             'sulk', 'surprised', 'thinking', 'weep', 'wicked', 'wronged', 'yummy'
         ];
         
-        return roundEmojis.includes(name) ? 'round' : 'square';
+        // 特殊组合表情通常使用方形布局
+        const specialEmojis = [
+            'fairy_blessing', 'shocked_expression', 'queen_flick', 'italian_gesture', 'stop_crying'
+        ];
+        
+        if (roundEmojis.includes(name)) {
+            return 'round';
+        } else if (specialEmojis.includes(name)) {
+            return 'special';
+        } else {
+            return 'square';
+        }
     }
 
     // 为emoji添加适当的分类和形状
@@ -54,23 +65,29 @@ document.addEventListener('DOMContentLoaded', function() {
             // 判断形状
             const shape = determineEmojiShape(name);
             
+            // 特殊表情类别
+            if (name.includes('_')) {
+                categories.push('special');
+            }
+            
             // 快乐表情
             if (name.includes('happy') || name.includes('smile') || name.includes('laugh') || 
                 name.includes('joy') || name.includes('grin') || name.includes('hehe') || 
                 name.includes('excited') || name.includes('flush') || name.includes('cute') ||
-                name.includes('yummy') || name.includes('joyful')) {
+                name.includes('yummy') || name.includes('joyful') || name.includes('fairy')) {
                 categories.push('happy');
             }
             
             // 悲伤表情
             if (name.includes('sad') || name.includes('cry') || name.includes('tear') || 
-                name.includes('weep') || name.includes('wrong') || name.includes('embarrassed')) {
+                name.includes('weep') || name.includes('wrong') || name.includes('embarrassed') ||
+                name.includes('stop_crying')) {
                 categories.push('sad');
             }
             
             // 愤怒表情
             if (name.includes('angry') || name.includes('rage') || name.includes('sulk') || 
-                name.includes('mad') || name.includes('disdain')) {
+                name.includes('mad') || name.includes('disdain') || name.includes('shocked')) {
                 categories.push('angry');
             }
             
@@ -81,7 +98,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             
             // 人物相关
-            if (name.includes('slap') || name.includes('hand')) {
+            if (name.includes('slap') || name.includes('hand') || name.includes('gesture') || 
+                name.includes('queen') || name.includes('italian') || name.includes('flick')) {
                 categories.push('people');
             }
             
@@ -94,8 +112,8 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // TikTok自定义表情数据 - 使用截图中的表情
-    const emojiData = [
+    // TikTok自定义表情数据 - 基本表情
+    const basicEmojiData = [
         {
             emoji: "😇",
             name: "angel",
@@ -465,9 +483,128 @@ document.addEventListener('DOMContentLoaded', function() {
             image: "emoji_png/yummy.png"
         }
     ];
+    
+    // TikTok特殊组合表情数据
+    const specialEmojiData = [
+        {
+            emoji: "✨🤖✨",
+            name: "fairy_blessing",
+            unicode: "U+2728 U+1F916 U+2728",
+            category: "special",
+            trending: true,
+            description: "Used on TikTok as a way to wish good luck or special blessings",
+            image: "emoji_png/fairy_blessing.png"
+        },
+        {
+            emoji: "👁️👄👁️",
+            name: "shocked_expression",
+            unicode: "U+1F441 U+1F444 U+1F441",
+            category: "special",
+            trending: true,
+            description: "I am observing and somewhat engrossed in this content",
+            image: "emoji_png/shocked_expression.png"
+        },
+        {
+            emoji: "💅✨",
+            name: "queen_flick",
+            unicode: "U+1F485 U+2728",
+            category: "special",
+            trending: true,
+            description: "Showing confidence, dismissiveness or sass",
+            image: "emoji_png/queen_flick.png"
+        },
+        {
+            emoji: "🤌✨",
+            name: "italian_gesture",
+            unicode: "U+1F90C U+2728",
+            category: "special",
+            trending: true,
+            description: "Italian hand gesture, often used sarcastically or to emphasize a point",
+            image: "emoji_png/italian_gesture.png"
+        },
+        {
+            emoji: "😭✋",
+            name: "stop_crying",
+            unicode: "U+1F62D U+270B",
+            category: "special",
+            trending: true,
+            description: "Used to express extreme emotion or to tell someone to stop being dramatic",
+            image: "emoji_png/stop_crying.png"
+        }
+    ];
+    
+    // 添加第二张截图中的TikTok特殊含义表情
+    const tiktokMeaningEmojiData = [
+        {
+            emoji: "🪑",
+            name: "chair",
+            unicode: "U+1FA91",
+            category: "objects",
+            trending: true,
+            description: "Used on TikTok as a placeholder with no single meaning. One use is implied to be sexual, other times simply to create confusion or to fill space. New in September 2021.",
+            image: "emoji_png/chair.png"
+        },
+        {
+            emoji: "✨",
+            name: "sparkles",
+            unicode: "U+2728",
+            category: "symbols",
+            trending: true,
+            description: "Emphasis on a point, sometimes used for sarcasm or mocking. May be used as an alternative to italics.",
+            image: "emoji_png/sparkles.png"
+        },
+        {
+            emoji: "🤡",
+            name: "clown_face",
+            unicode: "U+1F921",
+            category: "smileys",
+            trending: true,
+            description: "Describing someone selfish or unintelligent",
+            image: "emoji_png/clown_face.png"
+        },
+        {
+            emoji: "🎂",
+            name: "birthday_cake",
+            unicode: "U+1F382",
+            category: "food",
+            trending: true,
+            description: "Alternative to 🍑 Peach when referring to buttocks (eg 'nice 🎂')",
+            image: "emoji_png/birthday_cake.png"
+        },
+        {
+            emoji: "💀",
+            name: "skull",
+            unicode: "U+1F480",
+            category: "smileys",
+            trending: true,
+            description: "Figurative 'I'm dead' (I found this very funny, an alternative to 😂 Face with Tears of Joy)",
+            image: "emoji_png/skull.png"
+        },
+        {
+            emoji: "🧍",
+            name: "person_standing",
+            unicode: "U+1F9CD",
+            category: "people",
+            trending: true,
+            description: "Standing awkwardly. 'I don't know what I just watched' and/or mimicking a passer-by in a video",
+            image: "emoji_png/person_standing.png"
+        },
+        {
+            emoji: "🫣👉👈",
+            name: "shy_bashful",
+            unicode: "U+1FAE3 U+1F449 U+1F448",
+            category: "special",
+            trending: true,
+            description: "Shy or bashful; available as a hidden TikTok emote using the shortcode [wronged]",
+            image: "emoji_png/shy_bashful.png"
+        }
+    ];
+
+    // 合并所有表情数据
+    const combinedEmojiData = [...basicEmojiData, ...specialEmojiData, ...tiktokMeaningEmojiData];
 
     // 添加分类并初始化数据
-    const categorizedEmojiData = assignCategoriesAndShape(emojiData);
+    const categorizedEmojiData = assignCategoriesAndShape(combinedEmojiData);
 
     // 创建emoji图片的函数 - 修改以支持自定义表情图片
     function createEmojiImage(emoji, name) {
@@ -507,10 +644,12 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
         
-        // 首先按形状排序，方形在前，圆形在后
+        // 首先按形状排序，特殊组合式表情在最前，然后是方形，最后是圆形
         emojis.sort((a, b) => {
             // 如果形状不同，按形状排序
             if (a.shape !== b.shape) {
+                if (a.shape === 'special') return -1;
+                if (b.shape === 'special') return 1;
                 return a.shape === 'square' ? -1 : 1;
             }
             // 如果形状相同，按名称排序
@@ -521,27 +660,51 @@ document.addEventListener('DOMContentLoaded', function() {
             const card = document.createElement('div');
             card.className = `emoji-card ${emoji.shape}-emoji`;
             
-            card.innerHTML = `
-                <div class="emoji-image">
-                    <img src="${emoji.image}" alt="${emoji.name}" class="lazy-load">
-                </div>
-                <div class="emoji-info">
-                    <div class="emoji-name">${emoji.name}</div>
-                    <div class="emoji-unicode">${emoji.unicode}</div>
-                    <div class="emoji-category">${emoji.categories ? emoji.categories[0] : emoji.category}</div>
-                </div>
-                <div class="emoji-actions">
-                    <div class="emoji-btn copy-btn" data-emoji="${emoji.emoji}" title="Copy Emoji">
-                        <i class="fas fa-copy"></i>
+            // 为特殊组合表情使用不同的卡片结构
+            if (emoji.shape === 'special') {
+                card.innerHTML = `
+                    <div class="emoji-image special-image">
+                        <img src="${emoji.image}" alt="${emoji.name}" class="lazy-load">
                     </div>
-                    <div class="emoji-btn download-btn" data-image="${emoji.image}" data-name="${emoji.name}" title="Download PNG">
-                        <i class="fas fa-download"></i>
+                    <div class="emoji-info">
+                        <div class="emoji-name">${emoji.name.replace(/_/g, ' ')}</div>
+                        <div class="emoji-category">TikTok Features</div>
                     </div>
-                    <div class="emoji-btn info-btn" data-name="${emoji.name}" data-unicode="${emoji.unicode}" title="Emoji Info">
-                        <i class="fas fa-info-circle"></i>
+                    <div class="emoji-actions">
+                        <div class="emoji-btn copy-btn" data-emoji="${emoji.emoji}" title="Copy Emoji">
+                            <i class="fas fa-copy"></i>
+                        </div>
+                        <div class="emoji-btn download-btn" data-image="${emoji.image}" data-name="${emoji.name}" title="Download PNG">
+                            <i class="fas fa-download"></i>
+                        </div>
+                        <div class="emoji-btn info-btn" data-name="${emoji.name.replace(/_/g, ' ')}" data-description="${emoji.description || ''}" title="Emoji Info">
+                            <i class="fas fa-info-circle"></i>
+                        </div>
                     </div>
-                </div>
-            `;
+                `;
+            } else {
+                card.innerHTML = `
+                    <div class="emoji-image">
+                        <img src="${emoji.image}" alt="${emoji.name}" class="lazy-load">
+                    </div>
+                    <div class="emoji-info">
+                        <div class="emoji-name">${emoji.name.replace(/_/g, ' ')}</div>
+                        <div class="emoji-unicode">${emoji.unicode}</div>
+                        <div class="emoji-category">${emoji.categories ? emoji.categories[0] : emoji.category}</div>
+                    </div>
+                    <div class="emoji-actions">
+                        <div class="emoji-btn copy-btn" data-emoji="${emoji.emoji}" title="Copy Emoji">
+                            <i class="fas fa-copy"></i>
+                        </div>
+                        <div class="emoji-btn download-btn" data-image="${emoji.image}" data-name="${emoji.name}" title="Download PNG">
+                            <i class="fas fa-download"></i>
+                        </div>
+                        <div class="emoji-btn info-btn" data-name="${emoji.name}" data-unicode="${emoji.unicode}" data-description="${emoji.description || ''}" title="Emoji Info">
+                            <i class="fas fa-info-circle"></i>
+                        </div>
+                    </div>
+                `;
+            }
             
             emojiGrid.appendChild(card);
             
@@ -656,8 +819,15 @@ document.addEventListener('DOMContentLoaded', function() {
     function showEmojiInfo(e) {
         const name = e.currentTarget.getAttribute('data-name');
         const unicode = e.currentTarget.getAttribute('data-unicode');
+        const description = e.currentTarget.getAttribute('data-description');
         
-        showToast(`${name} (${unicode})`);
+        if (description) {
+            showToast(`${name}: ${description}`);
+        } else if (unicode) {
+            showToast(`${name} (${unicode})`);
+        } else {
+            showToast(`${name}`);
+        }
     }
 
     // Show toast notification
