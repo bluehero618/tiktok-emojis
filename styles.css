@@ -328,12 +328,15 @@ button,
 }
 
 .download-btn {
-    background: var(--colorful-gradient);
+    background-color: var(--dark-gray);
     color: var(--white);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: all 0.3s ease;
 }
 
 .download-btn:hover {
-    opacity: 0.9;
+    background: var(--colorful-gradient);
+    border: none;
 }
 
 .info-btn {

@@ -36,12 +36,14 @@ document.addEventListener('DOMContentLoaded', function() {
         const roundEmojis = [
             'angry', 'embarrassed', 'evil', 'flushed', 'funnyface', 'happy', 
             'laughwithtears', 'lovely', 'scream', 'shout', 'smile', 'speechless', 
-            'sulk', 'surprised', 'thinking', 'weep', 'wicked', 'wronged', 'yummy'
+            'sulk', 'surprised', 'thinking', 'weep', 'wicked', 'wronged', 'yummy',
+            'cry', 'drool', 'complacent'
         ];
         
         // 特殊组合表情通常使用方形布局
         const specialEmojis = [
-            'fairy_blessing', 'shocked_expression', 'queen_flick', 'italian_gesture', 'stop_crying'
+            'fairy_blessing', 'shocked_expression', 'queen_flick', 'italian_gesture', 'stop_crying',
+            'chair', 'sparkles', 'clown_face', 'birthday_cake', 'skull', 'person_standing', 'shy_bashful'
         ];
         
         if (roundEmojis.includes(name)) {
@@ -66,7 +68,8 @@ document.addEventListener('DOMContentLoaded', function() {
             const shape = determineEmojiShape(name);
             
             // 特殊表情类别
-            if (name.includes('_')) {
+            if (name.includes('_') || 
+                ['chair', 'sparkles', 'clown_face', 'birthday_cake', 'skull', 'person_standing'].includes(name)) {
                 categories.push('special');
             }
             
@@ -99,7 +102,8 @@ document.addEventListener('DOMContentLoaded', function() {
             
             // 人物相关
             if (name.includes('slap') || name.includes('hand') || name.includes('gesture') || 
-                name.includes('queen') || name.includes('italian') || name.includes('flick')) {
+                name.includes('queen') || name.includes('italian') || name.includes('flick') ||
+                name.includes('person') || name.includes('shy_bashful')) {
                 categories.push('people');
             }
             
@@ -644,19 +648,31 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
         
-        // 首先按形状排序，特殊组合式表情在最前，然后是方形，最后是圆形
-        emojis.sort((a, b) => {
-            // 如果形状不同，按形状排序
-            if (a.shape !== b.shape) {
-                if (a.shape === 'special') return -1;
-                if (b.shape === 'special') return 1;
-                return a.shape === 'square' ? -1 : 1;
-            }
-            // 如果形状相同，按名称排序
-            return a.name.localeCompare(b.name);
-        });
+        // 更新排序逻辑：首先按形状分组，然后在每个形状组内按名称排序
+        const specialEmojis = emojis.filter(emoji => emoji.shape === 'special');
+        const squareEmojis = emojis.filter(emoji => emoji.shape === 'square');
+        const roundEmojis = emojis.filter(emoji => emoji.shape === 'round');
         
-        emojis.forEach(emoji => {
+        // 按名称对每个组内的表情进行排序
+        specialEmojis.sort((a, b) => a.name.localeCompare(b.name));
+        squareEmojis.sort((a, b) => a.name.localeCompare(b.name));
+        roundEmojis.sort((a, b) => a.name.localeCompare(b.name));
+        
+        // 根据当前选择的形状筛选器决定显示顺序
+        let sortedEmojis = [];
+        
+        if (currentShape === 'all') {
+            // 如果选择"全部"，则按特殊->方形->圆形的顺序显示
+            sortedEmojis = [...specialEmojis, ...squareEmojis, ...roundEmojis];
+        } else if (currentShape === 'special') {
+            sortedEmojis = specialEmojis;
+        } else if (currentShape === 'square') {
+            sortedEmojis = squareEmojis;
+        } else if (currentShape === 'round') {
+            sortedEmojis = roundEmojis;
+        }
+        
+        sortedEmojis.forEach(emoji => {
             const card = document.createElement('div');
             card.className = `emoji-card ${emoji.shape}-emoji`;
             
@@ -671,15 +687,12 @@ document.addEventListener('DOMContentLoaded', function() {
                         <div class="emoji-category">TikTok Features</div>
                     </div>
                     <div class="emoji-actions">
-                        <div class="emoji-btn copy-btn" data-emoji="${emoji.emoji}" title="Copy Emoji">
-                            <i class="fas fa-copy"></i>
-                        </div>
-                        <div class="emoji-btn download-btn" data-image="${emoji.image}" data-name="${emoji.name}" title="Download PNG">
-                            <i class="fas fa-download"></i>
-                        </div>
-                        <div class="emoji-btn info-btn" data-name="${emoji.name.replace(/_/g, ' ')}" data-description="${emoji.description || ''}" title="Emoji Info">
-                            <i class="fas fa-info-circle"></i>
-                        </div>
+                        <button class="emoji-btn copy-btn" data-emoji="${emoji.emoji}" title="Copy Emoji">
+                            <i class="fas fa-copy"></i> Copy
+                        </button>
+                        <button class="emoji-btn download-btn" data-image="${emoji.image}" data-name="${emoji.name}" title="Download PNG">
+                            <i class="fas fa-download"></i> Download
+                        </button>
                     </div>
                 `;
             } else {
@@ -693,15 +706,12 @@ document.addEventListener('DOMContentLoaded', function() {
                         <div class="emoji-category">${emoji.categories ? emoji.categories[0] : emoji.category}</div>
                     </div>
                     <div class="emoji-actions">
-                        <div class="emoji-btn copy-btn" data-emoji="${emoji.emoji}" title="Copy Emoji">
-                            <i class="fas fa-copy"></i>
-                        </div>
-                        <div class="emoji-btn download-btn" data-image="${emoji.image}" data-name="${emoji.name}" title="Download PNG">
-                            <i class="fas fa-download"></i>
-                        </div>
-                        <div class="emoji-btn info-btn" data-name="${emoji.name}" data-unicode="${emoji.unicode}" data-description="${emoji.description || ''}" title="Emoji Info">
-                            <i class="fas fa-info-circle"></i>
-                        </div>
+                        <button class="emoji-btn copy-btn" data-emoji="${emoji.emoji}" title="Copy Emoji">
+                            <i class="fas fa-copy"></i> Copy
+                        </button>
+                        <button class="emoji-btn download-btn" data-image="${emoji.image}" data-name="${emoji.name}" title="Download PNG">
+                            <i class="fas fa-download"></i> Download
+                        </button>
                     </div>
                 `;
             }
@@ -711,7 +721,6 @@ document.addEventListener('DOMContentLoaded', function() {
             // Add event listeners to buttons
             card.querySelector('.copy-btn').addEventListener('click', copyEmoji);
             card.querySelector('.download-btn').addEventListener('click', downloadEmoji);
-            card.querySelector('.info-btn').addEventListener('click', showEmojiInfo);
         });
         
         // Lazy load images
@@ -728,38 +737,44 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Filter emojis by category and shape
     function filterEmojis() {
-        // 首先按类别过滤
-        let filtered = [];
+        filteredEmojis = allEmojis.filter(emoji => {
+            // 根据当前选择的类别过滤
+            const categoryMatch = currentCategory === 'all' || 
+                                (currentCategory === 'trending' && emoji.trending) ||
+                                (emoji.categories && emoji.categories.includes(currentCategory));
+            
+            // 根据当前选择的形状过滤
+            const shapeMatch = currentShape === 'all' || emoji.shape === currentShape;
+            
+            // 根据搜索查询过滤
+            const searchMatch = searchQuery === '' || 
+                               emoji.name.toLowerCase().includes(searchQuery) ||
+                               emoji.emoji.includes(searchQuery);
+            
+            return categoryMatch && shapeMatch && searchMatch;
+        });
         
-        if (currentCategory === 'all') {
-            filtered = [...allEmojis];
-        } else if (currentCategory === 'trending') {
-            filtered = allEmojis.filter(emoji => emoji.trending);
-        } else {
-            // 使用新的分类系统
-            filtered = allEmojis.filter(emoji => 
-                emoji.categories ? 
-                emoji.categories.includes(currentCategory) : 
-                emoji.category === currentCategory
-            );
-        }
+        // 按形状排序: 圆形优先，然后是特殊形状，最后是方形
+        filteredEmojis.sort((a, b) => {
+            const shapeOrder = { 'round': 0, 'special': 1, 'square': 2 };
+            return shapeOrder[a.shape] - shapeOrder[b.shape];
+        });
         
-        // 然后按形状过滤
-        if (currentShape !== 'all') {
-            filtered = filtered.filter(emoji => emoji.shape === currentShape);
-        }
-        
-        // 最后应用搜索过滤
-        if (searchQuery) {
-            filtered = filtered.filter(emoji => 
-                emoji.name.toLowerCase().includes(searchQuery) || 
-                emoji.unicode.toLowerCase().includes(searchQuery)
-            );
-        }
-        
-        filteredEmojis = filtered;
         updateEmojiCount();
         createEmojiCards(filteredEmojis);
+    }
+
+    // 更新形状过滤器显示
+    function updateShapeFilterDisplay() {
+        const specialCount = allEmojis.filter(emoji => emoji.shape === 'special').length;
+        const squareCount = allEmojis.filter(emoji => emoji.shape === 'square').length;
+        const roundCount = allEmojis.filter(emoji => emoji.shape === 'round').length;
+        
+        // 更新形状按钮上的数字
+        document.querySelector('.shape-btn[data-shape="all"]').textContent = `All Shapes (${allEmojis.length})`;
+        document.querySelector('.shape-btn[data-shape="special"]').textContent = `Special (${specialCount})`;
+        document.querySelector('.shape-btn[data-shape="square"]').textContent = `Square (${squareCount})`;
+        document.querySelector('.shape-btn[data-shape="round"]').textContent = `Round (${roundCount})`;
     }
 
     // Update emoji count display
@@ -872,6 +887,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Load emoji data and set up event listeners
     function initApp() {
         initializeEmojis(categorizedEmojiData);
+        updateShapeFilterDisplay();
         
         // Search input event listener
         searchInput.addEventListener('input', function() {
