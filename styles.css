@@ -18,10 +18,10 @@
 }
 
 body {
-    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', sans-serif;
-    color: var(--white);
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    background-color: #000;
+    color: #fff;
     line-height: 1.6;
-    background-color: var(--black);
 }
 
 /* Container adjustments for better responsiveness */
@@ -66,20 +66,58 @@ button,
 
 .gradient-border {
     position: relative;
-    border-radius: 1rem;
+    z-index: 0;
+    border-radius: 12px;
     overflow: hidden;
 }
 
 .gradient-border::before {
-    content: "";
+    content: '';
     position: absolute;
-    top: -2px;
-    left: -2px;
-    right: -2px;
-    bottom: -2px;
-    background: var(--colorful-gradient);
+    z-index: -2;
+    left: -50%;
+    top: -50%;
+    width: 200%;
+    height: 200%;
+    background-color: #1a202c;
+    background-repeat: no-repeat;
+    background-size: 50% 50%, 50% 50%;
+    background-position: 0 0, 100% 0, 100% 100%, 0 100%;
+    background-image: linear-gradient(#3b82f6, #3b82f6), linear-gradient(#8b5cf6, #8b5cf6), linear-gradient(#ec4899, #ec4899), linear-gradient(#06b6d4, #06b6d4);
+    animation: rotate 4s linear infinite;
+}
+
+.gradient-border::after {
+    content: '';
+    position: absolute;
     z-index: -1;
-    border-radius: 1.1rem;
+    left: 2px;
+    top: 2px;
+    width: calc(100% - 4px);
+    height: calc(100% - 4px);
+    background: #1f2937;
+    border-radius: 10px;
+}
+
+@keyframes rotate {
+    100% {
+        transform: rotate(1turn);
+    }
+}
+
+.feature-icon {
+    font-size: 24px;
+    margin-bottom: 16px;
+    color: #4f46e5;
+    height: 48px;
+    width: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(79, 70, 229, 0.1);
+    border-radius: 50%;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 /* Category Navigation */
@@ -132,189 +170,94 @@ button,
     box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
 }
 
-.feature-icon {
-    width: 60px;
-    height: 60px;
-    background: var(--colorful-gradient);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 0 auto 1.25rem;
-    color: var(--white);
-    font-size: 1.5rem;
-}
-
 /* Emoji Grid & Cards */
 #emoji-grid {
     margin-bottom: 2rem;
 }
 
 .emoji-card {
-    background-color: var(--light-gray);
-    border-radius: 1rem;
+    background-color: #2d2d2d;
+    border-radius: 12px;
     overflow: hidden;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    transition: transform 0.2s, box-shadow 0.2s;
     display: flex;
     flex-direction: column;
-    height: 100%;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     position: relative;
-}
-
-.emoji-card::after {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 3px;
-    background: var(--colorful-gradient);
-    opacity: 0;
-    transition: opacity 0.3s ease;
 }
 
 .emoji-card:hover {
     transform: translateY(-5px);
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-}
-
-.emoji-card:hover::after {
-    opacity: 1;
-}
-
-/* 圆形表情卡片样式 */
-.emoji-card.round-emoji {
-    border-radius: 1.25rem;
-}
-
-.emoji-card.round-emoji .emoji-image {
-    padding: 1.2rem;
-}
-
-.emoji-card.round-emoji .emoji-image img {
-    border-radius: 50%;
-}
-
-/* 方形表情卡片样式 */
-.emoji-card.square-emoji {
-    border-radius: 0.8rem;
-}
-
-.emoji-emoji.square-emoji .emoji-image img {
-    border-radius: 0.4rem;
-}
-
-/* 特殊组合表情卡片样式 */
-.emoji-card.special-emoji {
-    border-radius: 0.8rem;
-    background: linear-gradient(to bottom, var(--light-gray), #25262c);
-    border: 1px solid rgba(255, 255, 255, 0.05);
-}
-
-.emoji-card.special-emoji .emoji-image {
-    padding: 1rem;
-    height: 120px;
-    background-color: var(--lighter-gray);
-}
-
-.emoji-card.special-emoji .emoji-image img {
-    max-width: 100%;
-    max-height: 70px;
-    object-fit: contain;
-}
-
-.emoji-card.special-emoji .emoji-name {
-    font-size: 1.1rem;
-    text-transform: capitalize;
-    margin-bottom: 0.5rem;
-}
-
-.emoji-card.special-emoji .emoji-category {
-    color: #a3a3ff;
-    background-color: rgba(163, 163, 255, 0.1);
-}
-
-.special-image {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.2);
 }
 
 .emoji-image {
-    background-color: var(--lighter-gray); /* 使用更浅的灰色背景 */
-    height: 140px;
+    padding: 24px;
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 1.5rem;
+    height: 120px;
+    background-color: #222;
+    border-bottom: 1px solid #333;
 }
 
 .emoji-image img {
-    max-width: 80px;
-    max-height: 80px;
-    transition: transform 0.3s ease;
-}
-
-.emoji-card:hover .emoji-image img {
-    transform: scale(1.1);
+    width: 80px;
+    height: 80px;
+    object-fit: contain;
 }
 
 .emoji-info {
-    padding: 1rem;
-    flex-grow: 1;
+    padding: 12px;
+    text-align: center;
 }
 
 .emoji-name {
+    font-size: 16px;
     font-weight: 600;
-    font-size: 1rem;
-    margin-bottom: 0.25rem;
-    color: var(--white);
+    margin-bottom: 4px;
+    text-transform: capitalize;
 }
 
 .emoji-unicode {
-    font-family: monospace;
-    font-size: 0.8rem;
-    color: var(--mid-gray);
-    margin-bottom: 0.5rem;
-    background-color: rgba(255, 255, 255, 0.1);
-    padding: 0.15rem 0.5rem;
-    border-radius: 0.25rem;
-    display: inline-block;
+    font-size: 12px;
+    color: #aaa;
+    margin-bottom: 4px;
 }
 
 .emoji-category {
-    font-size: 0.7rem;
-    color: var(--mid-gray);
-    background-color: rgba(255, 255, 255, 0.1);
-    padding: 0.1rem 0.5rem;
-    border-radius: 1rem;
     display: inline-block;
+    padding: 2px 6px;
+    font-size: 12px;
+    background-color: #444;
+    border-radius: 12px;
+    color: #ccc;
 }
 
 .emoji-actions {
     display: flex;
-    padding: 0.75rem;
-    border-top: 1px solid rgba(255, 255, 255, 0.05);
-    gap: 0.8rem;
     justify-content: center;
+    gap: 8px;
+    padding: 12px;
+    border-top: 1px solid #333;
 }
 
 .emoji-btn {
     width: 36px;
     height: 36px;
     border-radius: 50%;
-    transition: all 0.2s ease;
-    cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1rem;
-    padding: 0;
+    background-color: #333;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.2s;
 }
 
-.emoji-btn i {
-    margin: 0;
+.emoji-btn:hover {
+    background-color: #444;
 }
 
 .copy-btn {
@@ -325,8 +268,7 @@ button,
 }
 
 .copy-btn:hover {
-    background: var(--colorful-gradient);
-    border: none;
+    background-color: #2563eb;
 }
 
 .download-btn {
@@ -337,8 +279,7 @@ button,
 }
 
 .download-btn:hover {
-    background: var(--colorful-gradient);
-    border: none;
+    background-color: #059669;
 }
 
 .info-btn {
@@ -348,7 +289,7 @@ button,
 }
 
 .info-btn:hover {
-    background-color: #3A3A3C;
+    background-color: #7c3aed;
 }
 
 /* 形状过滤器样式 */
@@ -360,17 +301,15 @@ button,
 }
 
 .shape-btn {
-    background-color: var(--dark-gray);
-    color: var(--white);
-    padding: 0.5rem 1.5rem;
-    border-radius: 0.5rem;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #fff;
+    font-weight: 500;
+    font-size: 14px;
+    transition: all 0.2s;
 }
 
 .shape-btn:hover, .shape-btn.active {
-    background: var(--colorful-gradient);
+    background-color: #4f46e5;
+    color: #fff;
 }
 
 /* 添加special形状按钮 */
@@ -496,7 +435,7 @@ button,
     padding: 0.75rem 1rem;
     border-radius: 0.5rem;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-    z-index: 1000;
+    z-index: 9999;
     transform: translateY(100px);
     opacity: 0;
     transition: all 0.3s ease;
@@ -563,6 +502,31 @@ button,
 }
 
 @media (max-width: 640px) {
+    .emoji-card {
+        min-height: auto;
+    }
+    
+    .emoji-image {
+        height: 100px;
+    }
+    
+    .emoji-image img {
+        width: 60px;
+        height: 60px;
+    }
+    
+    .emoji-name {
+        font-size: 14px;
+    }
+    
+    .emoji-unicode {
+        font-size: 10px;
+    }
+    
+    .emoji-category {
+        font-size: 10px;
+    }
+    
     .emoji-actions {
         flex-direction: column;
     }
@@ -572,4 +536,52 @@ button,
     }
 }
 
-/* Updated styling - 2023 */ 
+/* Updated styling - 2023 */
+
+/* Loading Animations */
+@keyframes pulse {
+    0% { opacity: 0.6; }
+    50% { opacity: 1; }
+    100% { opacity: 0.6; }
+}
+
+.animate-pulse {
+    animation: pulse 1.5s infinite ease-in-out;
+}
+
+/* Add new styles for special emoji cards with themed backgrounds */
+.special-emoji .emoji-image {
+    background: linear-gradient(135deg, #1e293b, #0f172a);
+}
+
+.special-emoji.fairy_blessing .emoji-image {
+    background: linear-gradient(135deg, #4338ca, #6366f1);
+}
+
+.special-emoji.shocked_expression .emoji-image {
+    background: linear-gradient(135deg, #be185d, #db2777);
+}
+
+.special-emoji.queen_flick .emoji-image {
+    background: linear-gradient(135deg, #b45309, #d97706);
+}
+
+.special-emoji.italian_gesture .emoji-image {
+    background: linear-gradient(135deg, #065f46, #059669);
+}
+
+.special-emoji.stop_crying .emoji-image {
+    background: linear-gradient(135deg, #1e40af, #3b82f6);
+}
+
+.special-emoji.shy_bashful .emoji-image {
+    background: linear-gradient(135deg, #6d28d9, #8b5cf6);
+}
+
+/* Improved visibility for emoji text */
+.emoji-display {
+    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    padding: 8px;
+    display: inline-block;
+} 

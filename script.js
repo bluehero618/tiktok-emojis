@@ -537,18 +537,18 @@ document.addEventListener('DOMContentLoaded', function() {
             image: "emoji_png/shocked_expression.png"
         },
         {
-            emoji: "💅✨",
+            emoji: "💅👑💅",
             name: "queen_flick",
-            unicode: "U+1F485 U+2728",
+            unicode: "U+1F485 U+1F451 U+1F485",
             category: "special",
             trending: true,
             description: "Showing confidence, dismissiveness or sass",
             image: "emoji_png/queen_flick.png"
         },
         {
-            emoji: "🤌✨",
+            emoji: "🤌🤌🤌",
             name: "italian_gesture",
-            unicode: "U+1F90C U+2728",
+            unicode: "U+1F90C U+1F90C U+1F90C",
             category: "special",
             trending: true,
             description: "Italian hand gesture, often used sarcastically or to emphasize a point",
@@ -1097,11 +1097,11 @@ document.addEventListener('DOMContentLoaded', function() {
                     ctx.textAlign = 'center';
                     ctx.textBaseline = 'middle';
                     ctx.fillStyle = 'white';
-                    ctx.fillText(parts[0], 30, 85); // 左手
+                    ctx.fillText('💅', 30, 85); // 左手
                     ctx.font = 'bold 60px Arial';
-                    ctx.fillText(parts[1], 64, 45); // 皇冠
+                    ctx.fillText('👑', 64, 45); // 皇冠
                     ctx.font = 'bold 35px Arial';
-                    ctx.fillText(parts[2], 98, 85); // 右手
+                    ctx.fillText('💅', 98, 85); // 右手
                     break;
                     
                 case 'italian_gesture': // 🤌🤌🤌
@@ -1109,9 +1109,9 @@ document.addEventListener('DOMContentLoaded', function() {
                     ctx.textAlign = 'center';
                     ctx.textBaseline = 'middle';
                     ctx.fillStyle = 'white';
-                    ctx.fillText(parts[0], 32, 64); // 左手
-                    ctx.fillText(parts[1], 64, 64); // 中间手
-                    ctx.fillText(parts[2], 96, 64); // 右手
+                    ctx.fillText('🤌', 32, 64); // 左手
+                    ctx.fillText('🤌', 64, 64); // 中间手
+                    ctx.fillText('🤌', 96, 64); // 右手
                     break;
                     
                 case 'stop_crying': // 😭✋
