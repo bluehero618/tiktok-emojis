@@ -7,7 +7,8 @@
     --black: #000000;
     --dark-gray: #1D1D1F;
     --mid-gray: #86868B;
-    --light-gray: #2D2D2D;
+    --light-gray: #2D2D33; /* 更新为浅灰色 */
+    --lighter-gray: #33333A; /* 新增更浅的灰色 */
     --white: #FFFFFF;
     --accent: #06C;
     --success: #4BB543;
@@ -118,7 +119,7 @@ button,
 
 /* Feature Cards */
 .feature-card {
-    background-color: var(--dark-gray);
+    background-color: var(--light-gray);
     border-radius: 1rem;
     padding: 2rem 1.5rem;
     text-align: center;
@@ -150,7 +151,7 @@ button,
 }
 
 .emoji-card {
-    background-color: var(--dark-gray);
+    background-color: var(--light-gray);
     border-radius: 1rem;
     overflow: hidden;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
@@ -182,8 +183,30 @@ button,
     opacity: 1;
 }
 
+/* 圆形表情卡片样式 */
+.emoji-card.round-emoji {
+    border-radius: 1.25rem;
+}
+
+.emoji-card.round-emoji .emoji-image {
+    padding: 1.2rem;
+}
+
+.emoji-card.round-emoji .emoji-image img {
+    border-radius: 50%;
+}
+
+/* 方形表情卡片样式 */
+.emoji-card.square-emoji {
+    border-radius: 0.8rem;
+}
+
+.emoji-emoji.square-emoji .emoji-image img {
+    border-radius: 0.4rem;
+}
+
 .emoji-image {
-    background-color: var(--light-gray);
+    background-color: var(--lighter-gray); /* 使用更浅的灰色背景 */
     height: 140px;
     display: flex;
     justify-content: center;
@@ -213,12 +236,12 @@ button,
     color: var(--white);
 }
 
-.emoji-code {
+.emoji-unicode {
     font-family: monospace;
     font-size: 0.8rem;
     color: var(--mid-gray);
     margin-bottom: 0.5rem;
-    background-color: var(--light-gray);
+    background-color: rgba(255, 255, 255, 0.1);
     padding: 0.15rem 0.5rem;
     border-radius: 0.25rem;
     display: inline-block;
@@ -227,7 +250,7 @@ button,
 .emoji-category {
     font-size: 0.7rem;
     color: var(--mid-gray);
-    background-color: var(--light-gray);
+    background-color: rgba(255, 255, 255, 0.1);
     padding: 0.1rem 0.5rem;
     border-radius: 1rem;
     display: inline-block;
@@ -238,24 +261,24 @@ button,
     padding: 0.75rem;
     border-top: 1px solid rgba(255, 255, 255, 0.05);
     gap: 0.5rem;
+    justify-content: center;
 }
 
 .emoji-btn {
-    flex: 1;
-    padding: 0.4rem;
-    text-align: center;
-    border-radius: 0.25rem;
-    font-weight: 500;
-    font-size: 0.8rem;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
     transition: all 0.2s ease;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
+    font-size: 1rem;
+    padding: 0;
 }
 
 .emoji-btn i {
-    margin-right: 0.25rem;
+    margin: 0;
 }
 
 .copy-btn {
@@ -275,6 +298,38 @@ button,
 
 .download-btn:hover {
     opacity: 0.9;
+}
+
+.info-btn {
+    background-color: var(--dark-gray);
+    color: var(--white);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.info-btn:hover {
+    background-color: #3A3A3C;
+}
+
+/* 形状过滤器样式 */
+.shape-filter {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    justify-content: center;
+}
+
+.shape-btn {
+    background-color: var(--dark-gray);
+    color: var(--white);
+    padding: 0.5rem 1.5rem;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.shape-btn:hover, .shape-btn.active {
+    background: var(--colorful-gradient);
 }
 
 /* Secret Emoji Cards */

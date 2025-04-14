@@ -5,6 +5,7 @@ document.addEventListener('DOMContentLoaded', function() {
     let allEmojis = [];
     let filteredEmojis = [];
     let currentCategory = 'all';
+    let currentShape = 'all';
     let searchQuery = '';
     
     // DOM Elements
@@ -12,6 +13,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const searchInput = document.getElementById('search');
     const emojiCountElement = document.getElementById('emoji-count');
     const categoryButtons = document.querySelectorAll('.category-btn');
+    const shapeButtons = document.querySelectorAll('.shape-btn');
     const toast = document.getElementById('toast');
 
     // 检查emoji_png文件夹是否存在, 如果不存在则创建
@@ -28,14 +30,29 @@ document.addEventListener('DOMContentLoaded', function() {
         console.log('Note: Make sure the emoji_png folder exists in your root directory');
     }
 
-    // 为emoji添加适当的分类
-    function assignCategories(emojiData) {
+    // 判断表情是圆形还是方形
+    function determineEmojiShape(name) {
+        // 圆形表情列表 - 基于截图中的表情形状
+        const roundEmojis = [
+            'angry', 'embarrassed', 'evil', 'flushed', 'funnyface', 'happy', 
+            'laughwithtears', 'lovely', 'scream', 'shout', 'smile', 'speechless', 
+            'sulk', 'surprised', 'thinking', 'weep', 'wicked', 'wronged', 'yummy'
+        ];
+        
+        return roundEmojis.includes(name) ? 'round' : 'square';
+    }
+
+    // 为emoji添加适当的分类和形状
+    function assignCategoriesAndShape(emojiData) {
         return emojiData.map(emoji => {
             // 将所有emoji默认设为smileys类别
             let categories = ['smileys'];
             
             // 根据emoji名称分配额外的类别
             const name = emoji.name.toLowerCase();
+            
+            // 判断形状
+            const shape = determineEmojiShape(name);
             
             // 快乐表情
             if (name.includes('happy') || name.includes('smile') || name.includes('laugh') || 
@@ -71,7 +88,8 @@ document.addEventListener('DOMContentLoaded', function() {
             // 返回更新后的emoji对象
             return {
                 ...emoji,
-                categories: categories
+                categories: categories,
+                shape: shape
             };
         });
     }
@@ -449,7 +467,7 @@ document.addEventListener('DOMContentLoaded', function() {
     ];
 
     // 添加分类并初始化数据
-    const categorizedEmojiData = assignCategories(emojiData);
+    const categorizedEmojiData = assignCategoriesAndShape(emojiData);
 
     // 创建emoji图片的函数 - 修改以支持自定义表情图片
     function createEmojiImage(emoji, name) {
@@ -489,9 +507,19 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
         
+        // 首先按形状排序，方形在前，圆形在后
+        emojis.sort((a, b) => {
+            // 如果形状不同，按形状排序
+            if (a.shape !== b.shape) {
+                return a.shape === 'square' ? -1 : 1;
+            }
+            // 如果形状相同，按名称排序
+            return a.name.localeCompare(b.name);
+        });
+        
         emojis.forEach(emoji => {
             const card = document.createElement('div');
-            card.className = 'emoji-card';
+            card.className = `emoji-card ${emoji.shape}-emoji`;
             
             card.innerHTML = `
                 <div class="emoji-image">
@@ -503,11 +531,14 @@ document.addEventListener('DOMContentLoaded', function() {
                     <div class="emoji-category">${emoji.categories ? emoji.categories[0] : emoji.category}</div>
                 </div>
                 <div class="emoji-actions">
-                    <div class="emoji-btn copy-btn" data-emoji="${emoji.emoji}">
-                        <i class="fas fa-copy mr-1"></i> Copy
+                    <div class="emoji-btn copy-btn" data-emoji="${emoji.emoji}" title="Copy Emoji">
+                        <i class="fas fa-copy"></i>
                     </div>
-                    <div class="emoji-btn download-btn" data-image="${emoji.image}" data-name="${emoji.name}">
-                        <i class="fas fa-download mr-1"></i> Download
+                    <div class="emoji-btn download-btn" data-image="${emoji.image}" data-name="${emoji.name}" title="Download PNG">
+                        <i class="fas fa-download"></i>
+                    </div>
+                    <div class="emoji-btn info-btn" data-name="${emoji.name}" data-unicode="${emoji.unicode}" title="Emoji Info">
+                        <i class="fas fa-info-circle"></i>
                     </div>
                 </div>
             `;
@@ -517,6 +548,7 @@ document.addEventListener('DOMContentLoaded', function() {
             // Add event listeners to buttons
             card.querySelector('.copy-btn').addEventListener('click', copyEmoji);
             card.querySelector('.download-btn').addEventListener('click', downloadEmoji);
+            card.querySelector('.info-btn').addEventListener('click', showEmojiInfo);
         });
         
         // Lazy load images
@@ -531,68 +563,62 @@ document.addEventListener('DOMContentLoaded', function() {
         createEmojiCards(filteredEmojis);
     }
 
-    // Filter emojis by category
-    function filterByCategory(category) {
-        if (category === 'all') {
-            filteredEmojis = [...allEmojis];
-        } else if (category === 'trending') {
-            filteredEmojis = allEmojis.filter(emoji => emoji.trending);
+    // Filter emojis by category and shape
+    function filterEmojis() {
+        // 首先按类别过滤
+        let filtered = [];
+        
+        if (currentCategory === 'all') {
+            filtered = [...allEmojis];
+        } else if (currentCategory === 'trending') {
+            filtered = allEmojis.filter(emoji => emoji.trending);
         } else {
             // 使用新的分类系统
-            filteredEmojis = allEmojis.filter(emoji => 
+            filtered = allEmojis.filter(emoji => 
                 emoji.categories ? 
-                emoji.categories.includes(category) : 
-                emoji.category === category
+                emoji.categories.includes(currentCategory) : 
+                emoji.category === currentCategory
             );
         }
         
-        // Apply search query if it exists
+        // 然后按形状过滤
+        if (currentShape !== 'all') {
+            filtered = filtered.filter(emoji => emoji.shape === currentShape);
+        }
+        
+        // 最后应用搜索过滤
         if (searchQuery) {
-            filterBySearch(searchQuery);
-        } else {
-            updateEmojiCount();
-            createEmojiCards(filteredEmojis);
-        }
-    }
-
-    // Filter emojis by search query
-    function filterBySearch(query) {
-        searchQuery = query.toLowerCase();
-        
-        if (!searchQuery) {
-            filterByCategory(currentCategory);
-            return;
+            filtered = filtered.filter(emoji => 
+                emoji.name.toLowerCase().includes(searchQuery) || 
+                emoji.unicode.toLowerCase().includes(searchQuery)
+            );
         }
         
-        // Start with the category filter
-        const categoryFiltered = currentCategory === 'all' 
-            ? [...allEmojis] 
-            : currentCategory === 'trending'
-                ? allEmojis.filter(emoji => emoji.trending)
-                : allEmojis.filter(emoji => 
-                    emoji.categories ? 
-                    emoji.categories.includes(currentCategory) : 
-                    emoji.category === currentCategory
-                );
-        
-        // Then apply search filter
-        filteredEmojis = categoryFiltered.filter(emoji => 
-            emoji.name.toLowerCase().includes(searchQuery) || 
-            emoji.unicode.toLowerCase().includes(searchQuery)
-        );
-        
+        filteredEmojis = filtered;
         updateEmojiCount();
         createEmojiCards(filteredEmojis);
     }
 
     // Update emoji count display
     function updateEmojiCount() {
-        if (currentCategory === 'all' && !searchQuery) {
+        if (currentCategory === 'all' && currentShape === 'all' && !searchQuery) {
             emojiCountElement.textContent = `Showing all ${filteredEmojis.length} emojis`;
-        } else if (searchQuery) {
-            emojiCountElement.textContent = `Found ${filteredEmojis.length} emojis matching "${searchQuery}"`;
         } else {
-            emojiCountElement.textContent = `Showing ${filteredEmojis.length} ${currentCategory} emojis`;
+            let filterText = [];
+            
+            if (currentCategory !== 'all') {
+                filterText.push(currentCategory);
+            }
+            
+            if (currentShape !== 'all') {
+                filterText.push(currentShape);
+            }
+            
+            if (searchQuery) {
+                filterText.push(`matching "${searchQuery}"`);
+            }
+            
+            emojiCountElement.textContent = `Showing ${filteredEmojis.length} ${filterText.join(' ')} emojis`;
         }
     }
 
@@ -625,6 +651,14 @@ document.addEventListener('DOMContentLoaded', function() {
         
         showToast('Emoji downloaded successfully!');
     }
+    
+    // Show emoji info
+    function showEmojiInfo(e) {
+        const name = e.currentTarget.getAttribute('data-name');
+        const unicode = e.currentTarget.getAttribute('data-unicode');
+        
+        showToast(`${name} (${unicode})`);
+    }
 
     // Show toast notification
     function showToast(message, isError = false) {
@@ -640,35 +674,28 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Lazy load images
     function lazyLoadImages() {
-        const images = document.querySelectorAll('.lazy-load');
+        const lazyImages = document.querySelectorAll('.lazy-load');
         
         if ('IntersectionObserver' in window) {
             const imageObserver = new IntersectionObserver((entries, observer) => {
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
-                        const img = entry.target;
-                        img.src = img.getAttribute('src');
-                        img.classList.add('loaded');
-                        imageObserver.unobserve(img);
+                        const image = entry.target;
+                        image.classList.remove('lazy-load');
+                        imageObserver.unobserve(image);
                     }
                 });
             });
             
-            images.forEach(img => {
-                imageObserver.observe(img);
+            lazyImages.forEach(image => {
+                imageObserver.observe(image);
             });
         } else {
             // Fallback for browsers that don't support IntersectionObserver
-            images.forEach(img => {
-                img.src = img.getAttribute('src');
-                img.classList.add('loaded');
+            lazyImages.forEach(image => {
+                image.classList.remove('lazy-load');
             });
         }
-    }
-
-    // Helper function to capitalize the first letter
-    function capitalizeFirstLetter(string) {
-        return string.charAt(0).toUpperCase() + string.slice(1);
     }
 
     // Initialize app
@@ -678,7 +705,8 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Search input event listener
         searchInput.addEventListener('input', function() {
-            filterBySearch(this.value);
+            searchQuery = this.value.toLowerCase();
+            filterEmojis();
         });
         
         // Category button event listeners
@@ -690,7 +718,20 @@ document.addEventListener('DOMContentLoaded', function() {
                 categoryButtons.forEach(btn => btn.classList.remove('active'));
                 this.classList.add('active');
                 
-                filterByCategory(currentCategory);
+                filterEmojis();
+            });
+        });
+        
+        // Shape button event listeners
+        shapeButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                currentShape = this.getAttribute('data-shape');
+                
+                // Update active button
+                shapeButtons.forEach(btn => btn.classList.remove('active'));
+                this.classList.add('active');
+                
+                filterEmojis();
             });
         });
     }
