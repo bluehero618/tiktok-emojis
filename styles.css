@@ -13,6 +13,7 @@
     --success: #4BB543;
     --gradient-start: #0071E3;
     --gradient-end: #42A5F5;
+    --colorful-gradient: linear-gradient(135deg, #ff5b79, #e942ff, #8b42ff, #4287ff, #42ddff);
 }
 
 body {
@@ -53,6 +54,33 @@ button,
     transform: translateY(-2px);
 }
 
+/* 添加炫彩渐变效果 */
+.hero-gradient {
+    background: var(--colorful-gradient);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    display: inline-block;
+}
+
+.gradient-border {
+    position: relative;
+    border-radius: 1rem;
+    overflow: hidden;
+}
+
+.gradient-border::before {
+    content: "";
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    background: var(--colorful-gradient);
+    z-index: -1;
+    border-radius: 1.1rem;
+}
+
 /* Category Navigation */
 .category-tabs {
     display: flex;
@@ -80,7 +108,7 @@ button,
 }
 
 .category-tab.active {
-    background-color: var(--primary-color);
+    background: var(--colorful-gradient);
     color: var(--white);
 }
 
@@ -106,7 +134,7 @@ button,
 .feature-icon {
     width: 60px;
     height: 60px;
-    background: linear-gradient(to bottom right, var(--gradient-start), var(--gradient-end));
+    background: var(--colorful-gradient);
     border-radius: 50%;
     display: flex;
     align-items: center;
@@ -130,11 +158,28 @@ button,
     display: flex;
     flex-direction: column;
     height: 100%;
+    position: relative;
+}
+
+.emoji-card::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: var(--colorful-gradient);
+    opacity: 0;
+    transition: opacity 0.3s ease;
 }
 
 .emoji-card:hover {
     transform: translateY(-5px);
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+}
+
+.emoji-card:hover::after {
+    opacity: 1;
 }
 
 .emoji-image {
@@ -216,6 +261,7 @@ button,
 .copy-btn {
     background-color: var(--dark-gray);
     color: var(--white);
+    border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .copy-btn:hover {
@@ -223,12 +269,12 @@ button,
 }
 
 .download-btn {
-    background-color: var(--primary-color);
+    background: var(--colorful-gradient);
     color: var(--white);
 }
 
 .download-btn:hover {
-    background-color: #2989FF;
+    opacity: 0.9;
 }
 
 /* Secret Emoji Cards */

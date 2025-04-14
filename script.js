@@ -28,6 +28,54 @@ document.addEventListener('DOMContentLoaded', function() {
         console.log('Note: Make sure the emoji_png folder exists in your root directory');
     }
 
+    // 为emoji添加适当的分类
+    function assignCategories(emojiData) {
+        return emojiData.map(emoji => {
+            // 将所有emoji默认设为smileys类别
+            let categories = ['smileys'];
+            
+            // 根据emoji名称分配额外的类别
+            const name = emoji.name.toLowerCase();
+            
+            // 快乐表情
+            if (name.includes('happy') || name.includes('smile') || name.includes('laugh') || 
+                name.includes('joy') || name.includes('grin') || name.includes('hehe') || 
+                name.includes('excited') || name.includes('flush') || name.includes('cute') ||
+                name.includes('yummy') || name.includes('joyful')) {
+                categories.push('happy');
+            }
+            
+            // 悲伤表情
+            if (name.includes('sad') || name.includes('cry') || name.includes('tear') || 
+                name.includes('weep') || name.includes('wrong') || name.includes('embarrassed')) {
+                categories.push('sad');
+            }
+            
+            // 愤怒表情
+            if (name.includes('angry') || name.includes('rage') || name.includes('sulk') || 
+                name.includes('mad') || name.includes('disdain')) {
+                categories.push('angry');
+            }
+            
+            // 爱心表情
+            if (name.includes('love') || name.includes('heart') || name.includes('lovely') || 
+                name.includes('cute')) {
+                categories.push('love');
+            }
+            
+            // 人物相关
+            if (name.includes('slap') || name.includes('hand')) {
+                categories.push('people');
+            }
+            
+            // 返回更新后的emoji对象
+            return {
+                ...emoji,
+                categories: categories
+            };
+        });
+    }
+
     // TikTok自定义表情数据 - 使用截图中的表情
     const emojiData = [
         {
@@ -400,6 +448,9 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     ];
 
+    // 添加分类并初始化数据
+    const categorizedEmojiData = assignCategories(emojiData);
+
     // 创建emoji图片的函数 - 修改以支持自定义表情图片
     function createEmojiImage(emoji, name) {
         // 尝试加载本地图片
@@ -449,7 +500,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 <div class="emoji-info">
                     <div class="emoji-name">${emoji.name}</div>
                     <div class="emoji-unicode">${emoji.unicode}</div>
-                    <div class="emoji-category">${capitalizeFirstLetter(emoji.category)}</div>
+                    <div class="emoji-category">${emoji.categories ? emoji.categories[0] : emoji.category}</div>
                 </div>
                 <div class="emoji-actions">
                     <div class="emoji-btn copy-btn" data-emoji="${emoji.emoji}">
@@ -487,7 +538,12 @@ document.addEventListener('DOMContentLoaded', function() {
         } else if (category === 'trending') {
             filteredEmojis = allEmojis.filter(emoji => emoji.trending);
         } else {
-            filteredEmojis = allEmojis.filter(emoji => emoji.category === category);
+            // 使用新的分类系统
+            filteredEmojis = allEmojis.filter(emoji => 
+                emoji.categories ? 
+                emoji.categories.includes(category) : 
+                emoji.category === category
+            );
         }
         
         // Apply search query if it exists
@@ -513,7 +569,11 @@ document.addEventListener('DOMContentLoaded', function() {
             ? [...allEmojis] 
             : currentCategory === 'trending'
                 ? allEmojis.filter(emoji => emoji.trending)
-                : allEmojis.filter(emoji => emoji.category === currentCategory);
+                : allEmojis.filter(emoji => 
+                    emoji.categories ? 
+                    emoji.categories.includes(currentCategory) : 
+                    emoji.category === currentCategory
+                );
         
         // Then apply search filter
         filteredEmojis = categoryFiltered.filter(emoji => 
@@ -570,13 +630,11 @@ document.addEventListener('DOMContentLoaded', function() {
     function showToast(message, isError = false) {
         toast.textContent = message;
         toast.className = isError 
-            ? 'fixed bottom-4 right-4 bg-red-500 text-white py-2 px-4 rounded-lg shadow-lg transform translate-y-0 opacity-1 transition-all duration-300'
-            : 'fixed bottom-4 right-4 bg-gray-800 text-white py-2 px-4 rounded-lg shadow-lg transform translate-y-0 opacity-1 transition-all duration-300';
-        
-        toast.classList.add('show');
+            ? 'fixed bottom-4 right-4 bg-red-600 text-white py-2 px-4 rounded-lg shadow-lg transform translate-y-0 opacity-100 transition-all duration-300'
+            : 'fixed bottom-4 right-4 bg-gray-800 text-white py-2 px-4 rounded-lg shadow-lg transform translate-y-0 opacity-100 transition-all duration-300';
         
         setTimeout(() => {
-            toast.classList.remove('show');
+            toast.className = 'fixed bottom-4 right-4 bg-gray-800 text-white py-2 px-4 rounded-lg shadow-lg transform translate-y-20 opacity-0 transition-all duration-300';
         }, 3000);
     }
 
@@ -616,7 +674,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Initialize app
     // Load emoji data and set up event listeners
     function initApp() {
-        initializeEmojis(emojiData);
+        initializeEmojis(categorizedEmojiData);
         
         // Search input event listener
         searchInput.addEventListener('input', function() {
