@@ -40,23 +40,22 @@
     }
     </script>
 </head>
-<body class="bg-gray-50 text-gray-900">
+<body class="bg-black text-white">
     <!-- Header -->
-    <header class="bg-yellow-400 shadow-md sticky top-0 z-50">
+    <header class="bg-black shadow-md sticky top-0 z-50">
         <div class="container mx-auto px-4 py-3 flex flex-wrap justify-between items-center">
             <div class="flex items-center">
-                <a href="/" class="text-2xl font-bold text-black flex items-center space-x-2">
-                    <img src="favicon.png" alt="TikTok Emojis Logo" class="h-8 w-8">
+                <a href="/" class="text-2xl font-bold text-white">
                     <span>TikTok Emojis</span>
                 </a>
             </div>
             <div class="mt-2 md:mt-0 w-full md:w-auto">
                 <input type="text" id="search" placeholder="Search emojis..." 
-                    class="w-full md:w-64 px-4 py-2 rounded-full border-2 border-gray-300 focus:border-black focus:outline-none">
+                    class="w-full md:w-64 px-4 py-2 rounded-full border-2 border-gray-700 bg-gray-800 text-white focus:border-blue-500 focus:outline-none">
             </div>
         </div>
         <!-- Category Navigation -->
-        <nav class="bg-gray-800 text-white overflow-x-auto whitespace-nowrap">
+        <nav class="bg-gray-900 text-white overflow-x-auto whitespace-nowrap">
             <div class="container mx-auto px-4 py-2 flex space-x-4">
                 <button class="category-btn active" data-category="all">All Emojis</button>
                 <button class="category-btn" data-category="smileys">Smileys & Emotion</button>
@@ -95,22 +94,22 @@
         <!-- Hero Section -->
         <section class="mb-12 text-center">
             <h1 class="text-4xl font-bold mb-4">TikTok Emojis Collection</h1>
-            <p class="text-xl text-gray-600 mb-6">Copy and download all TikTok emojis for free</p>
-            <p class="text-gray-600 mb-8">Use these emojis in TikTok comments, bios, or anywhere outside of TikTok</p>
+            <p class="text-xl text-gray-400 mb-6">Copy and download all TikTok emojis for free</p>
+            <p class="text-gray-400 mb-8">Use these emojis in TikTok comments, bios, or anywhere outside of TikTok</p>
             
             <!-- Features -->
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
-                <div class="bg-white p-6 rounded-lg shadow-md">
+                <div class="bg-gray-900 p-6 rounded-lg shadow-md">
                     <h3 class="text-xl font-semibold mb-2">Copy Emoji</h3>
-                    <p>Easily copy any TikTok emoji to use in your comments, bio, or anywhere else</p>
+                    <p class="text-gray-400">Easily copy any TikTok emoji to use in your comments, bio, or anywhere else</p>
                 </div>
-                <div class="bg-white p-6 rounded-lg shadow-md">
+                <div class="bg-gray-900 p-6 rounded-lg shadow-md">
                     <h3 class="text-xl font-semibold mb-2">Download PNG</h3>
-                    <p>Download high-quality PNG images of all TikTok emojis</p>
+                    <p class="text-gray-400">Download high-quality PNG images of all TikTok emojis</p>
                 </div>
-                <div class="bg-white p-6 rounded-lg shadow-md">
+                <div class="bg-gray-900 p-6 rounded-lg shadow-md">
                     <h3 class="text-xl font-semibold mb-2">Emoji Info</h3>
-                    <p>Get detailed information about each emoji including name, code, and category</p>
+                    <p class="text-gray-400">Get detailed information about each emoji including name, code, and category</p>
                 </div>
             </div>
         </section>
@@ -118,7 +117,7 @@
         <!-- Emojis Grid Section -->
         <section>
             <h2 class="text-2xl font-bold mb-4">All TikTok Emojis</h2>
-            <div id="emoji-count" class="text-gray-600 mb-4">Showing all emojis</div>
+            <div id="emoji-count" class="text-gray-400 mb-4">Showing all emojis</div>
             
             <!-- Emoji Grid -->
             <div id="emoji-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
@@ -127,7 +126,7 @@
             
             <!-- Loading Indicator -->
             <div id="loading" class="text-center my-8 hidden">
-                <div class="inline-block animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-yellow-400"></div>
+                <div class="inline-block animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-blue-500"></div>
                 <p class="mt-2">Loading more emojis...</p>
             </div>
         </section>
@@ -153,59 +152,59 @@
         <section class="my-12">
             <h2 class="text-2xl font-bold mb-6">Frequently Asked Questions</h2>
             <div class="space-y-4">
-                <div class="bg-white p-6 rounded-lg shadow-md">
+                <div class="bg-gray-900 p-6 rounded-lg shadow-md">
                     <h3 class="text-xl font-semibold mb-2">How to use TikTok emojis?</h3>
-                    <p>Click the "Copy" button on any emoji card to copy it to your clipboard. Then you can paste it in TikTok comments, bio, or anywhere else that supports emojis.</p>
+                    <p class="text-gray-400">Click the "Copy" button on any emoji card to copy it to your clipboard. Then you can paste it in TikTok comments, bio, or anywhere else that supports emojis.</p>
                 </div>
-                <div class="bg-white p-6 rounded-lg shadow-md">
+                <div class="bg-gray-900 p-6 rounded-lg shadow-md">
                     <h3 class="text-xl font-semibold mb-2">How to download TikTok emojis as PNG?</h3>
-                    <p>Click the "Download" button on any emoji card to download a high-quality PNG image of the emoji.</p>
+                    <p class="text-gray-400">Click the "Download" button on any emoji card to download a high-quality PNG image of the emoji.</p>
                 </div>
-                <div class="bg-white p-6 rounded-lg shadow-md">
+                <div class="bg-gray-900 p-6 rounded-lg shadow-md">
                     <h3 class="text-xl font-semibold mb-2">Can I use TikTok emojis outside of TikTok?</h3>
-                    <p>Yes! You can copy any TikTok emoji and use it in other social media platforms, messaging apps, or anywhere that supports Unicode emojis.</p>
+                    <p class="text-gray-400">Yes! You can copy any TikTok emoji and use it in other social media platforms, messaging apps, or anywhere that supports Unicode emojis.</p>
                 </div>
-                <div class="bg-white p-6 rounded-lg shadow-md">
+                <div class="bg-gray-900 p-6 rounded-lg shadow-md">
                     <h3 class="text-xl font-semibold mb-2">How to get TikTok emojis on keyboard?</h3>
-                    <p>TikTok emojis are standard Unicode emojis that are already available on most modern keyboards. If you're looking for specific TikTok-themed stickers, those are only available within the TikTok app.</p>
+                    <p class="text-gray-400">TikTok emojis are standard Unicode emojis that are already available on most modern keyboards. If you're looking for specific TikTok-themed stickers, those are only available within the TikTok app.</p>
                 </div>
-                <div class="bg-white p-6 rounded-lg shadow-md">
+                <div class="bg-gray-900 p-6 rounded-lg shadow-md">
                     <h3 class="text-xl font-semibold mb-2">What are trending TikTok emojis?</h3>
-                    <p>Trending TikTok emojis are those that are currently popular in TikTok comments and videos. You can find them in our "Trending" category.</p>
+                    <p class="text-gray-400">Trending TikTok emojis are those that are currently popular in TikTok comments and videos. You can find them in our "Trending" category.</p>
                 </div>
             </div>
         </section>
     </main>
 
     <!-- Footer -->
-    <footer class="bg-gray-800 text-white py-8">
+    <footer class="bg-gray-900 text-white py-8">
         <div class="container mx-auto px-4">
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
                 <div>
                     <h3 class="text-xl font-bold mb-4">TikTok Emojis</h3>
-                    <p>The best place to find, copy, and download TikTok emojis for free.</p>
+                    <p class="text-gray-400">The best place to find, copy, and download TikTok emojis for free.</p>
                 </div>
                 <div>
                     <h3 class="text-xl font-bold mb-4">Quick Links</h3>
                     <ul class="space-y-2">
-                        <li><a href="/" class="hover:text-yellow-400">Home</a></li>
-                        <li><a href="/about" class="hover:text-yellow-400">About</a></li>
-                        <li><a href="/privacy-policy" class="hover:text-yellow-400">Privacy Policy</a></li>
-                        <li><a href="/terms-of-service" class="hover:text-yellow-400">Terms of Service</a></li>
+                        <li><a href="/" class="hover:text-blue-400">Home</a></li>
+                        <li><a href="/about" class="hover:text-blue-400">About</a></li>
+                        <li><a href="/privacy-policy" class="hover:text-blue-400">Privacy Policy</a></li>
+                        <li><a href="/terms-of-service" class="hover:text-blue-400">Terms of Service</a></li>
                     </ul>
                 </div>
                 <div>
                     <h3 class="text-xl font-bold mb-4">Connect</h3>
-                    <p>Contact us at: <a href="mailto:info@tiktokemojis.art" class="text-yellow-400">info@tiktokemojis.art</a></p>
+                    <p class="text-gray-400">Contact us at: <a href="mailto:info@tiktokemojis.art" class="text-blue-400">info@tiktokemojis.art</a></p>
                     <div class="flex space-x-4 mt-4">
-                        <a href="#" class="text-white hover:text-yellow-400"><i class="fab fa-twitter"></i></a>
-                        <a href="#" class="text-white hover:text-yellow-400"><i class="fab fa-facebook"></i></a>
-                        <a href="#" class="text-white hover:text-yellow-400"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="text-white hover:text-blue-400"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="text-white hover:text-blue-400"><i class="fab fa-facebook"></i></a>
+                        <a href="#" class="text-white hover:text-blue-400"><i class="fab fa-instagram"></i></a>
                     </div>
                 </div>
             </div>
-            <div class="mt-8 pt-4 border-t border-gray-700 text-center">
-                <p>&copy; 2023 TikTokEmojis.art. All rights reserved.</p>
+            <div class="mt-8 pt-4 border-t border-gray-800 text-center">
+                <p class="text-gray-400">&copy; 2023 TikTokEmojis.art. All rights reserved.</p>
             </div>
         </div>
     </footer>

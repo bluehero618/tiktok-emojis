@@ -14,109 +14,420 @@ document.addEventListener('DOMContentLoaded', function() {
     const categoryButtons = document.querySelectorAll('.category-btn');
     const toast = document.getElementById('toast');
 
-    // Sample emoji data (replace with actual data from emojipedia.org/tiktok)
-    // In a real implementation, this would be loaded from a JSON file or API
+    // 检查emoji_png文件夹是否存在, 如果不存在则创建
+    checkAndCreateEmojiFolder();
+
+    // 检查和创建emoji文件夹的函数
+    function checkAndCreateEmojiFolder() {
+        const folderPath = 'emoji_png';
+        
+        // 在生产环境中，这部分逻辑会在服务器端实现
+        console.log('Checking for emoji_png folder...');
+        
+        // 在客户端无法直接创建文件夹，这里仅作为提示
+        console.log('Note: Make sure the emoji_png folder exists in your root directory');
+    }
+
+    // TikTok自定义表情数据 - 使用截图中的表情
     const emojiData = [
         {
-            emoji: "😀",
-            name: "Grinning Face",
-            unicode: "U+1F600",
+            emoji: "😇",
+            name: "angel",
+            unicode: "U+1F607",
             category: "smileys",
             trending: true,
-            image: "emoji_png/grinning_face.png"
+            image: "emoji_png/angel.png"
         },
         {
-            emoji: "😂",
-            name: "Face with Tears of Joy",
-            unicode: "U+1F602",
+            emoji: "😡",
+            name: "angry",
+            unicode: "U+1F621",
             category: "smileys",
             trending: true,
-            image: "emoji_png/face_with_tears_of_joy.png"
+            image: "emoji_png/angry.png"
+        },
+        {
+            emoji: "😯",
+            name: "astonish",
+            unicode: "U+1F62F",
+            category: "smileys",
+            trending: false,
+            image: "emoji_png/astonish.png"
+        },
+        {
+            emoji: "😓",
+            name: "awkward",
+            unicode: "U+1F613",
+            category: "smileys",
+            trending: false,
+            image: "emoji_png/awkward.png"
+        },
+        {
+            emoji: "😉",
+            name: "blink",
+            unicode: "U+1F609",
+            category: "smileys",
+            trending: true,
+            image: "emoji_png/blink.png"
+        },
+        {
+            emoji: "😎",
+            name: "complacent",
+            unicode: "U+1F60E",
+            category: "smileys",
+            trending: true,
+            image: "emoji_png/complacent.png"
+        },
+        {
+            emoji: "😈",
+            name: "cool",
+            unicode: "U+1F608",
+            category: "smileys",
+            trending: true,
+            image: "emoji_png/cool.png"
+        },
+        {
+            emoji: "😢",
+            name: "cry",
+            unicode: "U+1F622",
+            category: "smileys",
+            trending: true,
+            image: "emoji_png/cry.png"
         },
         {
             emoji: "🥰",
-            name: "Smiling Face with Hearts",
+            name: "cute",
             unicode: "U+1F970",
             category: "smileys",
             trending: true,
-            image: "emoji_png/smiling_face_with_hearts.png"
+            image: "emoji_png/cute.png"
         },
         {
-            emoji: "👋",
-            name: "Waving Hand",
-            unicode: "U+1F44B",
-            category: "people",
+            emoji: "😒",
+            name: "disdain",
+            unicode: "U+1F612",
+            category: "smileys",
             trending: false,
-            image: "emoji_png/waving_hand.png"
+            image: "emoji_png/disdain.png"
         },
         {
-            emoji: "🔥",
-            name: "Fire",
-            unicode: "U+1F525",
-            category: "symbols",
-            trending: true,
-            image: "emoji_png/fire.png"
-        },
-        {
-            emoji: "💯",
-            name: "Hundred Points",
-            unicode: "U+1F4AF",
-            category: "symbols",
-            trending: true,
-            image: "emoji_png/hundred_points.png"
-        },
-        {
-            emoji: "💕",
-            name: "Two Hearts",
-            unicode: "U+1F495",
-            category: "symbols",
-            trending: true,
-            image: "emoji_png/two_hearts.png"
-        },
-        {
-            emoji: "🤣",
-            name: "Rolling on the Floor Laughing",
-            unicode: "U+1F923",
+            emoji: "🤤",
+            name: "drool",
+            unicode: "U+1F924",
             category: "smileys",
             trending: true,
-            image: "emoji_png/rolling_on_the_floor_laughing.png"
+            image: "emoji_png/drool.png"
         },
         {
-            emoji: "❤️",
-            name: "Red Heart",
-            unicode: "U+2764 U+FE0F",
-            category: "symbols",
-            trending: true,
-            image: "emoji_png/red_heart.png"
+            emoji: "😞",
+            name: "embarrassed",
+            unicode: "U+1F61E",
+            category: "smileys",
+            trending: false,
+            image: "emoji_png/embarrassed.png"
         },
         {
-            emoji: "✨",
-            name: "Sparkles",
-            unicode: "U+2728",
-            category: "symbols",
-            trending: true,
-            image: "emoji_png/sparkles.png"
-        },
-        {
-            emoji: "😭",
-            name: "Loudly Crying Face",
-            unicode: "U+1F62D",
+            emoji: "😈",
+            name: "evil",
+            unicode: "U+1F608",
             category: "smileys",
             trending: true,
-            image: "emoji_png/loudly_crying_face.png"
+            image: "emoji_png/evil.png"
+        },
+        {
+            emoji: "😆",
+            name: "excited",
+            unicode: "U+1F606",
+            category: "smileys",
+            trending: true,
+            image: "emoji_png/excited.png"
+        },
+        {
+            emoji: "🙄",
+            name: "facewithrollingeyes",
+            unicode: "U+1F644",
+            category: "smileys",
+            trending: true,
+            image: "emoji_png/facewithrollingeyes.png"
+        },
+        {
+            emoji: "😊",
+            name: "flushed",
+            unicode: "U+1F60A",
+            category: "smileys",
+            trending: true,
+            image: "emoji_png/flushed.png"
+        },
+        {
+            emoji: "😛",
+            name: "funnyface",
+            unicode: "U+1F61B",
+            category: "smileys",
+            trending: true,
+            image: "emoji_png/funnyface.png"
+        },
+        {
+            emoji: "🤑",
+            name: "greedy",
+            unicode: "U+1F911",
+            category: "smileys",
+            trending: false,
+            image: "emoji_png/greedy.png"
+        },
+        {
+            emoji: "😊",
+            name: "happy",
+            unicode: "U+1F60A",
+            category: "smileys",
+            trending: true,
+            image: "emoji_png/happy.png"
+        },
+        {
+            emoji: "😄",
+            name: "hehe",
+            unicode: "U+1F604",
+            category: "smileys",
+            trending: true,
+            image: "emoji_png/hehe.png"
+        },
+        {
+            emoji: "😃",
+            name: "joyful",
+            unicode: "U+1F603",
+            category: "smileys",
+            trending: true,
+            image: "emoji_png/joyful.png"
+        },
+        {
+            emoji: "😂",
+            name: "laugh",
+            unicode: "U+1F602",
+            category: "smileys",
+            trending: true,
+            image: "emoji_png/laugh.png"
+        },
+        {
+            emoji: "😹",
+            name: "laughwithtears",
+            unicode: "U+1F639",
+            category: "smileys",
+            trending: true,
+            image: "emoji_png/laughwithtears.png"
         },
         {
             emoji: "😍",
-            name: "Smiling Face with Heart-Eyes",
+            name: "loveface",
             unicode: "U+1F60D",
             category: "smileys",
             trending: true,
-            image: "emoji_png/smiling_face_with_heart_eyes.png"
+            image: "emoji_png/loveface.png"
+        },
+        {
+            emoji: "🥰",
+            name: "lovely",
+            unicode: "U+1F970",
+            category: "smileys",
+            trending: true,
+            image: "emoji_png/lovely.png"
+        },
+        {
+            emoji: "😴",
+            name: "nap",
+            unicode: "U+1F634",
+            category: "smileys",
+            trending: false,
+            image: "emoji_png/nap.png"
+        },
+        {
+            emoji: "😤",
+            name: "pride",
+            unicode: "U+1F624",
+            category: "smileys",
+            trending: false,
+            image: "emoji_png/pride.png"
+        },
+        {
+            emoji: "😌",
+            name: "proud",
+            unicode: "U+1F60C",
+            category: "smileys",
+            trending: false,
+            image: "emoji_png/proud.png"
+        },
+        {
+            emoji: "😡",
+            name: "rage",
+            unicode: "U+1F621",
+            category: "smileys",
+            trending: true,
+            image: "emoji_png/rage.png"
+        },
+        {
+            emoji: "😱",
+            name: "scream",
+            unicode: "U+1F631",
+            category: "smileys",
+            trending: true,
+            image: "emoji_png/scream.png"
+        },
+        {
+            emoji: "😱",
+            name: "shock",
+            unicode: "U+1F631",
+            category: "smileys",
+            trending: true,
+            image: "emoji_png/shock.png"
+        },
+        {
+            emoji: "😲",
+            name: "shout",
+            unicode: "U+1F632",
+            category: "smileys",
+            trending: false,
+            image: "emoji_png/shout.png"
+        },
+        {
+            emoji: "👋",
+            name: "slap",
+            unicode: "U+1F44B",
+            category: "people",
+            trending: false,
+            image: "emoji_png/slap.png"
+        },
+        {
+            emoji: "🙂",
+            name: "smile",
+            unicode: "U+1F642",
+            category: "smileys",
+            trending: true,
+            image: "emoji_png/smile.png"
+        },
+        {
+            emoji: "😀",
+            name: "smileface",
+            unicode: "U+1F600",
+            category: "smileys",
+            trending: true,
+            image: "emoji_png/smileface.png"
+        },
+        {
+            emoji: "😶",
+            name: "speechless",
+            unicode: "U+1F636",
+            category: "smileys",
+            trending: false,
+            image: "emoji_png/speechless.png"
+        },
+        {
+            emoji: "😮",
+            name: "stun",
+            unicode: "U+1F62E",
+            category: "smileys",
+            trending: false,
+            image: "emoji_png/stun.png"
+        },
+        {
+            emoji: "😠",
+            name: "sulk",
+            unicode: "U+1F620",
+            category: "smileys",
+            trending: false,
+            image: "emoji_png/sulk.png"
+        },
+        {
+            emoji: "😲",
+            name: "surprised",
+            unicode: "U+1F632",
+            category: "smileys",
+            trending: true,
+            image: "emoji_png/surprised.png"
+        },
+        {
+            emoji: "😭",
+            name: "tears",
+            unicode: "U+1F62D",
+            category: "smileys",
+            trending: true,
+            image: "emoji_png/tears.png"
+        },
+        {
+            emoji: "🤔",
+            name: "thinking",
+            unicode: "U+1F914",
+            category: "smileys",
+            trending: true,
+            image: "emoji_png/thinking.png"
+        },
+        {
+            emoji: "😢",
+            name: "weep",
+            unicode: "U+1F622",
+            category: "smileys",
+            trending: true,
+            image: "emoji_png/weep.png"
+        },
+        {
+            emoji: "😈",
+            name: "wicked",
+            unicode: "U+1F608",
+            category: "smileys",
+            trending: true,
+            image: "emoji_png/wicked.png"
+        },
+        {
+            emoji: "😮",
+            name: "wow",
+            unicode: "U+1F62E",
+            category: "smileys",
+            trending: true,
+            image: "emoji_png/wow.png"
+        },
+        {
+            emoji: "😞",
+            name: "wronged",
+            unicode: "U+1F61E",
+            category: "smileys",
+            trending: false,
+            image: "emoji_png/wronged.png"
+        },
+        {
+            emoji: "😋",
+            name: "yummy",
+            unicode: "U+1F60B",
+            category: "smileys",
+            trending: true,
+            image: "emoji_png/yummy.png"
         }
     ];
 
-    // Initialize the emoji grid
-    initializeEmojis(emojiData);
+    // 创建emoji图片的函数 - 修改以支持自定义表情图片
+    function createEmojiImage(emoji, name) {
+        // 尝试加载本地图片
+        const img = new Image();
+        img.src = `emoji_png/${name}.png`;
+        
+        // 如果本地图片存在则直接返回
+        if (img.complete) {
+            return img.src;
+        }
+        
+        // 否则使用Canvas生成emoji图片
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+        canvas.width = 128;
+        canvas.height = 128;
+        
+        // 设置emoji字体
+        ctx.font = "90px Arial";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        
+        // 绘制emoji到canvas
+        ctx.fillText(emoji, canvas.width/2, canvas.height/2);
+        
+        // 生成图片数据
+        return canvas.toDataURL('image/png');
+    }
 
     // Create emoji card elements
     function createEmojiCards(emojis) {
@@ -252,7 +563,7 @@ document.addEventListener('DOMContentLoaded', function() {
         a.click();
         document.body.removeChild(a);
         
-        showToast('Emoji downloaded!');
+        showToast('Emoji downloaded successfully!');
     }
 
     // Show toast notification
@@ -302,24 +613,32 @@ document.addEventListener('DOMContentLoaded', function() {
         return string.charAt(0).toUpperCase() + string.slice(1);
     }
 
-    // Event Listeners
-    searchInput.addEventListener('input', e => {
-        filterBySearch(e.target.value);
-    });
-
-    categoryButtons.forEach(button => {
-        button.addEventListener('click', function() {
-            // Remove active class from all buttons
-            categoryButtons.forEach(btn => btn.classList.remove('active'));
-            
-            // Add active class to clicked button
-            this.classList.add('active');
-            
-            // Update current category and filter
-            currentCategory = this.getAttribute('data-category');
-            filterByCategory(currentCategory);
+    // Initialize app
+    // Load emoji data and set up event listeners
+    function initApp() {
+        initializeEmojis(emojiData);
+        
+        // Search input event listener
+        searchInput.addEventListener('input', function() {
+            filterBySearch(this.value);
         });
-    });
+        
+        // Category button event listeners
+        categoryButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                currentCategory = this.getAttribute('data-category');
+                
+                // Update active button
+                categoryButtons.forEach(btn => btn.classList.remove('active'));
+                this.classList.add('active');
+                
+                filterByCategory(currentCategory);
+            });
+        });
+    }
+    
+    // Start the app
+    initApp();
 
     // Add infinite scrolling simulation (in a real app, you would load more emojis)
     window.addEventListener('scroll', function() {
