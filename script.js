@@ -908,6 +908,9 @@ document.addEventListener('DOMContentLoaded', function() {
         const unicode = e.currentTarget.getAttribute('data-unicode');
         const description = e.currentTarget.getAttribute('data-description');
         
+        // 找到对应的emoji对象
+        const emojiObj = allEmojis.find(e => e.name === name);
+        
         // 创建模态对话框
         const modal = document.createElement('div');
         modal.className = 'fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50';
@@ -916,10 +919,13 @@ document.addEventListener('DOMContentLoaded', function() {
         let modalContent = `
             <div class="bg-gray-800 rounded-lg p-6 max-w-md w-full mx-4">
                 <div class="flex justify-between items-center mb-4">
-                    <h3 class="text-xl font-bold">${name.replace(/_/g, ' ')}</h3>
+                    <h3 class="text-xl font-semibold">${name.replace(/_/g, ' ')}</h3>
                     <button class="text-gray-400 hover:text-white" id="close-modal">
                         <i class="fas fa-times"></i>
                     </button>
+                </div>
+                <div class="text-center mb-4">
+                    <div class="emoji-display text-5xl mb-3">${emojiObj ? emojiObj.emoji : ''}</div>
                 </div>
                 <div class="mb-4">
                     <div class="text-sm text-gray-400 mb-1">Unicode:</div>
@@ -1052,8 +1058,13 @@ document.addEventListener('DOMContentLoaded', function() {
         canvas.height = 128;
         
         // 特殊表情处理
-        if (emoji.name.includes('_')) {
-            const parts = emoji.emoji.split('');
+        if (emoji.name.includes('_') || emoji.shape === 'special') {
+            // 提取emoji字符，确保正确处理复合表情
+            const parts = Array.from(emoji.emoji);
+            
+            // 先用纯色背景填充画布（半透明黑色背景以确保emoji能够很好地显示）
+            ctx.fillStyle = 'rgba(54, 54, 54, 0.3)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
             
             // 根据不同的特殊表情设置不同的布局
             switch (emoji.name) {
@@ -1061,6 +1072,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     ctx.font = 'bold 40px Arial';
                     ctx.textAlign = 'center';
                     ctx.textBaseline = 'middle';
+                    ctx.fillStyle = 'white';
                     ctx.fillText(parts[0], 30, 64); // 左侧✨
                     ctx.font = 'bold 70px Arial';
                     ctx.fillText(parts[1], 64, 64); // 中间🤖
@@ -1072,6 +1084,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     ctx.font = 'bold 40px Arial';
                     ctx.textAlign = 'center';
                     ctx.textBaseline = 'middle';
+                    ctx.fillStyle = 'white';
                     ctx.fillText(parts[0], 30, 45); // 左眼
                     ctx.font = 'bold 50px Arial';
                     ctx.fillText(parts[1], 64, 90); // 嘴
@@ -1083,6 +1096,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     ctx.font = 'bold 35px Arial';
                     ctx.textAlign = 'center';
                     ctx.textBaseline = 'middle';
+                    ctx.fillStyle = 'white';
                     ctx.fillText(parts[0], 30, 85); // 左手
                     ctx.font = 'bold 60px Arial';
                     ctx.fillText(parts[1], 64, 45); // 皇冠
@@ -1094,30 +1108,45 @@ document.addEventListener('DOMContentLoaded', function() {
                     ctx.font = 'bold 40px Arial';
                     ctx.textAlign = 'center';
                     ctx.textBaseline = 'middle';
+                    ctx.fillStyle = 'white';
                     ctx.fillText(parts[0], 32, 64); // 左手
                     ctx.fillText(parts[1], 64, 64); // 中间手
                     ctx.fillText(parts[2], 96, 64); // 右手
                     break;
                     
-                case 'stop_crying': // 🛑😭🛑
-                    ctx.font = 'bold 35px Arial';
+                case 'stop_crying': // 😭✋
+                    ctx.font = 'bold 50px Arial';
                     ctx.textAlign = 'center';
                     ctx.textBaseline = 'middle';
-                    ctx.fillText(parts[0], 32, 64); // 左边停止
-                    ctx.font = 'bold 55px Arial';
-                    ctx.fillText(parts[1], 64, 64); // 中间哭脸
-                    ctx.font = 'bold 35px Arial';
-                    ctx.fillText(parts[2], 96, 64); // 右边停止
+                    ctx.fillStyle = 'white';
+                    ctx.fillText(parts[0], 45, 64); // 哭脸
+                    ctx.font = 'bold 50px Arial'; 
+                    ctx.fillText(parts[1], 85, 64); // 手
                     break;
                     
-                case 'shy_bashful': // 👉👈😳
-                    ctx.font = 'bold 35px Arial';
+                case 'shy_bashful': // 🫣👉👈
+                    ctx.font = 'bold 50px Arial';
                     ctx.textAlign = 'center';
                     ctx.textBaseline = 'middle';
-                    ctx.fillText(parts[0], 32, 85); // 左手
-                    ctx.fillText(parts[1], 96, 85); // 右手
-                    ctx.font = 'bold 60px Arial';
-                    ctx.fillText(parts[2], 64, 45); // 脸
+                    ctx.fillStyle = 'white';
+                    ctx.fillText(parts[0], 64, 45); // 脸
+                    ctx.font = 'bold 35px Arial';
+                    ctx.fillText(parts[1], 45, 85); // 左手
+                    ctx.fillText(parts[2], 85, 85); // 右手
+                    break;
+                    
+                case 'chair': // 🪑
+                case 'skull': // 💀
+                case 'birthday_cake': // 🎂
+                case 'person_standing': // 🧍
+                case 'clown_face': // 🤡
+                case 'sparkles': // ✨
+                    // 单个特殊表情居中放大显示
+                    ctx.font = 'bold 90px Arial';
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'middle';
+                    ctx.fillStyle = 'white';
+                    ctx.fillText(emoji.emoji, 64, 64);
                     break;
                     
                 default:
@@ -1128,6 +1157,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     ctx.font = 'bold 40px Arial';
                     ctx.textAlign = 'center';
                     ctx.textBaseline = 'middle';
+                    ctx.fillStyle = 'white';
                     
                     parts.forEach((part, index) => {
                         const x = startX + index * 40;
@@ -1140,6 +1170,7 @@ document.addEventListener('DOMContentLoaded', function() {
             ctx.font = 'bold 80px Arial';
             ctx.textAlign = 'center';
             ctx.textBaseline = 'middle';
+            ctx.fillStyle = 'white';
             ctx.fillText(emoji.emoji, 64, 64);
         }
         
@@ -1163,8 +1194,24 @@ document.addEventListener('DOMContentLoaded', function() {
                     const canvas = createDynamicEmojiImage(emoji);
                     resolve(canvas.toDataURL('image/png'));
                 } else {
-                    // 普通表情使用默认图片
-                    resolve(`emoji_png/${emoji.name}.png`);
+                    // 默认生成普通表情
+                    const canvas = document.createElement('canvas');
+                    const ctx = canvas.getContext('2d');
+                    canvas.width = 128;
+                    canvas.height = 128;
+                    
+                    // 添加半透明背景
+                    ctx.fillStyle = 'rgba(54, 54, 54, 0.3)';
+                    ctx.fillRect(0, 0, canvas.width, canvas.height);
+                    
+                    // 添加表情
+                    ctx.font = 'bold 80px Arial';
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'middle';
+                    ctx.fillStyle = 'white';
+                    ctx.fillText(emoji.emoji, 64, 64);
+                    
+                    resolve(canvas.toDataURL('image/png'));
                 }
             };
             img.src = pngPath;
@@ -1178,7 +1225,7 @@ document.addEventListener('DOMContentLoaded', function() {
             getSpecialEmojiImagePath(emoji).then(imagePath => {
                 // 创建表情卡片HTML
                 const card = document.createElement('div');
-                card.className = cardClass;
+                card.className = cardClass || 'emoji-card';
                 
                 // 创建表情图片和信息HTML
                 card.innerHTML = `
@@ -1213,7 +1260,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 infoBtn.addEventListener('click', showEmojiInfo);
                 
                 // 添加到网格
-                emojiGrid.appendChild(card);
+                const container = document.querySelector(`.${cardContainerClass}`) || emojiGrid;
+                container.appendChild(card);
             });
         } catch (error) {
             console.error('Error creating emoji card: ', error);
