@@ -321,10 +321,12 @@ button,
     background-color: var(--dark-gray);
     color: var(--white);
     border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: all 0.3s ease;
 }
 
 .copy-btn:hover {
-    background-color: #3A3A3C;
+    background: var(--colorful-gradient);
+    border: none;
 }
 
 .download-btn {
