@@ -14,7 +14,8 @@ document.addEventListener('DOMContentLoaded', function() {
     const emojiCountElement = document.getElementById('emoji-count');
     const categoryButtons = document.querySelectorAll('.category-btn');
     const shapeButtons = document.querySelectorAll('.shape-btn');
-    const toast = document.getElementById('toast');
+    let toast = document.getElementById('toast');
+    let toastTimeout;
 
     // 检查emoji_png文件夹是否存在, 如果不存在则创建
     checkAndCreateEmojiFolder();
@@ -657,21 +658,21 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         
         // 更新排序逻辑：首先按形状分组，然后在每个形状组内按名称排序
-        const specialEmojis = emojis.filter(emoji => emoji.shape === 'special');
-        const squareEmojis = emojis.filter(emoji => emoji.shape === 'square');
         const roundEmojis = emojis.filter(emoji => emoji.shape === 'round');
+        const squareEmojis = emojis.filter(emoji => emoji.shape === 'square');
+        const specialEmojis = emojis.filter(emoji => emoji.shape === 'special');
         
         // 按名称对每个组内的表情进行排序
-        specialEmojis.sort((a, b) => a.name.localeCompare(b.name));
-        squareEmojis.sort((a, b) => a.name.localeCompare(b.name));
         roundEmojis.sort((a, b) => a.name.localeCompare(b.name));
+        squareEmojis.sort((a, b) => a.name.localeCompare(b.name));
+        specialEmojis.sort((a, b) => a.name.localeCompare(b.name));
         
         // 根据当前选择的形状筛选器决定显示顺序
         let sortedEmojis = [];
         
         if (currentShape === 'all') {
-            // 如果选择"全部"，则按特殊->方形->圆形的顺序显示
-            sortedEmojis = [...specialEmojis, ...squareEmojis, ...roundEmojis];
+            // 如果选择"全部"，则按圆形->方形->特殊表情的顺序显示
+            sortedEmojis = [...roundEmojis, ...squareEmojis, ...specialEmojis];
         } else if (currentShape === 'special') {
             sortedEmojis = specialEmojis;
         } else if (currentShape === 'square') {
@@ -683,9 +684,14 @@ document.addEventListener('DOMContentLoaded', function() {
         sortedEmojis.forEach(emoji => {
             // 确保图片路径正确，如果是特殊表情则确保路径完整
             let imagePath = emoji.image;
-            if (!imagePath.startsWith('http') && !imagePath.startsWith('./')) {
-                imagePath = (emoji.category === 'special' || emoji.shape === 'special') ? 
-                    `${imagePath}` : imagePath;
+            if (!imagePath.startsWith('http')) {
+                // 检查图片是否存在，如果不存在则使用emoji字符作为备用
+                const img = new Image();
+                img.src = imagePath;
+                if (!img.complete || img.naturalWidth === 0) {
+                    // 为特殊表情创建动态Canvas图像
+                    imagePath = createDynamicEmojiImage(emoji.emoji, emoji.name);
+                }
             }
             
             // 确定卡片的样式类
@@ -769,9 +775,9 @@ document.addEventListener('DOMContentLoaded', function() {
             return categoryMatch && shapeMatch && searchMatch;
         });
         
-        // 按形状排序: 圆形优先，然后是特殊形状，最后是方形
+        // 按形状排序: 将特殊形状放在最后
         filteredEmojis.sort((a, b) => {
-            const shapeOrder = { 'round': 0, 'special': 1, 'square': 2 };
+            const shapeOrder = { 'round': 0, 'square': 1, 'special': 2 };
             return shapeOrder[a.shape] - shapeOrder[b.shape];
         });
         
@@ -851,25 +857,46 @@ document.addEventListener('DOMContentLoaded', function() {
         const unicode = e.currentTarget.getAttribute('data-unicode');
         const description = e.currentTarget.getAttribute('data-description');
         
-        if (description) {
-            showToast(`${name}: ${description}`);
-        } else if (unicode) {
-            showToast(`${name} (${unicode})`);
-        } else {
-            showToast(`${name}`);
+        let message = name;
+        
+        // 添加Unicode信息
+        if (unicode) {
+            message += ` (${unicode})`;
         }
+        
+        // 添加描述信息
+        if (description) {
+            message += `: ${description}`;
+        } else {
+            // 如果没有描述，添加通用描述
+            if (name.includes('_')) {
+                message += `: 这是一个TikTok特殊组合表情`;
+            } else {
+                message += `: 可用于TikTok评论和个人资料`;
+            }
+        }
+        
+        showToast(message, false, 5000); // 显示5秒
     }
 
     // Show toast notification
-    function showToast(message, isError = false) {
+    function showToast(message, isError = false, duration = 3000) {
+        if (!toast) {
+            toast = document.createElement('div');
+            toast.id = 'toast';
+            toast.className = 'fixed bottom-4 right-4 bg-gray-800 text-white py-2 px-4 rounded-lg shadow-lg transform translate-y-0 opacity-100 transition-all duration-300';
+            document.body.appendChild(toast);
+        }
+        
         toast.textContent = message;
         toast.className = isError 
-            ? 'fixed bottom-4 right-4 bg-red-600 text-white py-2 px-4 rounded-lg shadow-lg transform translate-y-0 opacity-100 transition-all duration-300'
-            : 'fixed bottom-4 right-4 bg-gray-800 text-white py-2 px-4 rounded-lg shadow-lg transform translate-y-0 opacity-100 transition-all duration-300';
+            ? 'fixed bottom-4 right-4 bg-red-600 text-white py-2 px-4 rounded-lg shadow-lg transform translate-y-0 opacity-100 transition-all duration-300 max-w-md'
+            : 'fixed bottom-4 right-4 bg-gray-800 text-white py-2 px-4 rounded-lg shadow-lg transform translate-y-0 opacity-100 transition-all duration-300 max-w-md';
         
-        setTimeout(() => {
-            toast.className = 'fixed bottom-4 right-4 bg-gray-800 text-white py-2 px-4 rounded-lg shadow-lg transform translate-y-20 opacity-0 transition-all duration-300';
-        }, 3000);
+        clearTimeout(toastTimeout);
+        toastTimeout = setTimeout(() => {
+            toast.className = 'fixed bottom-4 right-4 bg-gray-800 text-white py-2 px-4 rounded-lg shadow-lg transform translate-y-20 opacity-0 transition-all duration-300 max-w-md';
+        }, duration);
     }
 
     // Lazy load images
@@ -896,6 +923,29 @@ document.addEventListener('DOMContentLoaded', function() {
                 image.classList.remove('lazy-load');
             });
         }
+    }
+
+    // 为特殊表情创建动态图像
+    function createDynamicEmojiImage(emojiChar, name) {
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+        canvas.width = 128;
+        canvas.height = 128;
+        
+        // 设置背景色
+        ctx.fillStyle = '#36393f';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        
+        // 设置emoji字体
+        ctx.font = "64px Arial";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        
+        // 绘制emoji到canvas
+        ctx.fillText(emojiChar, canvas.width/2, canvas.height/2);
+        
+        // 生成图片数据
+        return canvas.toDataURL('image/png');
     }
 
     // Initialize app
