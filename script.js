@@ -2,7 +2,7 @@
 
 document.addEventListener('DOMContentLoaded', function() {
     // Data storage for emoji information
-    let allEmojis = [];
+    let emojiData = [];
     let filteredEmojis = [];
     let currentCategory = 'all';
     let currentShape = 'all';
@@ -543,6 +543,69 @@ document.addEventListener('DOMContentLoaded', function() {
             trending: true,
             description: "Used to express extreme emotion or to tell someone to stop being dramatic",
             image: "emoji_png/stop_crying.png"
+        },
+        {
+            emoji: "👁️❤️👁️",
+            name: "flirty_eyes",
+            unicode: "U+1F441 U+2764 U+1F441",
+            category: "special",
+            trending: true,
+            description: "Flirtatious expression, often used to show interest in someone or something",
+            image: "emoji_png/flirty_eyes.png"
+        },
+        {
+            emoji: "😳❤️❤️",
+            name: "blushing_face",
+            unicode: "U+1F633 U+2764 U+2764",
+            category: "special",
+            trending: true,
+            description: "Feeling shy and in love, used to express a crush or attraction",
+            image: "emoji_png/blushing_face.png"
+        },
+        {
+            emoji: "😳📸",
+            name: "caught_in_the_act",
+            unicode: "U+1F633 U+1F4F8",
+            category: "special",
+            trending: true,
+            description: "Caught doing something embarrassing or unexpected",
+            image: "emoji_png/caught_in_the_act.png"
+        },
+        {
+            emoji: "🧿👄🧿",
+            name: "evil_eye",
+            unicode: "U+1F9FF U+1F444 U+1F9FF",
+            category: "special",
+            trending: true,
+            description: "A protective expression against bad luck or evil spirits",
+            image: "emoji_png/evil_eye.png"
+        },
+        {
+            emoji: "😍💕",
+            name: "love_struck",
+            unicode: "U+1F60D U+1F495",
+            category: "special",
+            trending: true,
+            description: "Deeply in love or obsessed with something or someone",
+            image: "emoji_png/love_struck.png"
+        },
+        {
+            emoji: "🤔💭",
+            name: "deep_thinking",
+            unicode: "U+1F914 U+1F4AD",
+            category: "special",
+            trending: true,
+            description: "Lost in thought or contemplating something complex",
+            image: "emoji_png/deep_thinking.png"
+        },
+        {
+            emoji: "😌✨",
+            name: "peaceful_vibe",
+            unicode: "U+1F60C U+2728",
+            category: "special",
+            trending: true,
+            description: "Feeling calm, peaceful, and positive about life",
+            image: "emoji_png/peaceful_vibe.png"
         }
     ];
     
@@ -782,15 +845,15 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Initialize emojis
     function initializeEmojis(data) {
-        allEmojis = data;
-        filteredEmojis = [...allEmojis];
+        emojiData = data;
+        filteredEmojis = [...emojiData];
         updateEmojiCount();
         createEmojiCards(filteredEmojis);
     }
 
     // Filter emojis by category and shape
     function filterEmojis() {
-        filteredEmojis = allEmojis.filter(emoji => {
+        filteredEmojis = emojiData.filter(emoji => {
             // 根据当前选择的类别过滤
             const categoryMatch = currentCategory === 'all' || 
                                 (currentCategory === 'trending' && emoji.trending) ||
@@ -819,12 +882,12 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // 更新形状过滤器显示
     function updateShapeFilterDisplay() {
-        const specialCount = allEmojis.filter(emoji => emoji.shape === 'special').length;
-        const squareCount = allEmojis.filter(emoji => emoji.shape === 'square').length;
-        const roundCount = allEmojis.filter(emoji => emoji.shape === 'round').length;
+        const specialCount = emojiData.filter(emoji => emoji.shape === 'special').length;
+        const squareCount = emojiData.filter(emoji => emoji.shape === 'square').length;
+        const roundCount = emojiData.filter(emoji => emoji.shape === 'round').length;
         
         // 更新形状按钮上的数字
-        document.querySelector('.shape-btn[data-shape="all"]').textContent = `All Shapes (${allEmojis.length})`;
+        document.querySelector('.shape-btn[data-shape="all"]').textContent = `All Shapes (${emojiData.length})`;
         document.querySelector('.shape-btn[data-shape="special"]').textContent = `Special (${specialCount})`;
         document.querySelector('.shape-btn[data-shape="square"]').textContent = `Square (${squareCount})`;
         document.querySelector('.shape-btn[data-shape="round"]').textContent = `Round (${roundCount})`;
@@ -885,12 +948,25 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Show emoji info
     function showEmojiInfo(e) {
-        const name = e.currentTarget.getAttribute('data-name');
-        const unicode = e.currentTarget.getAttribute('data-unicode');
-        const description = e.currentTarget.getAttribute('data-description');
+        // 检查参数类型，允许传递事件或直接传递表情对象
+        let emojiObj;
+        let name, unicode, description;
         
-        // 找到对应的emoji对象
-        const emojiObj = allEmojis.find(e => e.name === name);
+        if (e.currentTarget) {
+            // 通过事件调用
+            name = e.currentTarget.getAttribute('data-name');
+            unicode = e.currentTarget.getAttribute('data-unicode');
+            description = e.currentTarget.getAttribute('data-description');
+            
+            // 找到对应的emoji对象
+            emojiObj = emojiData.find(emoji => emoji.name === name);
+        } else {
+            // 直接传递了表情对象
+            emojiObj = e;
+            name = emojiObj.name;
+            unicode = emojiObj.unicode;
+            description = emojiObj.description || '';
+        }
         
         // 创建模态对话框
         const modal = document.createElement('div');
@@ -969,8 +1045,6 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // 复制按钮事件
         modal.querySelector('button.w-full').addEventListener('click', () => {
-            // 找到相应的emoji对象
-            const emojiObj = allEmojis.find(e => e.name === name);
             if (emojiObj) {
                 navigator.clipboard.writeText(emojiObj.emoji)
                     .then(() => {
@@ -983,6 +1057,11 @@ document.addEventListener('DOMContentLoaded', function() {
                     });
             }
         });
+        
+        // 记录表情互动
+        if (emojiObj) {
+            recordEmojiInteraction(emojiObj.name, 'views');
+        }
     }
 
     // Show toast notification
@@ -1104,6 +1183,90 @@ document.addEventListener('DOMContentLoaded', function() {
                     ctx.font = 'bold 50px Arial'; 
                     ctx.fillText(parts[1], 85, 64); // 手
                     break;
+                
+                case 'flirty_eyes': // 👁️❤️👁️
+                    ctx.font = 'bold 40px Arial';
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'middle';
+                    ctx.fillStyle = 'white';
+                    ctx.fillText(parts[0], 30, 45); // 左眼
+                    ctx.font = 'bold 50px Arial';
+                    ctx.fillStyle = '#ff5b79';
+                    ctx.fillText(parts[1], 64, 80); // 心形
+                    ctx.font = 'bold 40px Arial';
+                    ctx.fillStyle = 'white';
+                    ctx.fillText(parts[2], 98, 45); // 右眼
+                    break;
+                    
+                case 'blushing_face': // 😳❤️❤️
+                    ctx.font = 'bold 60px Arial';
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'middle';
+                    ctx.fillStyle = 'white';
+                    ctx.fillText(parts[0], 50, 64); // 脸
+                    ctx.font = 'bold 40px Arial';
+                    ctx.fillStyle = '#ff5b79';
+                    ctx.fillText(parts[1], 90, 50); // 心形1
+                    ctx.fillText(parts[2], 110, 75); // 心形2
+                    break;
+                    
+                case 'caught_in_the_act': // 😳📸
+                    ctx.font = 'bold 60px Arial';
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'middle';
+                    ctx.fillStyle = 'white';
+                    ctx.fillText(parts[0], 50, 64); // 脸
+                    ctx.font = 'bold 50px Arial';
+                    ctx.fillStyle = 'white';
+                    ctx.fillText(parts[1], 100, 64); // 相机
+                    break;
+                    
+                case 'evil_eye': // 🧿👄🧿
+                    ctx.font = 'bold 40px Arial';
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'middle';
+                    ctx.fillStyle = '#42ddff';
+                    ctx.fillText(parts[0], 30, 45); // 左护符
+                    ctx.font = 'bold 50px Arial';
+                    ctx.fillStyle = '#ff5b79';
+                    ctx.fillText(parts[1], 64, 90); // 嘴
+                    ctx.font = 'bold 40px Arial';
+                    ctx.fillStyle = '#42ddff';
+                    ctx.fillText(parts[2], 98, 45); // 右护符
+                    break;
+                    
+                case 'love_struck': // 😍💕
+                    ctx.font = 'bold 65px Arial';
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'middle';
+                    ctx.fillStyle = 'white';
+                    ctx.fillText(parts[0], 50, 64); // 脸
+                    ctx.font = 'bold 50px Arial';
+                    ctx.fillStyle = '#ff5b79';
+                    ctx.fillText(parts[1], 100, 64); // 心形
+                    break;
+                    
+                case 'deep_thinking': // 🤔💭
+                    ctx.font = 'bold 65px Arial';
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'middle';
+                    ctx.fillStyle = 'white';
+                    ctx.fillText(parts[0], 50, 64); // 思考脸
+                    ctx.font = 'bold 50px Arial';
+                    ctx.fillStyle = 'white';
+                    ctx.fillText(parts[1], 100, 50); // 思考泡泡
+                    break;
+                    
+                case 'peaceful_vibe': // 😌✨
+                    ctx.font = 'bold 65px Arial';
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'middle';
+                    ctx.fillStyle = 'white';
+                    ctx.fillText(parts[0], 50, 64); // 平静脸
+                    ctx.font = 'bold 45px Arial';
+                    ctx.fillStyle = '#ffeb3b';
+                    ctx.fillText(parts[1], 100, 64); // 星星
+                    break;
                     
                 case 'shy_bashful': // 🫣👉👈
                     ctx.font = 'bold 50px Arial';
@@ -1199,93 +1362,251 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // 创建和显示表情卡片 - 修改为使用异步加载
+    // 创建和显示表情卡片
     function createAndDisplayEmojiCard(emoji, cardContainerClass, cardClass) {
-        try {
-            // 获取表情图片路径
-            getSpecialEmojiImagePath(emoji).then(imagePath => {
-                // 创建表情卡片HTML
-                const card = document.createElement('div');
-                card.className = cardClass || 'emoji-card';
-                
-                // 创建表情图片和信息HTML
-                card.innerHTML = `
-                    <div class="emoji-image">
-                        <img src="${imagePath}" alt="${emoji.name}" loading="lazy" class="lazy-load">
-                    </div>
-                    <div class="emoji-info">
-                        <div class="emoji-name">${emoji.name.replace(/_/g, ' ')}</div>
-                        <div class="emoji-unicode font-mono text-sm">${emoji.unicode}</div>
-                        <div class="emoji-category">${emoji.category}</div>
-                    </div>
-                    <div class="emoji-actions">
-                        <button class="emoji-btn copy-btn" data-emoji="${emoji.emoji}" aria-label="Copy emoji">
-                            <i class="fas fa-copy"></i>
-                        </button>
-                        <button class="emoji-btn download-btn" data-image="${imagePath}" data-name="${emoji.name}" aria-label="Download emoji">
-                            <i class="fas fa-download"></i>
-                        </button>
-                        <button class="emoji-btn info-btn" data-name="${emoji.name}" data-unicode="${emoji.unicode}" data-description="${emoji.description || ''}" aria-label="Show emoji info">
-                            <i class="fas fa-info-circle"></i>
-                        </button>
-                    </div>
-                `;
-                
-                // 添加事件监听器
-                const copyBtn = card.querySelector('.copy-btn');
-                const downloadBtn = card.querySelector('.download-btn');
-                const infoBtn = card.querySelector('.info-btn');
-                
-                copyBtn.addEventListener('click', copyEmoji);
-                downloadBtn.addEventListener('click', downloadEmoji);
-                infoBtn.addEventListener('click', showEmojiInfo);
-                
-                // 添加到网格
-                const container = document.querySelector(`.${cardContainerClass}`) || emojiGrid;
-                container.appendChild(card);
+        const card = document.createElement('div');
+        card.className = cardClass || 'emoji-card';
+        card.dataset.emoji = emoji.emoji;
+        card.dataset.name = emoji.name;
+        card.dataset.category = emoji.category;
+        card.dataset.unicode = emoji.unicode;
+
+        // 检查是否是URL中指定的表情，如果是则添加高亮类
+        if (emoji.name === getUrlParameter('emoji')) {
+            card.classList.add('highlight-card');
+            // 滚动到此卡片的位置
+            setTimeout(() => {
+                card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }, 500);
+        }
+
+        // 表情图片容器
+        const imgContainer = document.createElement('div');
+        imgContainer.className = 'emoji-img-container';
+        
+        // 创建图片元素
+        const img = document.createElement('img');
+        img.className = 'emoji-img lazy';
+        img.dataset.src = emoji.image_path || getEmojiImagePath(emoji);
+        img.alt = emoji.name;
+        
+        imgContainer.appendChild(img);
+        
+        // 表情名称
+        const nameElem = document.createElement('div');
+        nameElem.className = 'emoji-name';
+        nameElem.textContent = emoji.name;
+        
+        // 操作按钮容器
+        const actions = document.createElement('div');
+        actions.className = 'emoji-actions';
+        
+        // 复制按钮
+        const copyBtn = document.createElement('button');
+        copyBtn.className = 'emoji-btn copy-btn';
+        copyBtn.innerHTML = '<i class="fas fa-copy"></i>';
+        copyBtn.title = '复制表情';
+        copyBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            copyEmoji(emoji);
+            recordEmojiInteraction(emoji.name, 'copy');
+        });
+        
+        // 下载按钮
+        const downloadBtn = document.createElement('button');
+        downloadBtn.className = 'emoji-btn download-btn';
+        downloadBtn.innerHTML = '<i class="fas fa-download"></i>';
+        downloadBtn.title = '下载图片';
+        downloadBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            downloadEmoji(emoji);
+            recordEmojiInteraction(emoji.name, 'download');
+        });
+        
+        // 信息按钮
+        const infoBtn = document.createElement('button');
+        infoBtn.className = 'emoji-btn info-btn';
+        infoBtn.innerHTML = '<i class="fas fa-info-circle"></i>';
+        infoBtn.title = '表情信息';
+        infoBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            showEmojiInfo(emoji);
+            recordEmojiInteraction(emoji.name, 'info');
+        });
+        
+        // 分享按钮
+        const shareBtn = document.createElement('button');
+        shareBtn.className = 'emoji-btn share-btn';
+        shareBtn.innerHTML = '<i class="fas fa-share-alt"></i>';
+        shareBtn.title = '分享表情';
+        shareBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            shareEmoji(emoji);
+            recordEmojiInteraction(emoji.name, 'share');
+        });
+        
+        actions.appendChild(copyBtn);
+        actions.appendChild(downloadBtn);
+        actions.appendChild(infoBtn);
+        actions.appendChild(shareBtn);
+        
+        card.appendChild(imgContainer);
+        card.appendChild(nameElem);
+        card.appendChild(actions);
+        
+        // 点击卡片显示表情信息
+        card.addEventListener('click', () => {
+            showEmojiInfo(emoji);
+            recordEmojiInteraction(emoji.name, 'view');
+        });
+        
+        const container = document.querySelector(cardContainerClass);
+        container.appendChild(card);
+    }
+
+    // 分享表情
+    function shareEmoji(emoji) {
+        const shareUrl = `${window.location.origin}${window.location.pathname}?emoji=${encodeURIComponent(emoji.name)}`;
+        
+        if (navigator.share && navigator.canShare) {
+            navigator.share({
+                title: `TikTok表情: ${emoji.name}`,
+                text: `查看TikTok表情: ${emoji.emoji} ${emoji.name}`,
+                url: shareUrl
+            }).catch(err => {
+                console.error('分享失败:', err);
+                // 如果分享API失败，回退到复制链接
+                copyToClipboard(shareUrl);
+                showToast('链接已复制到剪贴板，可以粘贴分享');
             });
-        } catch (error) {
-            console.error('Error creating emoji card: ', error);
+        } else {
+            // 浏览器不支持分享API，直接复制链接
+            copyToClipboard(shareUrl);
+            showToast('链接已复制到剪贴板，可以粘贴分享');
         }
     }
 
-    // Initialize app
-    // Load emoji data and set up event listeners
+    // 获取URL参数
+    function getUrlParameter(name) {
+        const urlParams = new URLSearchParams(window.location.search);
+        return urlParams.get(name);
+    }
+
+    // 记录表情使用统计
+    function recordEmojiInteraction(emojiName, action) {
+        const stats = JSON.parse(localStorage.getItem('emojiStats') || '{}');
+        
+        if (!stats[emojiName]) {
+            stats[emojiName] = {
+                views: 0,
+                copies: 0,
+                downloads: 0,
+                shares: 0,
+                infos: 0,
+                lastUsed: null
+            };
+        }
+        
+        // 更新统计数据
+        stats[emojiName].lastUsed = new Date().toISOString();
+        
+        switch (action) {
+            case 'view':
+                stats[emojiName].views = (stats[emojiName].views || 0) + 1;
+                break;
+            case 'copy':
+                stats[emojiName].copies = (stats[emojiName].copies || 0) + 1;
+                break;
+            case 'download':
+                stats[emojiName].downloads = (stats[emojiName].downloads || 0) + 1;
+                break;
+            case 'share':
+                stats[emojiName].shares = (stats[emojiName].shares || 0) + 1;
+                break;
+            case 'info':
+                stats[emojiName].infos = (stats[emojiName].infos || 0) + 1;
+                break;
+        }
+        
+        localStorage.setItem('emojiStats', JSON.stringify(stats));
+        
+        // 更新热门表情排序
+        updateTrendingEmojis();
+    }
+
+    // 更新热门表情
+    function updateTrendingEmojis() {
+        const stats = JSON.parse(localStorage.getItem('emojiStats') || '{}');
+        const trendingEmojis = Object.keys(stats)
+            .map(name => {
+                const emoji = emojiData.find(e => e.name === name);
+                if (!emoji) return null;
+                
+                const stat = stats[name];
+                const score = (stat.copies * 3) + (stat.shares * 2) + stat.views + (stat.downloads * 2) + stat.infos;
+                
+                return {
+                    emoji: emoji,
+                    score: score
+                };
+            })
+            .filter(item => item !== null)
+            .sort((a, b) => b.score - a.score)
+            .slice(0, 10)
+            .map(item => item.emoji.name);
+        
+        // 设置trending标志
+        emojiData.forEach(emoji => {
+            emoji.trending = trendingEmojis.includes(emoji.name);
+        });
+    }
+
+    // 检查URL参数中是否有指定表情
+    function checkUrlForEmojiParam() {
+        const emojiName = getUrlParameter('emoji');
+        if (emojiName) {
+            const emoji = emojiData.find(e => e.name.toLowerCase() === emojiName.toLowerCase());
+            if (emoji) {
+                // 在下一个渲染周期处理，确保DOM已经完全加载
+                setTimeout(() => {
+                    showEmojiInfo(emoji);
+                }, 1000);
+            }
+        }
+    }
+
+    // 应用初始化
     function initApp() {
+        // 加载表情数据
         initializeEmojis(categorizedEmojiData);
+        
+        // 更新筛选器
         updateShapeFilterDisplay();
         
-        // Search input event listener
-        searchInput.addEventListener('input', function() {
-            searchQuery = this.value.toLowerCase();
-            filterEmojis();
+        // 检查URL参数
+        checkUrlForEmojiParam();
+        
+        // 从本地存储加载使用统计
+        updateTrendingEmojis();
+        
+        // 事件监听
+        searchInput.addEventListener('input', handleSearch);
+        
+        // 添加类别按钮点击事件
+        document.querySelectorAll('.category-btn').forEach(btn => {
+            btn.addEventListener('click', handleCategoryClick);
         });
         
-        // Category button event listeners
-        categoryButtons.forEach(button => {
-            button.addEventListener('click', function() {
-                currentCategory = this.getAttribute('data-category');
-                
-                // Update active button
-                categoryButtons.forEach(btn => btn.classList.remove('active'));
-                this.classList.add('active');
-                
-                filterEmojis();
-            });
+        // 添加形状按钮点击事件
+        document.querySelectorAll('.shape-btn').forEach(btn => {
+            btn.addEventListener('click', handleShapeClick);
         });
         
-        // Shape button event listeners
-        shapeButtons.forEach(button => {
-            button.addEventListener('click', function() {
-                currentShape = this.getAttribute('data-shape');
-                
-                // Update active button
-                shapeButtons.forEach(btn => btn.classList.remove('active'));
-                this.classList.add('active');
-                
-                filterEmojis();
-            });
-        });
+        // 懒加载图片
+        lazyLoadImages();
+        
+        // 更新表情计数
+        updateEmojiCount();
     }
     
     // Start the app
@@ -1304,5 +1625,14 @@ document.addEventListener('DOMContentLoaded', function() {
             }, 1500);
         }
     });
+
+    // 新增函数：初始化使用统计
+    function initializeUsageStats() {
+        // 可以在这里添加代码，显示最常用的表情等统计信息
+        const usageData = JSON.parse(localStorage.getItem('emojiUsageData')) || {};
+        
+        // 仅用于开发调试
+        // console.log('表情使用统计:', usageData);
+    }
 }); 
 // Updated script - 2023 
