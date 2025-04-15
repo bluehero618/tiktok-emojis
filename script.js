@@ -854,10 +854,116 @@ document.addEventListener('DOMContentLoaded', function() {
     function initializeEmojis(data) {
         // 确保每个表情都有正确的类别和形状
         emojiData = data.map(emoji => assignCategoriesAndShape(emoji));
+        
+        // 确保至少有一些表情被标记为trending（基本数据的trending标记）
+        // 如果本地存储没有使用数据，设置一些默认的trending表情
+        const hasLocalStorageTrending = checkLocalStorageTrending();
+        
+        if (!hasLocalStorageTrending) {
+            // 将一些表情设置为默认trending
+            const defaultTrendingNames = [
+                'laugh', 'tears', 'smile', 'happy', 'angry', 'scream', 'shock',
+                'thinking', 'fairy_blessing', 'shocked_expression', 'skull'
+            ];
+            
+            emojiData.forEach(emoji => {
+                if (defaultTrendingNames.includes(emoji.name)) {
+                    emoji.trending = true;
+                }
+            });
+        }
+        
         filteredEmojis = [...emojiData];
         updateEmojiCount();
         updateFilterDisplay(); // 确保分类计数正确显示
         createEmojiCards(filteredEmojis);
+    }
+
+    // 检查本地存储中是否有trending数据
+    function checkLocalStorageTrending() {
+        const stats = JSON.parse(localStorage.getItem('emojiStats') || '{}');
+        if (Object.keys(stats).length === 0) {
+            return false;
+        }
+        
+        // 更新trending表情
+        updateTrendingEmojis();
+        
+        // 检查是否有至少一个表情被标记为trending
+        return emojiData.some(emoji => emoji.trending);
+    }
+
+    // 更新热门表情 - 修改评分系统
+    function updateTrendingEmojis() {
+        const stats = JSON.parse(localStorage.getItem('emojiStats') || '{}');
+        
+        // 如果没有统计数据，返回
+        if (Object.keys(stats).length === 0) {
+            return;
+        }
+        
+        // 计算每个表情的分数
+        const scoredEmojis = Object.keys(stats)
+            .map(name => {
+                const emoji = emojiData.find(e => e.name === name);
+                if (!emoji) return null;
+                
+                const stat = stats[name];
+                // 调整评分公式，确保即使互动少的表情也能获得足够的分数被标记为trending
+                const score = (stat.copies * 5) + (stat.shares * 8) + stat.views + 
+                             (stat.downloads * 3) + (stat.infos * 2);
+                
+                return {
+                    emoji: emoji,
+                    score: score
+                };
+            })
+            .filter(item => item !== null)
+            .sort((a, b) => b.score - a.score);
+        
+        // 获取前15个表情名称（增加数量以确保有足够多的trending表情）
+        const trendingNames = scoredEmojis.slice(0, 15).map(item => item.emoji.name);
+        
+        // 重置所有表情的trending状态
+        emojiData.forEach(emoji => {
+            // 保持原始trending表情的标记
+            if (!trendingNames.includes(emoji.name)) {
+                emoji.trending = emoji.originalTrending || false;
+            } else {
+                emoji.trending = true;
+            }
+        });
+        
+        // 确保至少有10个trending表情
+        ensureMinimumTrendingEmojis(10);
+    }
+
+    // 确保最少有指定数量的trending表情
+    function ensureMinimumTrendingEmojis(minCount) {
+        // 计算当前trending表情数量
+        const currentTrendingCount = emojiData.filter(emoji => emoji.trending).length;
+        
+        // 如果已经满足最小数量要求，则返回
+        if (currentTrendingCount >= minCount) {
+            return;
+        }
+        
+        // 添加更多trending表情，优先选择原始数据中标记为trending的表情
+        const additionalNeeded = minCount - currentTrendingCount;
+        const nonTrendingEmojis = emojiData
+            .filter(emoji => !emoji.trending)
+            .sort((a, b) => (b.originalTrending ? 1 : 0) - (a.originalTrending ? 1 : 0));
+        
+        for (let i = 0; i < Math.min(additionalNeeded, nonTrendingEmojis.length); i++) {
+            nonTrendingEmojis[i].trending = true;
+        }
+    }
+
+    // 保存原始trending状态
+    function preserveOriginalTrendingStatus() {
+        emojiData.forEach(emoji => {
+            emoji.originalTrending = emoji.trending;
+        });
     }
 
     // Filter emojis by category and shape
@@ -1572,33 +1678,6 @@ document.addEventListener('DOMContentLoaded', function() {
         updateTrendingEmojis();
     }
 
-    // 更新热门表情
-    function updateTrendingEmojis() {
-        const stats = JSON.parse(localStorage.getItem('emojiStats') || '{}');
-        const trendingEmojis = Object.keys(stats)
-            .map(name => {
-                const emoji = emojiData.find(e => e.name === name);
-                if (!emoji) return null;
-                
-                const stat = stats[name];
-                const score = (stat.copies * 3) + (stat.shares * 2) + stat.views + (stat.downloads * 2) + stat.infos;
-                
-                return {
-                    emoji: emoji,
-                    score: score
-                };
-            })
-            .filter(item => item !== null)
-            .sort((a, b) => b.score - a.score)
-            .slice(0, 10)
-            .map(item => item.emoji.name);
-        
-        // 设置trending标志
-        emojiData.forEach(emoji => {
-            emoji.trending = trendingEmojis.includes(emoji.name);
-        });
-    }
-
     // 检查URL参数中是否有指定表情
     function checkUrlForEmojiParam() {
         const emojiName = getUrlParameter('emoji');
@@ -1617,6 +1696,9 @@ document.addEventListener('DOMContentLoaded', function() {
     function initApp() {
         // 加载表情数据
         initializeEmojis(categorizedEmojiData);
+        
+        // 保存原始trending状态
+        preserveOriginalTrendingStatus();
         
         // 从本地存储加载使用统计
         updateTrendingEmojis();
