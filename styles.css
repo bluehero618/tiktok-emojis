@@ -229,8 +229,15 @@ button,
 
 /* Emoji Grid & Cards */
 #emoji-grid {
-    margin-bottom: 2rem;
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
     gap: 16px;
+    margin-bottom: 2rem;
+    width: 100%;
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 0 1rem;
 }
 
 .emoji-card {
@@ -751,4 +758,67 @@ header {
     display: flex;
     flex-wrap: wrap;
     gap: 8px;
+}
+
+/* 调整搜索框样式，使其与页面宽度匹配 */
+.search-container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto 1.5rem;
+    padding: 0 1rem;
+}
+
+.search-container input {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    font-size: 1rem;
+    border-radius: 8px;
+    background-color: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #fff;
+    transition: all 0.3s ease;
+}
+
+.search-container input:focus {
+    background-color: rgba(255, 255, 255, 0.15);
+    border-color: rgba(255, 255, 255, 0.3);
+    box-shadow: 0 0 0 2px rgba(66, 153, 225, 0.5);
+    outline: none;
+}
+
+/* 确保三个功能卡片在同一行 */
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    margin: 2rem auto;
+    width: 100%;
+    max-width: 1200px;
+}
+
+/* 响应式调整 */
+@media (max-width: 1200px) {
+    #emoji-grid {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+@media (max-width: 900px) {
+    #emoji-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+    
+    .features-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (max-width: 600px) {
+    #emoji-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .features-grid {
+        grid-template-columns: repeat(1, 1fr);
+    }
 } 
