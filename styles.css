@@ -40,6 +40,8 @@ body {
     width: 100%;
     max-width: 1280px;
     margin: 0 auto;
+    padding: 0 1rem;
+    text-align: left;
 }
 
 /* Button & Input Styles */
@@ -272,7 +274,7 @@ button,
 #emoji-grid {
     display: grid;
     grid-template-columns: repeat(6, 1fr);
-    gap: 24px; /* 增加卡片之间的间距 */
+    gap: 20px; /* 减小卡片间的间距 */
     margin-bottom: 2rem;
     width: 100%;
     max-width: 1200px;
@@ -284,7 +286,7 @@ button,
 .emoji-card {
     position: relative;
     overflow: hidden;
-    border-radius: 16px; /* 增加圆角 */
+    border-radius: 16px;
     box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
     background-color: #252525;
     transition: all 0.3s ease;
@@ -292,7 +294,8 @@ button,
     border: 2px solid transparent;
     display: flex;
     flex-direction: column;
-    min-height: 280px; /* 设置最小高度 */
+    min-height: 220px; /* 减小最小高度 */
+    text-align: center;
 }
 
 .emoji-card.highlight-card {
@@ -336,11 +339,11 @@ button,
 }
 
 .emoji-image {
-    padding: 36px; /* 进一步增加内边距 */
+    padding: 24px; /* 减小内边距 */
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 160px; /* 增加高度 */
+    height: 120px; /* 减小高度 */
     background-color: #1a1a1a;
     border-bottom: 1px solid #333;
     transition: all 0.3s ease;
@@ -351,8 +354,8 @@ button,
 }
 
 .emoji-image img {
-    width: 90px; /* 增加图片尺寸 */
-    height: 90px; /* 增加图片尺寸 */
+    width: 70px; /* 减小图片尺寸 */
+    height: 70px; /* 减小图片尺寸 */
     object-fit: contain;
     transition: transform 0.3s, filter 0.3s;
     filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.2));
@@ -364,7 +367,7 @@ button,
 }
 
 .emoji-info {
-    padding: 24px; /* 增加内边距 */
+    padding: 16px; /* 减小内边距 */
     text-align: center;
     transition: background-color 0.3s;
     background-color: #252525;
@@ -380,30 +383,36 @@ button,
 }
 
 .emoji-name {
-    font-size: 18px; /* 增加字体大小 */
+    font-size: 16px; /* 减小字体大小 */
     font-weight: 600;
-    margin-bottom: 10px; /* 增加下边距 */
+    margin-bottom: 6px; /* 减小下边距 */
     text-transform: capitalize;
     color: var(--text-color);
     letter-spacing: 0.5px;
+    text-align: center;
+    width: 100%;
 }
 
 .emoji-unicode {
-    font-size: 13px; /* 增加字体大小 */
+    font-size: 12px; /* 减小字体大小 */
     color: #aaa;
-    margin-bottom: 10px; /* 增加下边距 */
+    margin-bottom: 6px; /* 减小下边距 */
+    text-align: center;
+    width: 100%;
 }
 
 .emoji-category {
     display: inline-block;
-    padding: 4px 10px; /* 增加内边距 */
-    font-size: 12px; /* 增加字体大小 */
+    padding: 3px 8px; /* 减小内边距 */
+    font-size: 11px; /* 减小字体大小 */
     font-weight: 500;
     background-color: #333;
     border-radius: 12px;
     color: #ddd;
     letter-spacing: 0.5px;
-    margin-top: 10px; /* 增加上边距 */
+    margin-top: 6px; /* 减小上边距 */
+    text-align: center;
+    width: 100%;
 }
 
 /* 表情操作按钮样式 */
@@ -740,12 +749,12 @@ button,
 /* Media Queries */
 @media (max-width: 768px) {
     .emoji-image {
-        height: 140px;
-        padding: 30px;
+        height: 100px;
+        padding: 20px;
     }
     
     .emoji-info {
-        padding: 20px;
+        padding: 12px;
     }
     
     .feature-card {
@@ -837,6 +846,7 @@ header {
     max-width: 1200px;
     margin: 0 auto 1.5rem;
     padding: 0 1rem;
+    text-align: left;
 }
 
 .search-container input {
@@ -848,6 +858,7 @@ header {
     border: 2px solid rgba(255, 255, 255, 0.12);
     color: var(--text-color);
     transition: all 0.3s ease;
+    max-width: 1200px;
 }
 
 .search-container input:focus {
@@ -901,11 +912,12 @@ section.my-12 h3,
 footer h3,
 h2.text-2xl,
 h3.text-xl.font-semibold {
-    background: var(--title-gradient);
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
-    display: inline-block;
+    background: none;
+    -webkit-background-clip: initial;
+    background-clip: initial;
+    color: var(--text-color);
+    display: block;
+    font-weight: 600;
 }
 
 .text-white {
@@ -959,4 +971,123 @@ section.my-12 {
     margin-top: 10px;
     font-size: 15px;
     line-height: 1.7;
+}
+
+/* 红框标记的小标题 */
+.bg-gray-900 h3,
+section.my-12 h3 {
+    color: #ff5b79;
+    margin-bottom: 12px;
+    font-size: 1.25rem;
+}
+
+/* TikTok Emojis标题和副标题对齐 */
+h1.text-5xl.font-bold,
+p.text-lg,
+p.text-sm,
+.text-center {
+    text-align: left;
+    padding-left: 1rem;
+}
+
+/* 修复标题对齐问题 */
+header .container {
+    padding: 0 1rem;
+}
+
+header h1 {
+    margin-bottom: 1.5rem;
+    font-size: 2.25rem;
+    font-weight: 700;
+    display: block;
+    text-align: left;
+}
+
+/* 确保搜索框和标题对齐 */
+.search-container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto 1.5rem;
+    padding: 0 1rem;
+    text-align: left;
+}
+
+/* 确保主标题仍然使用渐变色，但小标题不使用 */
+h1.gradient-title {
+    background: var(--title-gradient);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    display: inline-block;
+    font-weight: 700;
+}
+
+/* 保持"TikTok Emojis"标题和搜索框对齐 */
+h1.text-5xl.font-bold.gradient-title {
+    padding-left: 1rem;
+    margin-bottom: 1.5rem;
+    text-align: left;
+}
+
+/* 确保emoji卡片的第一行和搜索框对齐 */
+#emoji-grid {
+    padding-left: 1rem;
+    padding-right: 1rem;
+}
+
+/* 确保所有标题左对齐 */
+section.my-12 h2.text-2xl {
+    text-align: left;
+    padding-left: 1rem;
+    margin-bottom: 1.5rem;
+    color: #e942ff; /* 使用粉紫色 */
+    font-weight: 700;
+}
+
+/* FAQ和TikTok Emoji Guide标题样式 */
+h2.text-2xl.gradient-title,
+.text-2xl.font-bold.gradient-title {
+    background: var(--title-gradient);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    display: inline-block;
+    font-weight: 700;
+    text-align: left;
+    padding-left: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+/* 所有小标题（FAQ项目）非渐变色 */
+section.my-12 .bg-gray-900 h3 {
+    color: #ff5b79; /* 使用粉红色 */
+}
+
+/* 所有小标题（TikTok Emoji Guide项目）非渐变色 */
+section.my-12 .grid .bg-gray-900 h3 {
+    color: #4287ff; /* 使用蓝色 */
+}
+
+/* 主内容区域对齐 */
+main.container {
+    padding: 0;
+}
+
+/* 修复卡片中文字标签对齐 */
+.emoji-info {
+    padding: 16px;
+    text-align: center;
+}
+
+/* 修复渐变标题样式冲突 */
+#emoji-count {
+    text-align: left;
+    padding-left: 1rem;
+    margin-bottom: 1rem;
+    color: var(--text-color);
+}
+
+/* 页面顶部标题修复 */
+header h1.gradient-title {
+    margin-top: 1rem;
 } 
