@@ -40,8 +40,7 @@ body {
     width: 100%;
     max-width: 1280px;
     margin: 0 auto;
-    padding: 0 1rem;
-    text-align: left;
+    padding: 0;
 }
 
 /* Button & Input Styles */
@@ -842,11 +841,11 @@ header {
 
 /* 调整搜索框样式，使其与页面宽度匹配 */
 .search-container {
-    width: 100%;
+    width: calc(100% - 4rem);
     max-width: 1200px;
     margin: 0 auto 1.5rem;
-    padding: 0 1rem;
-    text-align: left;
+    padding-left: 2rem;
+    padding-right: 2rem;
 }
 
 .search-container input {
@@ -1090,4 +1089,147 @@ main.container {
 /* 页面顶部标题修复 */
 header h1.gradient-title {
     margin-top: 1rem;
+}
+
+/* 底部标题渐变色修复 */
+footer h3.gradient-title,
+footer h3.text-xl.font-bold.gradient-title,
+footer h3.text-xl.font-bold {
+    background: var(--title-gradient);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    display: inline-block;
+    font-weight: 700;
+    margin-bottom: 1rem;
+}
+
+/* 最终修复标题对齐问题 */
+.container {
+    width: 100%;
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0;
+}
+
+/* 页面内容对齐问题修复 */
+#emoji-grid,
+.text-center.mb-8,
+#emoji-count,
+.text-lg.text-gray-300,
+.text-sm.text-gray-500,
+section.my-12 h2,
+.features-grid,
+footer .container {
+    padding-left: 2rem;
+    padding-right: 2rem;
+}
+
+/* 美化底部三行文字 */
+footer p.text-gray-400 {
+    color: #9CA3AF;
+    line-height: 1.6;
+    max-width: 80%;
+}
+
+footer .container {
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+}
+
+footer ul.space-y-2 {
+    margin-top: 1rem;
+}
+
+footer ul.space-y-2 li {
+    margin-bottom: 0.75rem;
+}
+
+/* 修复社交媒体图标间距 */
+footer .flex.space-x-4 {
+    margin-top: 1rem;
+}
+
+footer .flex.space-x-4 a {
+    font-size: 1.25rem;
+    margin-right: 1rem;
+    opacity: 0.8;
+    transition: opacity 0.2s;
+}
+
+footer .flex.space-x-4 a:hover {
+    opacity: 1;
+}
+
+/* 收集展示文字美化 */
+h1.gradient-title + p,
+.text-lg.text-gray-300,
+.text-sm.text-gray-500 {
+    color: #9CA3AF;
+    line-height: 1.6;
+    margin-bottom: 0.5rem;
+}
+
+.text-lg.text-gray-300 {
+    font-size: 1.125rem;
+    margin-bottom: 0.25rem;
+}
+
+.text-sm.text-gray-500 {
+    font-size: 0.875rem;
+    opacity: 0.75;
+    margin-bottom: 1.5rem;
+}
+
+/* 修复footer内容对齐 */
+footer div.grid {
+    padding-left: 0;
+    padding-right: 0;
+}
+
+footer h3.text-xl.font-bold {
+    margin-bottom: 1rem;
+}
+
+/* 确保红框内标题和所有类似主标题都用渐变色 */
+h3.text-xl.font-bold.mb-4.gradient-title,
+h3.text-xl.font-bold,
+.text-xl.font-bold.mb-4,
+footer h3.text-xl.font-bold {
+    background: var(--title-gradient);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    display: inline-block;
+    font-weight: 700;
+}
+
+/* 所有主标题渐变色效果 */
+.gradient-title,
+h1.text-3xl.font-bold.mb-4.gradient-title,
+h1.text-5xl.font-bold.mb-4.gradient-title,
+h2.text-2xl.font-bold.mb-6.gradient-title,
+h3.text-xl.font-bold.mb-4.gradient-title,
+header h1,
+.text-2xl.font-bold.mb-6 {
+    background: var(--title-gradient);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    display: inline-block;
+    font-weight: 700;
+}
+
+/* 修复所有主要区块的左边距 */
+.categories-nav, 
+.shapes-nav,
+header .container,
+.text-center.mb-8 {
+    padding-left: 2rem;
+    padding-right: 2rem;
+}
+
+/* 标题和副标题对齐改进 */
+h1, h2, h3, p.text-lg, p.text-sm, #emoji-count {
+    padding-left: 0;
 } 
