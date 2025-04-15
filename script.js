@@ -65,64 +65,71 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // 为emoji添加适当的分类和形状
-    function assignCategoriesAndShape(emojiData) {
-        return emojiData.map(emoji => {
-            // 将所有emoji默认设为smileys类别
-            let categories = ['smileys'];
-            
-            // 根据emoji名称分配额外的类别
-            const name = emoji.name.toLowerCase();
-            
-            // 判断形状
-            const shape = determineEmojiShape(name);
-            
-            // 特殊表情类别
-            if (name.includes('_') || 
-                ['chair', 'sparkles', 'clown_face', 'birthday_cake', 'skull', 'person_standing'].includes(name)) {
-                categories.push('special');
-            }
-            
-            // 快乐表情
-            if (name.includes('happy') || name.includes('smile') || name.includes('laugh') || 
-                name.includes('joy') || name.includes('grin') || name.includes('hehe') || 
-                name.includes('excited') || name.includes('flush') || name.includes('cute') ||
-                name.includes('yummy') || name.includes('joyful') || name.includes('fairy')) {
-                categories.push('happy');
-            }
-            
-            // 悲伤表情
-            if (name.includes('sad') || name.includes('cry') || name.includes('tear') || 
-                name.includes('weep') || name.includes('wrong') || name.includes('embarrassed') ||
-                name.includes('stop_crying')) {
-                categories.push('sad');
-            }
-            
-            // 愤怒表情
-            if (name.includes('angry') || name.includes('rage') || name.includes('sulk') || 
-                name.includes('mad') || name.includes('disdain') || name.includes('shocked')) {
-                categories.push('angry');
-            }
-            
-            // 爱心表情
-            if (name.includes('love') || name.includes('heart') || name.includes('lovely') || 
-                name.includes('cute')) {
-                categories.push('love');
-            }
-            
-            // 人物相关
-            if (name.includes('slap') || name.includes('hand') || name.includes('gesture') || 
-                name.includes('queen') || name.includes('italian') || name.includes('flick') ||
-                name.includes('person') || name.includes('shy_bashful')) {
-                categories.push('people');
-            }
-            
-            // 返回更新后的emoji对象
-            return {
-                ...emoji,
-                categories: categories,
-                shape: shape
-            };
-        });
+    function assignCategoriesAndShape(emoji) {
+        if (!emoji.categories) {
+            emoji.categories = [];
+        }
+        
+        // 根据表情名称和描述添加类别
+        const name = emoji.name.toLowerCase();
+        const desc = emoji.description ? emoji.description.toLowerCase() : '';
+        
+        // 检查是否应该属于happy类别
+        if (name.includes('smile') || name.includes('grin') || name.includes('laugh') || 
+            name.includes('joy') || name.includes('happy') || name.includes('hehe') || 
+            desc.includes('happiness') || desc.includes('joy') || name.includes('blush') || 
+            name.includes('love') || name.includes('heart')) {
+            emoji.categories.push('happy');
+        }
+        
+        // 检查是否应该属于sad类别
+        if (name.includes('sad') || name.includes('cry') || name.includes('tear') || 
+            name.includes('sob') || name.includes('disappointed') || name.includes('worried') || 
+            desc.includes('sadness') || desc.includes('crying') || desc.includes('tears')) {
+            emoji.categories.push('sad');
+        }
+        
+        // 检查是否应该属于angry类别
+        if (name.includes('angry') || name.includes('rage') || name.includes('mad') || 
+            name.includes('furious') || name.includes('annoyed') || name.includes('frustrated') || 
+            desc.includes('anger') || desc.includes('frustrated')) {
+            emoji.categories.push('angry');
+        }
+        
+        // 检查是否应该属于love类别
+        if (name.includes('love') || name.includes('heart') || name.includes('kiss') || 
+            name.includes('romantic') || name.includes('couple') || name.includes('affection') || 
+            desc.includes('love') || desc.includes('romantic') || desc.includes('affection')) {
+            emoji.categories.push('love');
+        }
+        
+        // 检查是否应该属于special类别
+        if (name.includes('special') || name.includes('unique') || emoji.isSpecial || 
+            name.includes('_') || (emoji.emoji && emoji.emoji.length > 2)) {
+            emoji.categories.push('special');
+        }
+        
+        // 如果没有分配任何类别，则分配到其主要类别或默认类别
+        if (emoji.categories.length === 0 && emoji.category) {
+            emoji.categories.push(emoji.category);
+        }
+        
+        // 设置主要类别
+        if (!emoji.category && emoji.categories.length > 0) {
+            emoji.category = emoji.categories[0];
+        } else if (!emoji.category) {
+            emoji.category = 'other';
+        }
+        
+        // 确保类别是唯一的
+        emoji.categories = [...new Set(emoji.categories)];
+        
+        // 分配形状
+        if (!emoji.shape) {
+            emoji.shape = determineEmojiShape(emoji.name);
+        }
+        
+        return emoji;
     }
 
     // TikTok自定义表情数据 - 基本表情
@@ -680,7 +687,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const combinedEmojiData = [...basicEmojiData, ...specialEmojiData, ...tiktokMeaningEmojiData];
 
     // 添加分类并初始化数据
-    const categorizedEmojiData = assignCategoriesAndShape(combinedEmojiData);
+    const categorizedEmojiData = combinedEmojiData.map(emoji => assignCategoriesAndShape(emoji));
 
     // 创建emoji图片的函数 - 修改为优先使用PNG图片
     function createEmojiImage(emoji, name) {
@@ -845,9 +852,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Initialize emojis
     function initializeEmojis(data) {
-        emojiData = data;
+        // 确保每个表情都有正确的类别和形状
+        emojiData = data.map(emoji => assignCategoriesAndShape(emoji));
         filteredEmojis = [...emojiData];
         updateEmojiCount();
+        updateFilterDisplay(); // 确保分类计数正确显示
         createEmojiCards(filteredEmojis);
     }
 
@@ -855,17 +864,25 @@ document.addEventListener('DOMContentLoaded', function() {
     function filterEmojis() {
         filteredEmojis = emojiData.filter(emoji => {
             // 根据当前选择的类别过滤
-            const categoryMatch = currentCategory === 'all' || 
-                                (currentCategory === 'trending' && emoji.trending) ||
-                                (emoji.categories && emoji.categories.includes(currentCategory));
+            let categoryMatch = false;
+            
+            if (currentCategory === 'all') {
+                categoryMatch = true;
+            } else if (currentCategory === 'trending' && emoji.trending) {
+                categoryMatch = true;
+            } else if (emoji.category === currentCategory) {
+                categoryMatch = true;
+            } else if (emoji.categories && emoji.categories.includes(currentCategory)) {
+                categoryMatch = true;
+            }
             
             // 根据当前选择的形状过滤
             const shapeMatch = currentShape === 'all' || emoji.shape === currentShape;
             
             // 根据搜索查询过滤
             const searchMatch = searchQuery === '' || 
-                               emoji.name.toLowerCase().includes(searchQuery) ||
-                               emoji.emoji.includes(searchQuery);
+                              emoji.name.toLowerCase().includes(searchQuery) ||
+                              emoji.emoji.includes(searchQuery);
             
             return categoryMatch && shapeMatch && searchMatch;
         });
@@ -886,11 +903,11 @@ document.addEventListener('DOMContentLoaded', function() {
         const categoryCount = {
             all: emojiData.length,
             trending: emojiData.filter(emoji => emoji.trending).length,
-            happy: emojiData.filter(emoji => emoji.category === 'happy').length,
-            sad: emojiData.filter(emoji => emoji.category === 'sad').length,
-            angry: emojiData.filter(emoji => emoji.category === 'angry').length,
-            love: emojiData.filter(emoji => emoji.category === 'love').length,
-            special: emojiData.filter(emoji => emoji.category === 'special').length
+            happy: emojiData.filter(emoji => emoji.category === 'happy' || (emoji.categories && emoji.categories.includes('happy'))).length,
+            sad: emojiData.filter(emoji => emoji.category === 'sad' || (emoji.categories && emoji.categories.includes('sad'))).length,
+            angry: emojiData.filter(emoji => emoji.category === 'angry' || (emoji.categories && emoji.categories.includes('angry'))).length,
+            love: emojiData.filter(emoji => emoji.category === 'love' || (emoji.categories && emoji.categories.includes('love'))).length,
+            special: emojiData.filter(emoji => emoji.category === 'special' || (emoji.categories && emoji.categories.includes('special'))).length
         };
         
         // 计算各个形状的表情数量
@@ -1601,14 +1618,11 @@ document.addEventListener('DOMContentLoaded', function() {
         // 加载表情数据
         initializeEmojis(categorizedEmojiData);
         
-        // 更新筛选器显示
-        updateFilterDisplay();
+        // 从本地存储加载使用统计
+        updateTrendingEmojis();
         
         // 检查URL参数
         checkUrlForEmojiParam();
-        
-        // 从本地存储加载使用统计
-        updateTrendingEmojis();
         
         // 搜索输入事件监听
         document.getElementById('search').addEventListener('input', function() {
