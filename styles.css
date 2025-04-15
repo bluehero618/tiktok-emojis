@@ -15,12 +15,13 @@
     --gradient-start: #0071E3;
     --gradient-end: #42A5F5;
     --title-gradient: linear-gradient(to right, #ff5b79, #e942ff, #8b42ff, #4287ff, #42ddff);
+    --text-color: #D1D5DB; /* 新增：较浅的灰色文本，替代纯白色 */
 }
 
 body {
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
     background-color: #121212;
-    color: #fff;
+    color: var(--text-color); /* 将纯白色改为浅灰色 */
     line-height: 1.6;
 }
 
@@ -231,7 +232,7 @@ button,
 #emoji-grid {
     display: grid;
     grid-template-columns: repeat(6, 1fr);
-    gap: 16px;
+    gap: 24px; /* 增加卡片之间的间距 */
     margin-bottom: 2rem;
     width: 100%;
     max-width: 1200px;
@@ -294,11 +295,11 @@ button,
 }
 
 .emoji-image {
-    padding: 24px;
+    padding: 30px; /* 增加内边距 */
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 120px;
+    height: 130px; /* 增加高度 */
     background-color: #1a1a1a;
     border-bottom: 1px solid #333;
     transition: all 0.3s ease;
@@ -322,11 +323,11 @@ button,
 }
 
 .emoji-info {
-    padding: 14px;
+    padding: 20px; /* 增加内边距 */
     text-align: center;
     transition: background-color 0.3s;
     background-color: #252525;
-    color: #f0f0f0;
+    color: var(--text-color); /* 使用浅灰色代替纯白色 */
     flex-grow: 1;
     display: flex;
     flex-direction: column;
@@ -340,16 +341,16 @@ button,
 .emoji-name {
     font-size: 16px;
     font-weight: 600;
-    margin-bottom: 4px;
+    margin-bottom: 8px; /* 增加下边距 */
     text-transform: capitalize;
-    color: #fff;
+    color: var(--text-color); /* 使用浅灰色代替纯白色 */
     letter-spacing: 0.5px;
 }
 
 .emoji-unicode {
     font-size: 12px;
     color: #aaa;
-    margin-bottom: 4px;
+    margin-bottom: 8px; /* 增加下边距 */
 }
 
 .emoji-category {
@@ -361,7 +362,7 @@ button,
     border-radius: 12px;
     color: #ddd;
     letter-spacing: 0.5px;
-    margin-top: 4px;
+    margin-top: 8px; /* 增加上边距 */
 }
 
 /* 表情操作按钮样式 */
@@ -372,8 +373,8 @@ button,
     width: 100%;
     display: flex;
     justify-content: center;
-    gap: 14px;
-    padding: 12px;
+    gap: 20px; /* 增加按钮之间的间距 */
+    padding: 16px; /* 增加内边距 */
     background-color: rgba(0, 0, 0, 0.85);
     opacity: 0;
     transform: translateY(100%);
@@ -389,12 +390,12 @@ button,
 .emoji-btn {
     background: rgba(255, 255, 255, 0.1);
     border: none;
-    color: white;
+    color: var(--text-color);
     font-size: 14px;
-    padding: 6px;
+    padding: 8px; /* 增加内边距 */
     border-radius: 50%;
-    width: 32px;
-    height: 32px;
+    width: 36px; /* 增加按钮尺寸 */
+    height: 36px; /* 增加按钮尺寸 */
     display: flex;
     align-items: center;
     justify-content: center;
@@ -665,17 +666,25 @@ button,
 .ad-container {
     max-width: 100%;
     overflow: hidden;
+    margin: 2rem 0;
+    min-height: 90px; /* 保留广告空间 */
+    background-color: rgba(40, 40, 40, 0.3); /* 浅灰色背景 */
+    border-radius: 8px;
+}
+
+.ad-container p {
+    display: none; /* 隐藏广告文字 */
 }
 
 /* Media Queries */
 @media (max-width: 768px) {
     .emoji-image {
-        height: 120px;
+        height: 130px; /* 调整响应式下的高度 */
+        padding: 25px; /* 调整响应式下的内边距 */
     }
     
-    .emoji-image img {
-        max-width: 60px;
-        max-height: 60px;
+    .emoji-info {
+        padding: 15px; /* 调整响应式下的内边距 */
     }
     
     .feature-card {
@@ -821,4 +830,43 @@ header {
     .features-grid {
         grid-template-columns: repeat(1, 1fr);
     }
+}
+
+/* FAQ Section 和其他文本部分 - 减少对比度 */
+section.my-12 h3,
+.gradient-title,
+footer h3 {
+    color: var(--text-color); /* 使用浅灰色代替纯白色 */
+}
+
+.text-white {
+    color: var(--text-color) !important; /* 全局替换纯白色文本 */
+}
+
+p.text-gray-400 {
+    color: #9CA3AF !important; /* 调整灰色文本的亮度 */
+}
+
+/* 修改蓝色链接文字颜色 */
+a.text-blue-400, 
+.hover\:text-blue-400:hover,
+footer a {
+    color: #86C1FF !important; /* 使用更柔和的蓝色 */
+    transition: color 0.3s ease;
+}
+
+a:hover {
+    opacity: 0.85;
+}
+
+/* 修正特殊表情形状分类问题 */
+/* 以下表情应该属于special形状分类 */
+.special-emoji.blushing_face .emoji-image,
+.special-emoji.caught_in_the_act .emoji-image,
+.special-emoji.deep_thinking .emoji-image,
+.special-emoji.flirty_eyes .emoji-image,
+.special-emoji.love_struck .emoji-image,
+.special-emoji.peaceful_vibe .emoji-image,
+.special-emoji.evil_eye .emoji-image {
+    background: linear-gradient(135deg, #1e1b4b, #4338ca); /* 使用special分类的背景色 */
 } 

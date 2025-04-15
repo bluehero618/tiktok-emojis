@@ -44,7 +44,9 @@ document.addEventListener('DOMContentLoaded', function() {
         // 特殊组合表情通常使用方形布局
         const specialEmojis = [
             'fairy_blessing', 'shocked_expression', 'queen_flick', 'italian_gesture', 'stop_crying',
-            'chair', 'sparkles', 'clown_face', 'birthday_cake', 'skull', 'person_standing', 'shy_bashful'
+            'chair', 'sparkles', 'clown_face', 'birthday_cake', 'skull', 'person_standing', 'shy_bashful',
+            'blushing_face', 'caught_in_the_act', 'deep_thinking', 'flirty_eyes', 
+            'love_struck', 'peaceful_vibe', 'evil_eye'
         ];
         
         // 明确指定为方形的表情
@@ -58,6 +60,9 @@ document.addEventListener('DOMContentLoaded', function() {
         } else if (roundEmojis.includes(name)) {
             return 'round';
         } else if (specialEmojis.includes(name)) {
+            return 'special';
+        } else if (name.includes('_') || name.includes(' ')) {
+            // 添加额外检查：包含下划线或空格的名称通常是组合表情，应该归类为special
             return 'special';
         } else {
             return 'square'; // 默认为方形
@@ -105,8 +110,12 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // 检查是否应该属于special类别
         if (name.includes('special') || name.includes('unique') || emoji.isSpecial || 
-            name.includes('_') || (emoji.emoji && emoji.emoji.length > 2)) {
+            name.includes('_') || name.includes(' ') || (emoji.emoji && emoji.emoji.length > 2) ||
+            ['blushing_face', 'caught_in_the_act', 'deep_thinking', 'flirty_eyes', 
+            'love_struck', 'peaceful_vibe', 'evil_eye'].includes(name)) {
             emoji.categories.push('special');
+            // 确保这些特殊表情的形状也设置为special
+            emoji.shape = 'special';
         }
         
         // 如果没有分配任何类别，则分配到其主要类别或默认类别
@@ -929,7 +938,7 @@ document.addEventListener('DOMContentLoaded', function() {
             // 保持原始trending表情的标记
             if (!trendingNames.includes(emoji.name)) {
                 emoji.trending = emoji.originalTrending || false;
-        } else {
+            } else {
                 emoji.trending = true;
             }
         });
@@ -1706,38 +1715,27 @@ document.addEventListener('DOMContentLoaded', function() {
         // 检查URL参数
         checkUrlForEmojiParam();
         
-        // 搜索输入事件监听
-        document.getElementById('search').addEventListener('input', function() {
+        // 处理搜索输入
+        searchInput.addEventListener('input', function() {
             searchQuery = this.value.toLowerCase();
             filterEmojis();
         });
         
-        // 添加类别按钮点击事件
-        document.querySelectorAll('.category-btn').forEach(btn => {
-            btn.addEventListener('click', function() {
-            currentCategory = this.getAttribute('data-category');
-                
-                // 更新活动按钮
-                document.querySelectorAll('.category-btn').forEach(b => {
-                    b.classList.remove('active');
-                });
+        // 设置各类别和形状按钮的点击事件
+        categoryButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                currentCategory = this.getAttribute('data-category');
+                document.querySelectorAll('.category-btn').forEach(btn => btn.classList.remove('active'));
                 this.classList.add('active');
-                
                 filterEmojis();
+            });
         });
-    });
         
-        // 添加形状按钮点击事件
-        document.querySelectorAll('.shape-btn').forEach(btn => {
-            btn.addEventListener('click', function() {
+        shapeButtons.forEach(button => {
+            button.addEventListener('click', function() {
                 currentShape = this.getAttribute('data-shape');
-                
-                // 更新活动按钮
-                document.querySelectorAll('.shape-btn').forEach(b => {
-                    b.classList.remove('active');
-                });
+                document.querySelectorAll('.shape-btn').forEach(btn => btn.classList.remove('active'));
                 this.classList.add('active');
-                
                 filterEmojis();
             });
         });
