@@ -929,7 +929,7 @@ document.addEventListener('DOMContentLoaded', function() {
             // 保持原始trending表情的标记
             if (!trendingNames.includes(emoji.name)) {
                 emoji.trending = emoji.originalTrending || false;
-            } else {
+        } else {
                 emoji.trending = true;
             }
         });
@@ -987,7 +987,7 @@ document.addEventListener('DOMContentLoaded', function() {
             
             // 根据搜索查询过滤
             const searchMatch = searchQuery === '' || 
-                              emoji.name.toLowerCase().includes(searchQuery) ||
+            emoji.name.toLowerCase().includes(searchQuery) || 
                               emoji.emoji.includes(searchQuery);
             
             return categoryMatch && shapeMatch && searchMatch;
@@ -1715,7 +1715,7 @@ document.addEventListener('DOMContentLoaded', function() {
         // 添加类别按钮点击事件
         document.querySelectorAll('.category-btn').forEach(btn => {
             btn.addEventListener('click', function() {
-                currentCategory = this.getAttribute('data-category');
+            currentCategory = this.getAttribute('data-category');
                 
                 // 更新活动按钮
                 document.querySelectorAll('.category-btn').forEach(b => {
@@ -1724,8 +1724,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 this.classList.add('active');
                 
                 filterEmojis();
-            });
         });
+    });
         
         // 添加形状按钮点击事件
         document.querySelectorAll('.shape-btn').forEach(btn => {
