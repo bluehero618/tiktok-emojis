@@ -1232,4 +1232,140 @@ header .container,
 /* 标题和副标题对齐改进 */
 h1, h2, h3, p.text-lg, p.text-sm, #emoji-count {
     padding-left: 0;
+}
+
+/* 修复"Showing all 65 emojis"文字对齐和美化 */
+#emoji-count,
+.text-center.mb-4,
+.text-sm.text-gray-500.my-2,
+div:has(> #emoji-grid) > p,
+div:has(> #emoji-grid) > div {
+    text-align: left;
+    padding-left: 2rem;
+    padding-right: 2rem;
+    color: #9CA3AF;
+    margin-bottom: 1.5rem;
+    font-size: 0.95rem;
+    letter-spacing: 0.02em;
+}
+
+/* 修复三个功能卡片的间距和对齐问题 */
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+    margin: 3rem auto;
+    width: 100%;
+    max-width: 1200px;
+    align-items: stretch;
+    padding-left: 2rem;
+    padding-right: 2rem;
+}
+
+/* 确保特性卡片和下方的文本框两端对齐 */
+.feature-card {
+    background-color: #2D2D33;
+    border-radius: 1rem;
+    padding: 2.5rem 2rem;
+    text-align: center;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    min-height: 280px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    position: relative;
+    border: 2px solid transparent;
+    overflow: hidden;
+}
+
+/* 确保响应式设计适配各种设备 */
+@media (max-width: 1280px) {
+    .features-grid {
+        max-width: 95%;
+    }
+    
+    #emoji-grid {
+        max-width: 95%;
+    }
+}
+
+@media (max-width: 992px) {
+    .features-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20px;
+    }
+    
+    .feature-card {
+        padding: 2rem 1.5rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .features-grid {
+        grid-template-columns: repeat(1, 1fr);
+        gap: 20px;
+    }
+    
+    #emoji-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 15px;
+    }
+    
+    .feature-card {
+        min-height: 240px;
+    }
+    
+    .emoji-image {
+        height: 100px;
+        padding: 20px;
+    }
+    
+    .emoji-info {
+        padding: 12px;
+    }
+    
+    #emoji-count,
+    .text-center.mb-4,
+    .text-sm.text-gray-500.my-2,
+    div:has(> #emoji-grid) > p,
+    div:has(> #emoji-grid) > div,
+    .search-container,
+    .categories-nav, 
+    .shapes-nav,
+    header .container,
+    .text-center.mb-8,
+    section.my-12 h2,
+    .features-grid,
+    footer .container {
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    #emoji-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+    }
+    
+    .feature-card {
+        min-height: 220px;
+        padding: 1.5rem 1rem;
+    }
+    
+    .emoji-image {
+        height: 90px;
+        padding: 15px;
+    }
+    
+    .emoji-image img {
+        width: 60px;
+        height: 60px;
+    }
+    
+    .emoji-name {
+        font-size: 14px;
+    }
 } 
