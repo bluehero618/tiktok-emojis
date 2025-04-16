@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="zh">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TikTok表情 | 关键词搜索结果</title>
-    <meta name="description" content="查找和浏览TikTok表情符号，复制并使用最流行的TikTok表情。">
+    <title>TikTok Emojis | Keyword Search Results</title>
+    <meta name="description" content="Find and browse TikTok emojis, copy and use the most popular TikTok emoji symbols.">
     <link rel="stylesheet" href="styles.css">
     <!-- Google Analytics脚本 -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXX"></script>
@@ -15,16 +15,16 @@
         gtag('config', 'G-XXXXXXXX');
     </script>
 </head>
-<body class="bg-gray-900 text-white">
+<body class="bg-black text-white">
     <header class="bg-gray-800 shadow-lg">
         <div class="container mx-auto px-4 py-6">
             <div class="flex flex-col md:flex-row md:justify-between md:items-center">
-                <a href="index.html" class="text-2xl font-bold text-pink-500 mb-4 md:mb-0">
-                    TikTok表情😊
+                <a href="index.html" class="text-2xl font-bold gradient-title mb-4 md:mb-0">
+                    TikTok Emojis
                 </a>
                 <div class="search-container w-full md:w-96">
                     <div class="relative">
-                        <input type="text" id="searchInput" placeholder="搜索表情..." class="w-full px-4 py-2 bg-gray-800 rounded-full focus:outline-none focus:ring-2 focus:ring-pink-500">
+                        <input type="text" id="searchInput" placeholder="Search emojis..." class="w-full px-4 py-2 bg-gray-800 rounded-full focus:outline-none focus:ring-2 focus:ring-pink-500">
                         <button id="searchButton" class="absolute right-3 top-2 text-gray-400 hover:text-pink-500">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
@@ -34,9 +34,9 @@
                 </div>
                 <nav class="hidden md:block">
                     <ul class="flex space-x-4">
-                        <li><a href="index.html" class="hover:text-pink-500">首页</a></li>
-                        <li><a href="keywords/index.html" class="hover:text-pink-500">关键词搜索</a></li>
-                        <li><a href="index.html#faq" class="hover:text-pink-500">常见问题</a></li>
+                        <li><a href="index.html" class="hover:text-pink-500">Home</a></li>
+                        <li><a href="keywords/index.html" class="hover:text-pink-500">Keyword Search</a></li>
+                        <li><a href="index.html#faq" class="hover:text-pink-500">FAQ</a></li>
                     </ul>
                 </nav>
             </div>
@@ -45,62 +45,62 @@
 
     <main class="container mx-auto px-4 py-10">
         <div id="keywordTitle" class="mb-8 text-center">
-            <h1 class="text-3xl font-bold" id="mainTitle">TikTok表情搜索结果</h1>
-            <p class="mt-2 text-gray-400" id="subTitle">加载中...</p>
+            <h1 class="text-3xl font-bold gradient-title" id="mainTitle">TikTok Emoji Search Results</h1>
+            <p class="mt-2 text-gray-400" id="subTitle">Loading...</p>
         </div>
 
         <div class="bg-gray-800 p-4 rounded-lg mb-8">
-            <h2 class="text-lg font-semibold mb-2">表情过滤器</h2>
+            <h2 class="text-lg font-semibold mb-2">Emoji Filters</h2>
             <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-                <!-- 类别过滤按钮 -->
+                <!-- Category filter buttons -->
                 <div>
-                    <label class="block text-sm mb-1">类别:</label>
+                    <label class="block text-sm mb-1">Category:</label>
                     <select id="categoryFilter" class="w-full bg-gray-700 rounded p-2 text-sm">
-                        <option value="all">所有类别</option>
-                        <option value="happy">开心</option>
-                        <option value="sad">伤心</option>
-                        <option value="love">爱心</option>
-                        <option value="angry">生气</option>
-                        <option value="special">特殊</option>
+                        <option value="all">All Categories</option>
+                        <option value="happy">Happy</option>
+                        <option value="sad">Sad</option>
+                        <option value="love">Love</option>
+                        <option value="angry">Angry</option>
+                        <option value="special">Special</option>
                     </select>
                 </div>
                 
-                <!-- 形状过滤按钮 -->
+                <!-- Shape filter buttons -->
                 <div>
-                    <label class="block text-sm mb-1">形状:</label>
+                    <label class="block text-sm mb-1">Shape:</label>
                     <select id="shapeFilter" class="w-full bg-gray-700 rounded p-2 text-sm">
-                        <option value="all">所有形状</option>
-                        <option value="circle">圆形</option>
-                        <option value="square">方形</option>
-                        <option value="special">特殊</option>
+                        <option value="all">All Shapes</option>
+                        <option value="circle">Circle</option>
+                        <option value="square">Square</option>
+                        <option value="special">Special</option>
                     </select>
                 </div>
 
-                <!-- 排序选项 -->
+                <!-- Sort options -->
                 <div>
-                    <label class="block text-sm mb-1">排序方式:</label>
+                    <label class="block text-sm mb-1">Sort By:</label>
                     <select id="sortOption" class="w-full bg-gray-700 rounded p-2 text-sm">
-                        <option value="trending">热门程度</option>
-                        <option value="alphabetical">字母顺序</option>
-                        <option value="recent">最新添加</option>
+                        <option value="trending">Trending</option>
+                        <option value="alphabetical">Alphabetical</option>
+                        <option value="recent">Recently Added</option>
                     </select>
                 </div>
 
-                <!-- 显示选项 -->
+                <!-- Display options -->
                 <div>
-                    <label class="block text-sm mb-1">显示:</label>
+                    <label class="block text-sm mb-1">Display:</label>
                     <select id="displayOption" class="w-full bg-gray-700 rounded p-2 text-sm">
-                        <option value="all">所有表情</option>
-                        <option value="trending">仅热门表情</option>
-                        <option value="special">仅特殊表情</option>
+                        <option value="all">All Emojis</option>
+                        <option value="trending">Trending Only</option>
+                        <option value="special">Special Only</option>
                     </select>
                 </div>
             </div>
         </div>
 
-        <!-- 表情计数器 -->
+        <!-- Emoji counter -->
         <div class="mb-6 flex justify-between items-center">
-            <div id="emojiCount" class="text-gray-400">加载中...</div>
+            <div id="emojiCount" class="text-gray-400">Loading...</div>
             <div class="flex gap-2">
                 <button id="gridViewBtn" class="bg-pink-500 text-white px-3 py-1 rounded-full text-sm active">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 inline" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -109,20 +109,20 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2z" />
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
                     </svg>
-                    网格视图
+                    Grid View
                 </button>
                 <button id="listViewBtn" class="bg-gray-700 text-white px-3 py-1 rounded-full text-sm">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 inline" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
                     </svg>
-                    列表视图
+                    List View
                 </button>
             </div>
         </div>
 
-        <!-- 表情展示区域 -->
+        <!-- Emoji display area -->
         <div id="emojiContainer" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
-            <!-- 表情卡片会动态添加到这里 -->
+            <!-- Emoji cards will be dynamically added here -->
             <div class="skeleton-card bg-gray-800 rounded-lg p-4 flex flex-col items-center animate-pulse">
                 <div class="w-16 h-16 mb-3 bg-gray-700 rounded-full"></div>
                 <div class="h-4 bg-gray-700 rounded w-2/3 mb-2"></div>
@@ -155,47 +155,47 @@
             </div>
         </div>
 
-        <!-- 没有结果时显示 -->
+        <!-- Display when no results found -->
         <div id="noResults" class="hidden text-center py-12">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mx-auto text-gray-600 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
-            <h3 class="text-xl font-semibold mb-2">未找到表情</h3>
-            <p class="text-gray-400">没有与您的关键词匹配的表情，请尝试其他关键词。</p>
+            <h3 class="text-xl font-semibold mb-2">No Emojis Found</h3>
+            <p class="text-gray-400">No emojis match your keyword. Please try a different keyword.</p>
         </div>
 
-        <!-- 相关关键词 -->
+        <!-- Related keywords -->
         <div id="relatedKeywords" class="mt-12 bg-gray-800 p-6 rounded-lg">
-            <h2 class="text-xl font-semibold mb-4">相关关键词</h2>
+            <h2 class="text-xl font-semibold mb-4 gradient-title">Related Keywords</h2>
             <div class="flex flex-wrap gap-3" id="relatedKeywordsContainer">
-                <!-- 相关关键词将在这里动态添加 -->
-                <a href="#" class="bg-gray-700 px-3 py-1 rounded-full text-sm hover:bg-gray-600 transition">加载中...</a>
+                <!-- Related keywords will be dynamically added here -->
+                <a href="#" class="bg-gray-700 px-3 py-1 rounded-full text-sm hover:bg-gray-600 transition">Loading...</a>
             </div>
         </div>
 
-        <!-- 热门关键词 -->
+        <!-- Popular keywords -->
         <div id="popularKeywords" class="mt-8 bg-gray-800 p-6 rounded-lg">
-            <h2 class="text-xl font-semibold mb-4">热门关键词</h2>
+            <h2 class="text-xl font-semibold mb-4 gradient-title">Popular Keywords</h2>
             <div class="flex flex-wrap gap-3" id="popularKeywordsContainer">
-                <!-- 热门关键词将在这里动态添加 -->
-                <a href="#" class="bg-gray-700 px-3 py-1 rounded-full text-sm hover:bg-gray-600 transition">加载中...</a>
+                <!-- Popular keywords will be dynamically added here -->
+                <a href="#" class="bg-gray-700 px-3 py-1 rounded-full text-sm hover:bg-gray-600 transition">Loading...</a>
             </div>
         </div>
 
-        <!-- 关键词详情 -->
+        <!-- Keyword information -->
         <section id="keywordInfo" class="mt-12 bg-gray-800 p-6 rounded-lg">
-            <h2 class="text-xl font-semibold mb-4" id="keywordInfoTitle">关于TikTok表情</h2>
+            <h2 class="text-xl font-semibold mb-4 gradient-title" id="keywordInfoTitle">About TikTok Emojis</h2>
             <div id="keywordInfoContent">
-                <p class="mb-4">加载中...</p>
+                <p class="mb-4">Loading...</p>
             </div>
         </section>
     </main>
 
-    <!-- 表情信息模态框 -->
+    <!-- Emoji info modal -->
     <div id="emojiModal" class="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50 hidden">
         <div class="bg-gray-800 rounded-lg p-6 max-w-lg w-full mx-4">
             <div class="flex justify-between items-start mb-4">
-                <h3 class="text-xl font-semibold" id="modalEmojiName">表情名称</h3>
+                <h3 class="text-xl font-semibold" id="modalEmojiName">Emoji Name</h3>
                 <button id="closeModal" class="text-gray-400 hover:text-white">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
@@ -206,63 +206,63 @@
                 <div id="modalEmojiImage" class="text-6xl mr-4">😊</div>
                 <div>
                     <p class="mb-2"><span class="text-gray-400">Unicode:</span> <span id="modalEmojiUnicode">U+1F600</span></p>
-                    <p class="mb-2"><span class="text-gray-400">类别:</span> <span id="modalEmojiCategory">开心</span></p>
-                    <p><span class="text-gray-400">TikTok热门:</span> <span id="modalEmojiTrending">是</span></p>
+                    <p class="mb-2"><span class="text-gray-400">Category:</span> <span id="modalEmojiCategory">Happy</span></p>
+                    <p><span class="text-gray-400">Trending on TikTok:</span> <span id="modalEmojiTrending">Yes</span></p>
                 </div>
             </div>
             <div class="mb-6">
-                <h4 class="text-lg font-semibold mb-2">表情描述</h4>
-                <p id="modalEmojiDescription" class="text-gray-300">这个表情表示...</p>
+                <h4 class="text-lg font-semibold mb-2">Emoji Description</h4>
+                <p id="modalEmojiDescription" class="text-gray-300">This emoji represents...</p>
             </div>
             <div class="mb-6">
-                <h4 class="text-lg font-semibold mb-2">在TikTok中的使用</h4>
-                <p id="modalEmojiTikTokUsage" class="text-gray-300">在TikTok中，这个表情通常用于...</p>
+                <h4 class="text-lg font-semibold mb-2">Usage on TikTok</h4>
+                <p id="modalEmojiTikTokUsage" class="text-gray-300">On TikTok, this emoji is typically used for...</p>
             </div>
             <div class="flex flex-wrap gap-3">
                 <button id="modalCopyEmoji" class="bg-pink-500 hover:bg-pink-600 text-white px-4 py-2 rounded-lg flex items-center">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" />
                     </svg>
-                    复制表情
+                    Copy Emoji
                 </button>
                 <button id="modalDownloadEmoji" class="bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded-lg flex items-center">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
                     </svg>
-                    下载PNG
+                    Download PNG
                 </button>
             </div>
         </div>
     </div>
 
-    <!-- 提示框 -->
+    <!-- Toast notification -->
     <div id="toast" class="fixed bottom-4 right-4 bg-gray-800 text-white px-4 py-2 rounded-lg shadow-lg transform translate-y-10 opacity-0 transition-all duration-300 z-50">
-        已复制表情到剪贴板！
+        Emoji copied to clipboard!
     </div>
 
     <footer class="bg-gray-800 text-gray-400 py-8 mt-16">
         <div class="container mx-auto px-4">
             <div class="grid md:grid-cols-3 gap-8">
                 <div>
-                    <h3 class="text-xl font-semibold mb-4">TikTok表情</h3>
-                    <p>浏览、复制和下载最流行的TikTok表情，让您的评论更加生动有趣！</p>
+                    <h3 class="text-xl font-semibold mb-4 gradient-title">TikTok Emojis</h3>
+                    <p>Browse, copy and download the most popular TikTok emojis to make your comments more engaging!</p>
                 </div>
                 <div>
-                    <h3 class="text-xl font-semibold mb-4">快速链接</h3>
+                    <h3 class="text-xl font-semibold mb-4">Quick Links</h3>
                     <ul class="space-y-2">
-                        <li><a href="index.html" class="hover:text-pink-500">首页</a></li>
-                        <li><a href="index.html#trending" class="hover:text-pink-500">热门表情</a></li>
-                        <li><a href="index.html#faq" class="hover:text-pink-500">常见问题</a></li>
+                        <li><a href="index.html" class="hover:text-pink-500">Home</a></li>
+                        <li><a href="index.html#trending" class="hover:text-pink-500">Trending Emojis</a></li>
+                        <li><a href="index.html#faq" class="hover:text-pink-500">FAQ</a></li>
                     </ul>
                 </div>
                 <div>
-                    <h3 class="text-xl font-semibold mb-4">联系我们</h3>
-                    <p>如果您有任何问题或建议，请随时联系我们。</p>
-                    <p class="mt-2">电子邮件：contact@tiktokemojis.com</p>
+                    <h3 class="text-xl font-semibold mb-4">Contact Us</h3>
+                    <p>If you have any questions or suggestions, feel free to contact us.</p>
+                    <p class="mt-2">Email: contact@tiktokemojis.com</p>
                 </div>
             </div>
             <div class="mt-8 pt-8 border-t border-gray-700 text-center">
-                <p>&copy; 2023 TikTok表情。保留所有权利。</p>
+                <p>&copy; 2023 TikTok Emojis. All rights reserved.</p>
             </div>
         </div>
     </footer>
