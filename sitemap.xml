@@ -2,80 +2,164 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
    <url>
       <loc>https://tiktokemojis.art/</loc>
-      <lastmod>2025-04-16</lastmod>
+      <lastmod>2025-06-15</lastmod>
       <changefreq>weekly</changefreq>
       <priority>1.0</priority>
    </url>
    <url>
       <loc>https://tiktokemojis.art/special-emojis</loc>
-      <lastmod>2025-04-16</lastmod>
+      <lastmod>2025-06-15</lastmod>
       <changefreq>monthly</changefreq>
       <priority>0.9</priority>
    </url>
    <url>
       <loc>https://tiktokemojis.art/trending-emojis</loc>
-      <lastmod>2025-04-16</lastmod>
+      <lastmod>2025-06-15</lastmod>
       <changefreq>daily</changefreq>
       <priority>0.9</priority>
    </url>
    <url>
       <loc>https://tiktokemojis.art/emoji-meanings</loc>
-      <lastmod>2025-04-16</lastmod>
+      <lastmod>2025-06-15</lastmod>
       <changefreq>monthly</changefreq>
       <priority>0.8</priority>
    </url>
    <url>
       <loc>https://tiktokemojis.art/terms-of-service.html</loc>
-      <lastmod>2025-04-16</lastmod>
+      <lastmod>2025-06-15</lastmod>
       <changefreq>monthly</changefreq>
       <priority>0.5</priority>
    </url>
    <url>
       <loc>https://tiktokemojis.art/privacy-policy.html</loc>
-      <lastmod>2025-04-16</lastmod>
+      <lastmod>2025-06-15</lastmod>
       <changefreq>monthly</changefreq>
       <priority>0.5</priority>
    </url>
    <url>
       <loc>https://tiktokemojis.art/emojis/happy</loc>
-      <lastmod>2025-04-16</lastmod>
+      <lastmod>2025-06-15</lastmod>
       <changefreq>weekly</changefreq>
       <priority>0.8</priority>
    </url>
    <url>
       <loc>https://tiktokemojis.art/emojis/sad</loc>
-      <lastmod>2025-04-16</lastmod>
+      <lastmod>2025-06-15</lastmod>
       <changefreq>weekly</changefreq>
       <priority>0.8</priority>
    </url>
    <url>
       <loc>https://tiktokemojis.art/emojis/angry</loc>
-      <lastmod>2025-04-16</lastmod>
+      <lastmod>2025-06-15</lastmod>
       <changefreq>weekly</changefreq>
       <priority>0.8</priority>
    </url>
    <url>
       <loc>https://tiktokemojis.art/emojis/love</loc>
-      <lastmod>2025-04-16</lastmod>
+      <lastmod>2025-06-15</lastmod>
       <changefreq>weekly</changefreq>
       <priority>0.8</priority>
    </url>
    <url>
       <loc>https://tiktokemojis.art/emojis/special</loc>
-      <lastmod>2025-04-16</lastmod>
+      <lastmod>2025-06-15</lastmod>
       <changefreq>weekly</changefreq>
       <priority>0.8</priority>
    </url>
    <url>
       <loc>https://tiktokemojis.art/emojis/round</loc>
-      <lastmod>2025-04-16</lastmod>
+      <lastmod>2025-06-15</lastmod>
       <changefreq>weekly</changefreq>
       <priority>0.7</priority>
    </url>
    <url>
       <loc>https://tiktokemojis.art/emojis/square</loc>
-      <lastmod>2025-04-16</lastmod>
+      <lastmod>2025-06-15</lastmod>
       <changefreq>weekly</changefreq>
       <priority>0.7</priority>
+   </url>
+   <url>
+      <loc>https://tiktokemojis.art/keywords/tiktok-emojis-meaning.html</loc>
+      <lastmod>2025-06-15</lastmod>
+      <changefreq>weekly</changefreq>
+      <priority>0.9</priority>
+   </url>
+   <url>
+      <loc>https://tiktokemojis.art/keywords/trending-tiktok-emojis.html</loc>
+      <lastmod>2025-06-15</lastmod>
+      <changefreq>daily</changefreq>
+      <priority>0.9</priority>
+   </url>
+   <url>
+      <loc>https://tiktokemojis.art/keywords/tiktok-emojis-happy.html</loc>
+      <lastmod>2025-06-15</lastmod>
+      <changefreq>weekly</changefreq>
+      <priority>0.8</priority>
+   </url>
+   <url>
+      <loc>https://tiktokemojis.art/keywords/tiktok-emojis-crying.html</loc>
+      <lastmod>2025-06-15</lastmod>
+      <changefreq>weekly</changefreq>
+      <priority>0.8</priority>
+   </url>
+   <url>
+      <loc>https://tiktokemojis.art/keywords/tiktok-emojis-shock.html</loc>
+      <lastmod>2025-06-15</lastmod>
+      <changefreq>weekly</changefreq>
+      <priority>0.8</priority>
+   </url>
+   <url>
+      <loc>https://tiktokemojis.art/keywords/tiktok-emojis-hehe.html</loc>
+      <lastmod>2025-06-15</lastmod>
+      <changefreq>weekly</changefreq>
+      <priority>0.8</priority>
+   </url>
+   <url>
+      <loc>https://tiktokemojis.art/keywords/tiktok-emojis-love.html</loc>
+      <lastmod>2025-06-15</lastmod>
+      <changefreq>weekly</changefreq>
+      <priority>0.8</priority>
+   </url>
+   <url>
+      <loc>https://tiktokemojis.art/keywords/tiktok-emojis-stickers.html</loc>
+      <lastmod>2025-06-15</lastmod>
+      <changefreq>weekly</changefreq>
+      <priority>0.8</priority>
+   </url>
+   <url>
+      <loc>https://tiktokemojis.art/keywords/tiktok-comment-emojis.html</loc>
+      <lastmod>2025-06-15</lastmod>
+      <changefreq>weekly</changefreq>
+      <priority>0.8</priority>
+   </url>
+   <url>
+      <loc>https://tiktokemojis.art/keywords/tiktok-emojis-names.html</loc>
+      <lastmod>2025-06-15</lastmod>
+      <changefreq>weekly</changefreq>
+      <priority>0.8</priority>
+   </url>
+   <url>
+      <loc>https://tiktokemojis.art/keywords/tiktok-emojis-discord.html</loc>
+      <lastmod>2025-06-15</lastmod>
+      <changefreq>weekly</changefreq>
+      <priority>0.8</priority>
+   </url>
+   <url>
+      <loc>https://tiktokemojis.art/keywords/tiktok-emojis-list.html</loc>
+      <lastmod>2025-06-15</lastmod>
+      <changefreq>weekly</changefreq>
+      <priority>0.8</priority>
+   </url>
+   <url>
+      <loc>https://tiktokemojis.art/keywords/tiktok-emojis-code.html</loc>
+      <lastmod>2025-06-15</lastmod>
+      <changefreq>weekly</changefreq>
+      <priority>0.8</priority>
+   </url>
+   <url>
+      <loc>https://tiktokemojis.art/keywords/tiktok-emojis-png.html</loc>
+      <lastmod>2025-06-15</lastmod>
+      <changefreq>weekly</changefreq>
+      <priority>0.8</priority>
    </url>
 </urlset> 

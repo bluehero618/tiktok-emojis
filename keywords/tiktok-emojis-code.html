@@ -39,29 +39,68 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <!-- Favicon -->
     <link rel="icon" href="../assets/favicon.ico" type="image/x-icon">
+    <style>
+        .nav-home-button {
+            display: inline-block;
+            color: white;
+            font-weight: bold;
+            padding: 8px 15px;
+            border-radius: 6px;
+            text-decoration: none;
+            border: 1px solid rgba(255,255,255,0.3);
+            transition: background-color 0.3s, border-color 0.3s;
+        }
+        .nav-home-button:hover {
+            background-color: rgba(255,255,255,0.1);
+            border-color: rgba(255,255,255,0.5);
+        }
+        .feature-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: #fe2c55;
+            text-align: center;
+        }
+        .emoji-card {
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            background-color: #1e1e1e;
+            border-radius: 12px;
+        }
+        .emoji-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        .emoji-card h3 .emoji {
+            font-size: 2.5rem;
+            margin-right: 0.5rem;
+            vertical-align: middle;
+        }
+        /* 添加首页分类图标样式 */
+        .icon-circle {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            background-color: #2a2a2a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            transition: transform 0.3s ease, background-color 0.3s ease;
+        }
+        .bg-gray-900:hover .icon-circle {
+            transform: scale(1.1);
+            background-color: #333;
+        }
+    </style>
 </head>
 <body class="bg-black text-white">
     <!-- Header -->
     <header class="bg-gray-800 py-4 shadow-lg">
         <div class="container mx-auto px-4">
-            <h1 class="text-3xl font-bold mb-4 gradient-title">TikTok Emojis Code</h1>
-            <div class="search-container relative mb-4">
-                <input type="text" id="search" placeholder="Search emojis..." class="w-full px-4 py-2 bg-gray-700 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-            </div>
-            <div class="categories-nav flex flex-wrap gap-2 mb-3">
-                <button class="category-btn active" data-category="all">All Categories</button>
-                <button class="category-btn" data-category="trending">Trending</button>
-                <button class="category-btn" data-category="happy">Happy</button>
-                <button class="category-btn" data-category="sad">Sad</button>
-                <button class="category-btn" data-category="angry">Angry</button>
-                <button class="category-btn" data-category="love">Love</button>
-                <button class="category-btn" data-category="special">Special</button>
-            </div>
-            <div class="shapes-nav flex flex-wrap gap-2">
-                <button class="shape-btn active" data-shape="all">All Shapes</button>
-                <button class="shape-btn" data-shape="round">Round</button>
-                <button class="shape-btn" data-shape="square">Square</button>
-                <button class="shape-btn" data-shape="special">Special</button>
+            <div class="flex justify-between items-center">
+                <h1 class="text-3xl font-bold gradient-title">TikTok Emojis Code</h1>
+                <a href="/" class="nav-home-button"><i class="fas fa-home"></i> Home</a>
             </div>
         </div>
     </header>
@@ -72,70 +111,100 @@
             <h1 class="text-5xl font-bold mb-4 gradient-title">TikTok Emojis Code Reference</h1>
             <p class="text-lg text-gray-300">Unicode and HTML Codes for TikTok Emojis</p>
             <p class="text-sm text-gray-500 my-2">Perfect for developers, programmers and web designers</p>
-            <!-- 添加到首页的回链，以关键词开头 -->
-            <p class="text-sm text-gray-400 mt-4">
-                <a href="/" class="hover:text-blue-400">tiktok emojis code - View All TikTok Emojis</a>
-            </p>
         </div>
         
-        <div class="text-center mb-4" id="emoji-count">Loading emojis...</div>
-        
-        <div id="emoji-grid">
-            <!-- Emoji Cards will be dynamically inserted here -->
-        </div>
-        
-        <div id="loading" class="text-center py-8 hidden">
-            <div class="animate-pulse">Loading more emojis...</div>
-        </div>
-
-        <!-- Features specific to Code -->
-        <div class="features-grid">
-            <div class="bg-gray-900 p-6 rounded-lg shadow-md gradient-border">
-                <div class="feature-icon code-icon">
-                    <i class="fas fa-code"></i>
-                </div>
-                <h3 class="text-xl font-semibold mb-2">Unicode Reference</h3>
-                <p class="text-gray-400">Get unicode values for all TikTok emojis to use in your code</p>
-            </div>
-            <div class="bg-gray-900 p-6 rounded-lg shadow-md gradient-border">
-                <div class="feature-icon copy-icon">
-                    <i class="fas fa-copy"></i>
-                </div>
-                <h3 class="text-xl font-semibold mb-2">Copy Code</h3>
-                <p class="text-gray-400">Easily copy unicode and HTML code for any TikTok emoji</p>
-            </div>
-            <div class="bg-gray-900 p-6 rounded-lg shadow-md gradient-border">
-                <div class="feature-icon info-icon">
-                    <i class="fas fa-info-circle"></i>
-                </div>
-                <h3 class="text-xl font-semibold mb-2">Implementation Guide</h3>
-                <p class="text-gray-400">Get tips on how to implement TikTok emojis in various programming languages</p>
-            </div>
-        </div>
-
         <!-- Code Specific Content -->
         <section class="my-12">
             <h2 class="text-2xl font-bold mb-6 gradient-title">Using TikTok Emoji Codes</h2>
-            <div class="bg-gray-900 p-6 rounded-lg shadow-md">
-                <p class="text-gray-400 mb-4">Our TikTok emojis code reference provides Unicode and HTML codes for all TikTok emojis. You can use these codes in your web projects, applications, or any platform that supports emoji rendering.</p>
-                <p class="text-gray-400 mb-4">To use an emoji in HTML, you can use its HTML entity (e.g., &amp;#128512; for 😀) or directly insert the emoji character in UTF-8 encoded documents.</p>
+            <div class="emoji-card">
+                <h3><span class="emoji">💻</span> HTML Emoji Codes</h3>
+                <p class="text-gray-400">To use an emoji in HTML, you can use its HTML entity (e.g., &amp;#128512; for 😀) or directly insert the emoji character in UTF-8 encoded documents.</p>
+            </div>
+            <div class="emoji-card">
+                <h3><span class="emoji">🔢</span> Unicode Values</h3>
                 <p class="text-gray-400">For JavaScript applications, you can use the unicode escape sequence (e.g., \uD83D\uDE00 for 😀) or directly insert the emoji character in your source code if it's saved with UTF-8 encoding.</p>
+            </div>
+            <div class="emoji-card">
+                <h3><span class="emoji">📱</span> Cross-Platform Support</h3>
+                <p class="text-gray-400">Our TikTok emojis code reference provides Unicode and HTML codes for all TikTok emojis. You can use these codes in your web projects, applications, or any platform that supports emoji rendering.</p>
             </div>
         </section>
 
         <!-- Related Keywords -->
         <section class="my-12">
-            <h2 class="text-2xl font-bold mb-6 gradient-title">Explore More TikTok Emojis</h2>
-            <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
-                <a href="/keywords/tiktok-emojis-discord" class="bg-gray-900 p-4 rounded-lg text-center hover:bg-gray-800 transition-colors">
-                    <h3 class="text-lg font-semibold">TikTok Emojis Discord</h3>
-                </a>
-                <a href="/keywords/tiktok-emojis-meaning" class="bg-gray-900 p-4 rounded-lg text-center hover:bg-gray-800 transition-colors">
-                    <h3 class="text-lg font-semibold">TikTok Emojis Meaning</h3>
-                </a>
-                <a href="/keywords/how-to-type-tiktok-emojis" class="bg-gray-900 p-4 rounded-lg text-center hover:bg-gray-800 transition-colors">
-                    <h3 class="text-lg font-semibold">How to Type TikTok Emojis</h3>
-                </a>
+            <h2 class="text-2xl font-bold mb-6 gradient-title">Explore All TikTok Emojis Categories</h2>
+            <div class="emoji-links-container">
+                <!-- 第一行 - 5个按钮 -->
+                <div class="emoji-links-row">
+                    <a href="/keywords/tiktok-emojis-meaning.html" class="emoji-link-btn">
+                        <div class="emoji-icon text-xl">🔍</div>
+                        <h4 class="text-md font-semibold">TikTok Emojis Meaning</h4>
+                    </a>
+                    <a href="/keywords/trending-tiktok-emojis.html" class="emoji-link-btn">
+                        <div class="emoji-icon text-xl">🔥</div>
+                        <h4 class="text-md font-semibold">Trending TikTok Emojis</h4>
+                    </a>
+                    <a href="/keywords/tiktok-emojis-happy.html" class="emoji-link-btn">
+                        <div class="emoji-icon text-xl">😄</div>
+                        <h4 class="text-md font-semibold">TikTok Emojis Happy</h4>
+                    </a>
+                    <a href="/keywords/tiktok-emojis-crying.html" class="emoji-link-btn">
+                        <div class="emoji-icon text-xl">😭</div>
+                        <h4 class="text-md font-semibold">TikTok Emojis Crying</h4>
+                    </a>
+                    <a href="/keywords/tiktok-emojis-shock.html" class="emoji-link-btn">
+                        <div class="emoji-icon text-xl">😱</div>
+                        <h4 class="text-md font-semibold">TikTok Emojis Shock</h4>
+                    </a>
+                </div>
+                
+                <!-- 第二行 - 5个按钮 -->
+                <div class="emoji-links-row">
+                    <a href="/keywords/tiktok-emojis-hehe.html" class="emoji-link-btn">
+                        <div class="emoji-icon text-xl">😏</div>
+                        <h4 class="text-md font-semibold">TikTok Emojis Hehe</h4>
+                    </a>
+                    <a href="/keywords/tiktok-emojis-love.html" class="emoji-link-btn">
+                        <div class="emoji-icon text-xl">❤️</div>
+                        <h4 class="text-md font-semibold">TikTok Emojis Love</h4>
+                    </a>
+                    <a href="/keywords/tiktok-emojis-stickers.html" class="emoji-link-btn">
+                        <div class="emoji-icon text-xl">🏷️</div>
+                        <h4 class="text-md font-semibold">TikTok Emojis Stickers</h4>
+                    </a>
+                    <a href="/keywords/tiktok-comment-emojis.html" class="emoji-link-btn">
+                        <div class="emoji-icon text-xl">💬</div>
+                        <h4 class="text-md font-semibold">TikTok Comment Emojis</h4>
+                    </a>
+                    <a href="/keywords/tiktok-emojis-names.html" class="emoji-link-btn">
+                        <div class="emoji-icon text-xl">📋</div>
+                        <h4 class="text-md font-semibold">TikTok Emojis Names</h4>
+                    </a>
+                </div>
+                
+                <!-- 第三行 - 5个按钮 -->
+                <div class="emoji-links-row">
+                    <a href="/keywords/tiktok-emojis-discord.html" class="emoji-link-btn">
+                        <div class="emoji-icon text-xl">👾</div>
+                        <h4 class="text-md font-semibold">TikTok Emojis Discord</h4>
+                    </a>
+                    <a href="/keywords/tiktok-emojis-list.html" class="emoji-link-btn">
+                        <div class="emoji-icon text-xl">📑</div>
+                        <h4 class="text-md font-semibold">TikTok Emojis List</h4>
+                    </a>
+                    <a href="/keywords/tiktok-emojis-code.html" class="emoji-link-btn">
+                        <div class="emoji-icon text-xl">💻</div>
+                        <h4 class="text-md font-semibold">TikTok Emojis Code</h4>
+                    </a>
+                    <a href="/keywords/tiktok-emojis-png.html" class="emoji-link-btn">
+                        <div class="emoji-icon text-xl">🖼️</div>
+                        <h4 class="text-md font-semibold">TikTok Emojis PNG</h4>
+                    </a>
+                    <div class="emoji-link-btn emoji-link-btn-placeholder">
+                        <div class="emoji-icon text-xl">🔍</div>
+                        <h4 class="text-md font-semibold">More Coming Soon</h4>
+                    </div>
+                </div>
             </div>
         </section>
     </main>
@@ -167,36 +236,59 @@
                     </div>
                 </div>
             </div>
-            <div class="mt-8 pt-4 border-t border-gray-800 text-center">
-                <p class="text-gray-400">&copy; 2025 TikTokEmojis.art. All rights reserved.</p>
+            <div class="text-center pt-8 mt-8 border-t border-gray-800">
+                <p class="text-gray-400">&copy; 2023 TikTok Emojis. All rights reserved.</p>
             </div>
         </div>
     </footer>
 
-    <!-- Toast notification -->
-    <div id="toast" class="fixed bottom-4 right-4 bg-gray-900 text-white px-4 py-2 rounded-lg shadow-lg z-50 transform translate-y-10 opacity-0 transition-all duration-300">
-        <div class="flex items-center">
-            <i class="fas fa-check-circle text-green-500 mr-2"></i>
-            <span id="toast-message">Message copied to clipboard!</span>
-        </div>
+    <!-- Toast -->
+    <div id="toast" class="hidden fixed bottom-4 left-1/2 transform -translate-x-1/2 bg-gray-800 text-white px-4 py-2 rounded-md shadow-lg z-50">
+        Copied to clipboard!
     </div>
 
-    <!-- Modal for emoji info -->
-    <div id="emoji-modal" class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 hidden">
-        <div class="bg-gray-800 rounded-lg p-6 max-w-md w-full mx-4">
-            <div class="flex justify-between items-center mb-4">
-                <h3 class="text-xl font-semibold" id="modal-title">Emoji Info</h3>
-                <button class="text-gray-400 hover:text-white" id="close-modal">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-            <div id="modal-content">
-                <!-- Modal content will be dynamically inserted here -->
+    <!-- Emoji Info Modal -->
+    <div id="emoji-modal" class="hidden fixed inset-0 z-50 overflow-auto bg-black bg-opacity-80 flex items-center justify-center">
+        <div class="bg-gray-900 rounded-lg max-w-md w-full mx-4 relative">
+            <button id="close-modal" class="absolute top-2 right-2 text-gray-400 hover:text-white">
+                <i class="fas fa-times"></i>
+            </button>
+            <div id="modal-content" class="p-6">
+                <!-- Modal Content will be inserted here -->
             </div>
         </div>
     </div>
 
-    <!-- JavaScript -->
-    <script src="../script.js"></script>
+    <!-- 结构化数据 - JSON-LD -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebPage",
+        "name": "TikTok Emojis Code | Unicode and HTML Codes for TikTok Emojis",
+        "description": "Find the Unicode and HTML codes for all TikTok emojis. Perfect for developers, content creators, and programmers.",
+        "publisher": {
+            "@type": "Organization",
+            "name": "TikTok Emojis",
+            "logo": {
+                "@type": "ImageObject",
+                "url": "https://www.tiktokemojis.art/assets/logo.png"
+            }
+        }
+    }
+    </script>
+
+    <!-- 只需要必要的JavaScript -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 处理导航Home按钮的事件（如需要）
+            const homeButton = document.querySelector('.nav-home-button');
+            if (homeButton) {
+                homeButton.addEventListener('click', function(e) {
+                    // 可以在这里添加额外的跟踪或分析代码
+                    console.log('返回首页');
+                });
+            }
+        });
+    </script>
 </body>
 </html> 

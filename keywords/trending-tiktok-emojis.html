@@ -13,21 +13,21 @@
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Trending TikTok Emojis | Most Popular TikTok Emojis 2025</title>
-    <meta name="description" content="Discover the most trending TikTok emojis of 2025. Find the hottest and most popular emoji trends on TikTok and stay ahead in your social media game.">
-    <meta name="keywords" content="trending tiktok emojis, popular tiktok emojis, viral tiktok emojis, tiktok emoji trends, top tiktok emojis">
+    <title>Trending TikTok Emojis | Popular TikTok Emojis 2023</title>
+    <meta name="description" content="Discover the most trending TikTok emojis of 2023. Stay up-to-date with the latest and most popular emojis used on TikTok right now.">
+    <meta name="keywords" content="trending tiktok emojis, popular tiktok emojis, viral tiktok emojis, latest tiktok emoji trends, trendy tiktok emojis">
     
     <!-- Open Graph Meta Tags -->
-    <meta property="og:title" content="Trending TikTok Emojis | Most Popular TikTok Emojis 2025">
-    <meta property="og:description" content="Discover the most trending and popular TikTok emojis of 2025. Stay updated with the latest emoji trends.">
+    <meta property="og:title" content="Trending TikTok Emojis | Popular TikTok Emojis 2023">
+    <meta property="og:description" content="Discover the most trending TikTok emojis of 2023. Stay up-to-date with the latest and most popular emojis used on TikTok right now.">
     <meta property="og:image" content="../assets/og-image.jpg">
     <meta property="og:url" content="https://www.tiktokemojis.art/keywords/trending-tiktok-emojis">
     <meta property="og:type" content="website">
     
     <!-- Twitter Card Meta Tags -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Trending TikTok Emojis | Most Popular TikTok Emojis 2025">
-    <meta name="twitter:description" content="Stay updated with the latest and most viral TikTok emojis in 2025.">
+    <meta name="twitter:title" content="Trending TikTok Emojis | Popular TikTok Emojis 2023">
+    <meta name="twitter:description" content="Stay updated with the most popular and trending TikTok emojis right now.">
     <meta name="twitter:image" content="../assets/og-image.jpg">
     
     <!-- Canonical URL -->
@@ -39,29 +39,68 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <!-- Favicon -->
     <link rel="icon" href="../assets/favicon.ico" type="image/x-icon">
+    <style>
+        .nav-home-button {
+            display: inline-block;
+            color: white;
+            font-weight: bold;
+            padding: 8px 15px;
+            border-radius: 6px;
+            text-decoration: none;
+            border: 1px solid rgba(255,255,255,0.3);
+            transition: background-color 0.3s, border-color 0.3s;
+        }
+        .nav-home-button:hover {
+            background-color: rgba(255,255,255,0.1);
+            border-color: rgba(255,255,255,0.5);
+        }
+        .feature-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: #fe2c55;
+            text-align: center;
+        }
+        .emoji-card {
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            background-color: #1e1e1e;
+            border-radius: 12px;
+        }
+        .emoji-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        .emoji-card h3 .emoji {
+            font-size: 2.5rem;
+            margin-right: 0.5rem;
+            vertical-align: middle;
+        }
+        /* 添加首页分类图标样式 */
+        .icon-circle {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            background-color: #2a2a2a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            transition: transform 0.3s ease, background-color 0.3s ease;
+        }
+        .bg-gray-900:hover .icon-circle {
+            transform: scale(1.1);
+            background-color: #333;
+        }
+    </style>
 </head>
 <body class="bg-black text-white">
     <!-- Header -->
     <header class="bg-gray-800 py-4 shadow-lg">
         <div class="container mx-auto px-4">
-            <h1 class="text-3xl font-bold mb-4 gradient-title">Trending TikTok Emojis</h1>
-            <div class="search-container relative mb-4">
-                <input type="text" id="search" placeholder="Search emojis..." class="w-full px-4 py-2 bg-gray-700 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-            </div>
-            <div class="categories-nav flex flex-wrap gap-2 mb-3">
-                <button class="category-btn active" data-category="all">All Categories</button>
-                <button class="category-btn" data-category="trending">Trending</button>
-                <button class="category-btn" data-category="happy">Happy</button>
-                <button class="category-btn" data-category="sad">Sad</button>
-                <button class="category-btn" data-category="angry">Angry</button>
-                <button class="category-btn" data-category="love">Love</button>
-                <button class="category-btn" data-category="special">Special</button>
-            </div>
-            <div class="shapes-nav flex flex-wrap gap-2">
-                <button class="shape-btn active" data-shape="all">All Shapes</button>
-                <button class="shape-btn" data-shape="round">Round</button>
-                <button class="shape-btn" data-shape="square">Square</button>
-                <button class="shape-btn" data-shape="special">Special</button>
+            <div class="flex justify-between items-center">
+                <h1 class="text-3xl font-bold gradient-title">Trending TikTok Emojis</h1>
+                <a href="/" class="nav-home-button"><i class="fas fa-home"></i> Home</a>
             </div>
         </div>
     </header>
@@ -70,137 +109,126 @@
     <main class="container mx-auto px-4 py-8">
         <div class="text-center mb-8">
             <h1 class="text-5xl font-bold mb-4 gradient-title">Trending TikTok Emojis</h1>
-            <p class="text-lg text-gray-300">The Most Popular TikTok Emojis of 2025</p>
-            <p class="text-sm text-gray-500 my-2">Stay ahead with the latest trending emojis on TikTok</p>
-            <!-- 添加到首页的回链，以关键词开头 -->
-            <p class="text-sm text-gray-400 mt-4">
-                <a href="/" class="hover:text-blue-400">trending tiktok emojis - View All TikTok Emojis</a>
-            </p>
+            <p class="text-lg text-gray-300">Most Popular TikTok Emojis in 2023</p>
+            <p class="text-sm text-gray-500 my-2">Stay updated with the latest emoji trends on TikTok</p>
         </div>
         
-        <div class="text-center mb-4" id="emoji-count">Loading emojis...</div>
-        
-        <div id="emoji-grid">
-            <!-- Emoji Cards will be dynamically inserted here -->
-        </div>
-        
-        <div id="loading" class="text-center py-8 hidden">
-            <div class="animate-pulse">Loading more emojis...</div>
-        </div>
-
-        <!-- Features specific to Trending -->
-        <div class="features-grid">
-            <div class="bg-gray-900 p-6 rounded-lg shadow-md gradient-border">
-                <div class="feature-icon trending-icon">
-                    <i class="fas fa-fire"></i>
-                </div>
-                <h3 class="text-xl font-semibold mb-2">Weekly Updates</h3>
-                <p class="text-gray-400">Get weekly updates on which emojis are trending on TikTok</p>
-            </div>
-            <div class="bg-gray-900 p-6 rounded-lg shadow-md gradient-border">
-                <div class="feature-icon viral-icon">
-                    <i class="fas fa-bolt"></i>
-                </div>
-                <h3 class="text-xl font-semibold mb-2">Viral Potential</h3>
-                <p class="text-gray-400">Learn which emojis can help your TikTok content go viral</p>
-            </div>
-            <div class="bg-gray-900 p-6 rounded-lg shadow-md gradient-border">
-                <div class="feature-icon stats-icon">
-                    <i class="fas fa-chart-bar"></i>
-                </div>
-                <h3 class="text-xl font-semibold mb-2">Usage Statistics</h3>
-                <p class="text-gray-400">View detailed statistics on emoji popularity over time</p>
-            </div>
-        </div>
-
-        <!-- Trending Emoji Content -->
+        <!-- Trending Specific Content -->
         <section class="my-12">
-            <h2 class="text-2xl font-bold mb-6 gradient-title">Top Trending TikTok Emojis</h2>
-            <div class="bg-gray-900 p-6 rounded-lg shadow-md mb-6">
-                <h3 class="text-xl font-semibold mb-3">🤖 Robot Emoji Trend</h3>
-                <p class="text-gray-400 mb-4">The robot emoji has become a sensation on TikTok, often used in AI filter trends and robotic dance challenges. Its usage has increased by 300% in the last quarter alone.</p>
+            <h2 class="text-2xl font-bold mb-6 gradient-title">Hot TikTok Emoji Trends</h2>
+            <div class="emoji-card">
+                <h3><span class="emoji">💀</span> Skull Emoji</h3>
+                <p class="text-gray-400">Currently one of the most trending emojis on TikTok, the skull emoji (💀) is used to indicate something is extremely funny - so funny that the person "died" laughing. It's become the go-to reaction for hilarious content.</p>
             </div>
-            <div class="bg-gray-900 p-6 rounded-lg shadow-md mb-6">
-                <h3 class="text-xl font-semibold mb-3">✨🤖✨ Fairy Bot</h3>
-                <p class="text-gray-400 mb-4">This unique TikTok special emoji combination is trending for content related to AI assistance, chatbots, and futuristic technology themes. Created by adding sparkles around the robot emoji.</p>
+            <div class="emoji-card">
+                <h3><span class="emoji">🪑</span> Chair Emoji</h3>
+                <p class="text-gray-400">The chair emoji (🪑) recently exploded in popularity on TikTok. It's used to indicate that something is so funny that the person "fell off their chair" laughing. Often paired with the skull emoji for maximum impact.</p>
             </div>
-            <div class="bg-gray-900 p-6 rounded-lg shadow-md">
-                <h3 class="text-xl font-semibold mb-3">🫶 Heart Hands</h3>
-                <p class="text-gray-400 mb-4">The heart hands emoji continues to trend in 2025, especially in heartwarming content, appreciation videos, and supportive comments. It's one of the most consistently popular emojis on the platform.</p>
-            </div>
-        </section>
-
-        <!-- Trend Timeline -->
-        <section class="my-12">
-            <h2 class="text-2xl font-bold mb-6 gradient-title">TikTok Emoji Trend Timeline</h2>
-            <div class="relative">
-                <!-- Timeline bar -->
-                <div class="absolute left-0 w-1 h-full bg-blue-400"></div>
-                
-                <!-- Timeline items -->
-                <div class="relative pl-8 pb-10">
-                    <div class="absolute left-0 w-4 h-4 rounded-full bg-blue-400 mt-1"></div>
-                    <h3 class="text-xl font-semibold mb-1">Q1 2025</h3>
-                    <p class="text-gray-400">Skull emoji (💀) dominates as the top reaction emoji for comedy content</p>
-                </div>
-                
-                <div class="relative pl-8 pb-10">
-                    <div class="absolute left-0 w-4 h-4 rounded-full bg-blue-400 mt-1"></div>
-                    <h3 class="text-xl font-semibold mb-1">Q2 2025</h3>
-                    <p class="text-gray-400">Chair emoji (🪑) rises to prominence, while robot (🤖) combinations emerge</p>
-                </div>
-                
-                <div class="relative pl-8 pb-10">
-                    <div class="absolute left-0 w-4 h-4 rounded-full bg-blue-400 mt-1"></div>
-                    <h3 class="text-xl font-semibold mb-1">Q3 2025</h3>
-                    <p class="text-gray-400">Robot-sparkle combinations (✨🤖✨) become viral, and new exclusive TikTok emojis launch</p>
-                </div>
-                
-                <div class="relative pl-8">
-                    <div class="absolute left-0 w-4 h-4 rounded-full bg-blue-400 mt-1"></div>
-                    <h3 class="text-xl font-semibold mb-1">Q4 2025 (Predicted)</h3>
-                    <p class="text-gray-400">AI-themed emoji combinations expected to continue growing in popularity</p>
-                </div>
+            <div class="emoji-card">
+                <h3><span class="emoji">✨</span> Sparkles Emoji</h3>
+                <p class="text-gray-400">The sparkles emoji (✨) continues to trend on TikTok, often used to add emphasis or to highlight positive transformations. Frequently used in "before and after" videos or to draw attention to something beautiful.</p>
             </div>
         </section>
 
         <!-- Related Keywords -->
         <section class="my-12">
-            <h2 class="text-2xl font-bold mb-6 gradient-title">Explore More About TikTok Emojis</h2>
-            <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
-                <a href="/keywords/tiktok-emojis-png" class="bg-gray-900 p-4 rounded-lg text-center hover:bg-gray-800 transition-colors">
-                    <h3 class="text-lg font-semibold">TikTok Emojis PNG</h3>
-                </a>
-                <a href="/keywords/tiktok-emojis-code" class="bg-gray-900 p-4 rounded-lg text-center hover:bg-gray-800 transition-colors">
-                    <h3 class="text-lg font-semibold">TikTok Emojis Code</h3>
-                </a>
-                <a href="/keywords/tiktok-emojis-meaning" class="bg-gray-900 p-4 rounded-lg text-center hover:bg-gray-800 transition-colors">
-                    <h3 class="text-lg font-semibold">TikTok Emojis Meaning</h3>
-                </a>
+            <h2 class="text-2xl font-bold mb-6 gradient-title">Explore All TikTok Emojis Categories</h2>
+            <div class="emoji-links-container">
+                <!-- 第一行 - 5个按钮 -->
+                <div class="emoji-links-row">
+                    <a href="/keywords/tiktok-emojis-meaning.html" class="emoji-link-btn">
+                        <div class="emoji-icon text-xl">🔍</div>
+                        <h4 class="text-md font-semibold">TikTok Emojis Meaning</h4>
+                    </a>
+                    <a href="/keywords/trending-tiktok-emojis.html" class="emoji-link-btn">
+                        <div class="emoji-icon text-xl">🔥</div>
+                        <h4 class="text-md font-semibold">Trending TikTok Emojis</h4>
+                    </a>
+                    <a href="/keywords/tiktok-emojis-happy.html" class="emoji-link-btn">
+                        <div class="emoji-icon text-xl">😄</div>
+                        <h4 class="text-md font-semibold">TikTok Emojis Happy</h4>
+                    </a>
+                    <a href="/keywords/tiktok-emojis-crying.html" class="emoji-link-btn">
+                        <div class="emoji-icon text-xl">😭</div>
+                        <h4 class="text-md font-semibold">TikTok Emojis Crying</h4>
+                    </a>
+                    <a href="/keywords/tiktok-emojis-shock.html" class="emoji-link-btn">
+                        <div class="emoji-icon text-xl">😱</div>
+                        <h4 class="text-md font-semibold">TikTok Emojis Shock</h4>
+                    </a>
+                </div>
+                
+                <!-- 第二行 - 5个按钮 -->
+                <div class="emoji-links-row">
+                    <a href="/keywords/tiktok-emojis-hehe.html" class="emoji-link-btn">
+                        <div class="emoji-icon text-xl">😏</div>
+                        <h4 class="text-md font-semibold">TikTok Emojis Hehe</h4>
+                    </a>
+                    <a href="/keywords/tiktok-emojis-love.html" class="emoji-link-btn">
+                        <div class="emoji-icon text-xl">❤️</div>
+                        <h4 class="text-md font-semibold">TikTok Emojis Love</h4>
+                    </a>
+                    <a href="/keywords/tiktok-emojis-stickers.html" class="emoji-link-btn">
+                        <div class="emoji-icon text-xl">🏷️</div>
+                        <h4 class="text-md font-semibold">TikTok Emojis Stickers</h4>
+                    </a>
+                    <a href="/keywords/tiktok-comment-emojis.html" class="emoji-link-btn">
+                        <div class="emoji-icon text-xl">💬</div>
+                        <h4 class="text-md font-semibold">TikTok Comment Emojis</h4>
+                    </a>
+                    <a href="/keywords/tiktok-emojis-names.html" class="emoji-link-btn">
+                        <div class="emoji-icon text-xl">📋</div>
+                        <h4 class="text-md font-semibold">TikTok Emojis Names</h4>
+                    </a>
+                </div>
+                
+                <!-- 第三行 - 5个按钮 -->
+                <div class="emoji-links-row">
+                    <a href="/keywords/tiktok-emojis-discord.html" class="emoji-link-btn">
+                        <div class="emoji-icon text-xl">👾</div>
+                        <h4 class="text-md font-semibold">TikTok Emojis Discord</h4>
+                    </a>
+                    <a href="/keywords/tiktok-emojis-list.html" class="emoji-link-btn">
+                        <div class="emoji-icon text-xl">📑</div>
+                        <h4 class="text-md font-semibold">TikTok Emojis List</h4>
+                    </a>
+                    <a href="/keywords/tiktok-emojis-code.html" class="emoji-link-btn">
+                        <div class="emoji-icon text-xl">💻</div>
+                        <h4 class="text-md font-semibold">TikTok Emojis Code</h4>
+                    </a>
+                    <a href="/keywords/tiktok-emojis-png.html" class="emoji-link-btn">
+                        <div class="emoji-icon text-xl">🖼️</div>
+                        <h4 class="text-md font-semibold">TikTok Emojis PNG</h4>
+                    </a>
+                    <div class="emoji-link-btn emoji-link-btn-placeholder">
+                        <div class="emoji-icon text-xl">🔍</div>
+                        <h4 class="text-md font-semibold">More Coming Soon</h4>
+                    </div>
+                </div>
             </div>
         </section>
     </main>
 
-    <!-- FAQ Section Specific to Trending -->
+    <!-- FAQ Section -->
     <section class="bg-gray-900 py-12">
         <div class="container mx-auto px-4">
             <h2 class="text-3xl font-bold mb-8 text-center gradient-title">Trending TikTok Emojis FAQ</h2>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div class="bg-gray-800 p-6 rounded-lg">
                     <h3 class="text-xl font-semibold mb-3">How often do TikTok emoji trends change?</h3>
-                    <p class="text-gray-400">TikTok emoji trends can change rapidly, sometimes within a few weeks. Major trends typically last 2-3 months, while some evergreen emojis remain popular year-round. We update our trending list weekly.</p>
+                    <p class="text-gray-400">TikTok emoji trends can change rapidly, sometimes within weeks. Popular emojis can surge in usage based on viral videos, challenges, or shifts in youth culture. We update our trending section regularly to keep up with these changes.</p>
                 </div>
                 <div class="bg-gray-800 p-6 rounded-lg">
-                    <h3 class="text-xl font-semibold mb-3">How can I use trending emojis to boost my TikTok engagement?</h3>
-                    <p class="text-gray-400">Incorporate trending emojis in your video captions, comments, and on-screen text. Using popular emojis can help your content appear more relevant and potentially increase engagement from viewers familiar with current trends.</p>
+                    <h3 class="text-xl font-semibold mb-3">Why is the skull emoji (💀) trending on TikTok?</h3>
+                    <p class="text-gray-400">The skull emoji (💀) is trending because it's become the preferred way to express extreme laughter on TikTok - the digital equivalent of "I'm dead" or "I'm dying of laughter." It's replaced traditional laughing emojis for Gen Z users especially.</p>
                 </div>
                 <div class="bg-gray-800 p-6 rounded-lg">
-                    <h3 class="text-xl font-semibold mb-3">Are trending emojis the same worldwide?</h3>
-                    <p class="text-gray-400">While some emoji trends are global, others may be region-specific. TikTok's algorithm shows different trends to different users based on location and content preferences. Our trending list focuses on global and US-based trends.</p>
+                    <h3 class="text-xl font-semibold mb-3">What's the newest emoji trend on TikTok?</h3>
+                    <p class="text-gray-400">Currently, the chair emoji (🪑) is one of the newest trending emojis on TikTok, used to indicate falling off a chair from laughter. Emoji combinations are also trending, with users creating custom emoticons from multiple standard emojis.</p>
                 </div>
                 <div class="bg-gray-800 p-6 rounded-lg">
-                    <h3 class="text-xl font-semibold mb-3">How do I create special emoji combinations that are trending?</h3>
-                    <p class="text-gray-400">You can create special emoji combinations by simply typing multiple emojis together in your TikTok posts. For example, to create the trending "Fairy Bot" (✨🤖✨), just type the sparkle emoji, followed by the robot emoji, and another sparkle emoji.</p>
+                    <h3 class="text-xl font-semibold mb-3">How do emojis become trending on TikTok?</h3>
+                    <p class="text-gray-400">Emojis typically become trending on TikTok when influential creators start using them in a new or creative way, or when they become associated with a popular trend or challenge. The TikTok algorithm then amplifies this usage through related content recommendations.</p>
                 </div>
             </div>
         </div>
@@ -233,36 +261,59 @@
                     </div>
                 </div>
             </div>
-            <div class="mt-8 pt-4 border-t border-gray-800 text-center">
-                <p class="text-gray-400">&copy; 2025 TikTokEmojis.art. All rights reserved.</p>
+            <div class="text-center pt-8 mt-8 border-t border-gray-800">
+                <p class="text-gray-400">&copy; 2023 TikTok Emojis. All rights reserved.</p>
             </div>
         </div>
     </footer>
 
-    <!-- Toast notification -->
-    <div id="toast" class="fixed bottom-4 right-4 bg-gray-900 text-white px-4 py-2 rounded-lg shadow-lg z-50 transform translate-y-10 opacity-0 transition-all duration-300">
-        <div class="flex items-center">
-            <i class="fas fa-check-circle text-green-500 mr-2"></i>
-            <span id="toast-message">Message copied to clipboard!</span>
-        </div>
+    <!-- Toast -->
+    <div id="toast" class="hidden fixed bottom-4 left-1/2 transform -translate-x-1/2 bg-gray-800 text-white px-4 py-2 rounded-md shadow-lg z-50">
+        Copied to clipboard!
     </div>
 
-    <!-- Modal for emoji info -->
-    <div id="emoji-modal" class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 hidden">
-        <div class="bg-gray-800 rounded-lg p-6 max-w-md w-full mx-4">
-            <div class="flex justify-between items-center mb-4">
-                <h3 class="text-xl font-semibold" id="modal-title">Emoji Info</h3>
-                <button class="text-gray-400 hover:text-white" id="close-modal">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-            <div id="modal-content">
-                <!-- Modal content will be dynamically inserted here -->
+    <!-- Emoji Info Modal -->
+    <div id="emoji-modal" class="hidden fixed inset-0 z-50 overflow-auto bg-black bg-opacity-80 flex items-center justify-center">
+        <div class="bg-gray-900 rounded-lg max-w-md w-full mx-4 relative">
+            <button id="close-modal" class="absolute top-2 right-2 text-gray-400 hover:text-white">
+                <i class="fas fa-times"></i>
+            </button>
+            <div id="modal-content" class="p-6">
+                <!-- Modal Content will be inserted here -->
             </div>
         </div>
     </div>
 
-    <!-- JavaScript -->
-    <script src="../script.js"></script>
+    <!-- 结构化数据 - JSON-LD -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebPage",
+        "name": "Trending TikTok Emojis | Popular TikTok Emojis 2023",
+        "description": "Discover the most trending TikTok emojis of 2023. Stay up-to-date with the latest and most popular emojis used on TikTok right now.",
+        "publisher": {
+            "@type": "Organization",
+            "name": "TikTok Emojis",
+            "logo": {
+                "@type": "ImageObject",
+                "url": "https://www.tiktokemojis.art/assets/logo.png"
+            }
+        }
+    }
+    </script>
+
+    <!-- 只需要必要的JavaScript -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 处理导航Home按钮的事件（如需要）
+            const homeButton = document.querySelector('.nav-home-button');
+            if (homeButton) {
+                homeButton.addEventListener('click', function(e) {
+                    // 可以在这里添加额外的跟踪或分析代码
+                    console.log('返回首页');
+                });
+            }
+        });
+    </script>
 </body>
 </html> 
