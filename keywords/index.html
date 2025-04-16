@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TikTok表情关键词页面 - 搜索TikTok表情</title>
+    <meta name="description" content="查找和搜索TikTok表情符号，根据关键词浏览最流行的TikTok表情">
+    <link rel="stylesheet" href="../styles.css">
+    <!-- Google Analytics脚本 -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXX"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-XXXXXXXX');
+    </script>
+    <script>
+        // 重定向到关键词模板页面，保留查询参数
+        window.addEventListener('DOMContentLoaded', function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const keyword = urlParams.get('q') || '';
+            
+            if (keyword) {
+                window.location.href = '../keyword-template.html?q=' + keyword;
+            } else {
+                // 如果没有关键词，展示关键词搜索页面
+                document.getElementById('content').style.display = 'block';
+            }
+        });
+    </script>
+    <style>
+        #content {
+            display: none;
+            padding: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .keyword-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+        .keyword-card {
+            background-color: #1f2937;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            transition: transform 0.2s;
+        }
+        .keyword-card:hover {
+            transform: translateY(-5px);
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-white">
+    <header class="bg-gray-800 shadow-lg">
+        <div class="container mx-auto px-4 py-6">
+            <div class="flex justify-between items-center">
+                <a href="../index.html" class="text-2xl font-bold text-pink-500">
+                    TikTok表情😊
+                </a>
+                <nav>
+                    <ul class="flex space-x-4">
+                        <li><a href="../index.html" class="hover:text-pink-500">首页</a></li>
+                        <li><a href="#" class="text-pink-500">关键词搜索</a></li>
+                        <li><a href="../index.html#faq" class="hover:text-pink-500">常见问题</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+    
+    <div id="content">
+        <h1 class="text-3xl font-bold mb-6 text-center mt-8">TikTok表情关键词搜索</h1>
+        
+        <div class="search-container mx-auto max-w-lg">
+            <form action="index.html" method="get">
+                <div class="relative">
+                    <input type="text" name="q" id="search" placeholder="搜索TikTok表情..." class="w-full px-4 py-3 bg-gray-800 rounded-full focus:outline-none focus:ring-2 focus:ring-pink-500">
+                    <button type="submit" class="absolute right-3 top-3 text-gray-400 hover:text-pink-500">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                        </svg>
+                    </button>
+                </div>
+            </form>
+        </div>
+        
+        <h2 class="text-2xl font-bold mt-12 mb-4">热门TikTok表情关键词</h2>
+        
+        <div class="keyword-grid">
+            <a href="index.html?q=tiktok-emojis-png" class="keyword-card">
+                <h3 class="text-xl font-semibold mb-2">TikTok表情PNG</h3>
+                <p class="text-gray-400">下载高质量的TikTok表情PNG图片</p>
+            </a>
+            <a href="index.html?q=tiktok-trending-emojis" class="keyword-card">
+                <h3 class="text-xl font-semibold mb-2">热门TikTok表情</h3>
+                <p class="text-gray-400">查看最流行的TikTok表情符号</p>
+            </a>
+            <a href="index.html?q=tiktok-happy-emojis" class="keyword-card">
+                <h3 class="text-xl font-semibold mb-2">TikTok开心表情</h3>
+                <p class="text-gray-400">展示所有开心类的TikTok表情</p>
+            </a>
+            <a href="index.html?q=tiktok-crying-emojis" class="keyword-card">
+                <h3 class="text-xl font-semibold mb-2">TikTok哭泣表情</h3>
+                <p class="text-gray-400">寻找表达伤心和哭泣的TikTok表情</p>
+            </a>
+            <a href="index.html?q=tiktok-special-emojis" class="keyword-card">
+                <h3 class="text-xl font-semibold mb-2">TikTok特殊表情</h3>
+                <p class="text-gray-400">发现TikTok上的特殊独特表情符号</p>
+            </a>
+            <a href="index.html?q=tiktok-emoji-codes" class="keyword-card">
+                <h3 class="text-xl font-semibold mb-2">TikTok表情代码</h3>
+                <p class="text-gray-400">查找TikTok表情符号的Unicode代码</p>
+            </a>
+            <a href="index.html?q=tiktok-love-emojis" class="keyword-card">
+                <h3 class="text-xl font-semibold mb-2">TikTok爱心表情</h3>
+                <p class="text-gray-400">浏览与爱情相关的TikTok表情符号</p>
+            </a>
+            <a href="index.html?q=tiktok-cool-emojis" class="keyword-card">
+                <h3 class="text-xl font-semibold mb-2">TikTok酷炫表情</h3>
+                <p class="text-gray-400">查看所有酷炫和时尚的TikTok表情</p>
+            </a>
+        </div>
+        
+        <h2 class="text-2xl font-bold mt-12 mb-4">TikTok表情类别</h2>
+        
+        <div class="flex flex-wrap gap-3 mt-4">
+            <a href="index.html?q=tiktok-happy-emojis" class="bg-gray-800 px-3 py-1 rounded-full text-sm hover:bg-gray-700 transition">开心表情</a>
+            <a href="index.html?q=tiktok-sad-emojis" class="bg-gray-800 px-3 py-1 rounded-full text-sm hover:bg-gray-700 transition">伤心表情</a>
+            <a href="index.html?q=tiktok-love-emojis" class="bg-gray-800 px-3 py-1 rounded-full text-sm hover:bg-gray-700 transition">爱心表情</a>
+            <a href="index.html?q=tiktok-angry-emojis" class="bg-gray-800 px-3 py-1 rounded-full text-sm hover:bg-gray-700 transition">生气表情</a>
+            <a href="index.html?q=tiktok-funny-emojis" class="bg-gray-800 px-3 py-1 rounded-full text-sm hover:bg-gray-700 transition">搞笑表情</a>
+            <a href="index.html?q=tiktok-cute-emojis" class="bg-gray-800 px-3 py-1 rounded-full text-sm hover:bg-gray-700 transition">可爱表情</a>
+            <a href="index.html?q=tiktok-cool-emojis" class="bg-gray-800 px-3 py-1 rounded-full text-sm hover:bg-gray-700 transition">酷炫表情</a>
+            <a href="index.html?q=tiktok-special-emojis" class="bg-gray-800 px-3 py-1 rounded-full text-sm hover:bg-gray-700 transition">特殊表情</a>
+        </div>
+        
+        <section class="mt-16 mb-12">
+            <h2 class="text-2xl font-bold mb-4">关于TikTok表情关键词搜索</h2>
+            <p class="mb-4">我们的TikTok表情关键词搜索工具可以帮助您轻松找到您想要的特定TikTok表情。无论您是寻找某个特定类别的表情，还是想了解当前最流行的表情，我们都能为您提供便捷的搜索体验。</p>
+            <p class="mb-4">使用上方的搜索框输入您想查找的关键词，例如"happy"、"love"或"trending"等，系统会立即为您过滤出最相关的TikTok表情，让您轻松找到并使用它们。</p>
+            <p>此外，您还可以点击我们精心准备的热门关键词链接，直接跳转到相应的表情集合，省去输入的麻烦。每个关键词页面都包含经过精心筛选的表情，让您的TikTok评论和内容更加生动有趣！</p>
+        </section>
+    </div>
+    
+    <footer class="bg-gray-800 text-gray-400 py-8 mt-8">
+        <div class="container mx-auto px-4">
+            <div class="grid md:grid-cols-3 gap-8">
+                <div>
+                    <h3 class="text-xl font-semibold mb-4">TikTok表情</h3>
+                    <p>浏览、复制和下载最流行的TikTok表情，让您的评论更加生动有趣！</p>
+                </div>
+                <div>
+                    <h3 class="text-xl font-semibold mb-4">快速链接</h3>
+                    <ul class="space-y-2">
+                        <li><a href="../index.html" class="hover:text-pink-500">首页</a></li>
+                        <li><a href="../index.html#trending" class="hover:text-pink-500">热门表情</a></li>
+                        <li><a href="../index.html#faq" class="hover:text-pink-500">常见问题</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-xl font-semibold mb-4">联系我们</h3>
+                    <p>如果您有任何问题或建议，请随时联系我们。</p>
+                    <p class="mt-2">电子邮件：contact@tiktokemojis.com</p>
+                </div>
+            </div>
+            <div class="mt-8 pt-8 border-t border-gray-700 text-center">
+                <p>&copy; 2023 TikTok表情。保留所有权利。</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html> 

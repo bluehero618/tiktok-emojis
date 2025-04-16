@@ -938,7 +938,7 @@ document.addEventListener('DOMContentLoaded', function() {
             // 保持原始trending表情的标记
             if (!trendingNames.includes(emoji.name)) {
                 emoji.trending = emoji.originalTrending || false;
-            } else {
+        } else {
                 emoji.trending = true;
             }
         });
@@ -1722,11 +1722,11 @@ document.addEventListener('DOMContentLoaded', function() {
         });
         
         // 设置各类别和形状按钮的点击事件
-        categoryButtons.forEach(button => {
-            button.addEventListener('click', function() {
+    categoryButtons.forEach(button => {
+        button.addEventListener('click', function() {
                 currentCategory = this.getAttribute('data-category');
                 document.querySelectorAll('.category-btn').forEach(btn => btn.classList.remove('active'));
-                this.classList.add('active');
+            this.classList.add('active');
                 filterEmojis();
             });
         });
@@ -1737,8 +1737,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 document.querySelectorAll('.shape-btn').forEach(btn => btn.classList.remove('active'));
                 this.classList.add('active');
                 filterEmojis();
-            });
         });
+    });
         
         // 懒加载图片
         lazyLoadImages();
@@ -1772,5 +1772,310 @@ document.addEventListener('DOMContentLoaded', function() {
         // 仅用于开发调试
         // console.log('表情使用统计:', usageData);
     }
+
+    // Check if we're on a keyword page
+    function isKeywordPage() {
+        return window.location.pathname.includes('/keywords') || window.location.pathname.includes('/keyword-template.html');
+    }
+
+    // Function to get keyword from URL
+    function getKeywordFromUrl() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const keyword = urlParams.get('q') || 'tiktok-emojis';
+        return keyword.replace(/-/g, ' ');
+    }
+
+    // Function to filter emojis based on keyword
+    function filterEmojisByKeyword(keyword) {
+        if (!keyword) return emojiData;
+        
+        keyword = keyword.toLowerCase();
+        const keywordTerms = keyword.split(' ');
+        
+        // Create filters based on common keywords
+        let categoryFilter = null;
+        let shapeFilter = null;
+        let nameFilter = null;
+        let specialFilter = false;
+        
+        // Determine filters based on keyword terms
+        keywordTerms.forEach(term => {
+            if (['happy', 'sad', 'angry', 'love', 'cool', 'cute'].includes(term)) {
+                categoryFilter = term;
+            }
+            if (['round', 'square', 'special'].includes(term)) {
+                shapeFilter = term;
+            }
+            if (['png', 'sticker', 'download', 'image'].includes(term)) {
+                // These terms indicate user wants to download images
+                specialFilter = 'download';
+            }
+            if (['code', 'unicode', 'html'].includes(term)) {
+                // These terms indicate user wants to see code values
+                specialFilter = 'code';
+            }
+            if (['trending', 'popular', 'viral'].includes(term)) {
+                // Filter for trending emojis
+                specialFilter = 'trending';
+            }
+        });
+        
+        // Apply filters to emoji data
+        return emojiData.filter(emoji => {
+            // Always include base check for keyword match in name or category
+            const basicMatch = emoji.name.toLowerCase().includes(keyword) || 
+                               emoji.category.toLowerCase().includes(keyword) ||
+                               keywordTerms.some(term => emoji.name.toLowerCase().includes(term));
+            
+            // Apply additional filters if specified
+            const categoryMatch = categoryFilter ? emoji.category.toLowerCase().includes(categoryFilter) : true;
+            const shapeMatch = shapeFilter ? getEmojiShape(emoji) === shapeFilter : true;
+            
+            // Special filter logic
+            let specialMatch = true;
+            if (specialFilter === 'trending') {
+                specialMatch = emoji.trending === 'yes';
+            } else if (specialFilter === 'code' || specialFilter === 'download') {
+                // For code/download, we prioritize but don't filter out
+                specialMatch = true;
+            }
+            
+            return basicMatch && categoryMatch && shapeMatch && specialMatch;
+        });
+    }
+
+    // Function to create keyword-specific content
+    function createKeywordSpecificContent(keyword) {
+        if (!isKeywordPage()) return;
+        
+        const formattedKeyword = keyword || getKeywordFromUrl();
+        const filteredEmojis = filterEmojisByKeyword(formattedKeyword);
+        
+        // Update emoji count
+        updateEmojiCount(filteredEmojis.length);
+        
+        // Clear current emoji grid
+        const emojiGrid = document.getElementById('emoji-grid');
+        if (emojiGrid) emojiGrid.innerHTML = '';
+        
+        // Display filtered emojis
+        displayEmojis(filteredEmojis);
+        
+        // Add popular keywords
+        addPopularKeywords(formattedKeyword);
+        
+        // Add related keywords
+        addRelatedKeywords(formattedKeyword);
+    }
+
+    // Add popular keywords links
+    function addPopularKeywords(currentKeyword) {
+        const popularKeywords = [
+            'tiktok emojis png',
+            'tiktok emojis code',
+            'tiktok emojis list',
+            'tiktok emojis discord',
+            'tiktok emojis names',
+            'tiktok emojis happy',
+            'tiktok emojis stickers',
+            'tiktok emojis shock',
+            'tiktok emojis hehe',
+            'tiktok emojis crying'
+        ];
+        
+        const popularContainer = document.getElementById('popular-searches');
+        if (!popularContainer) return;
+        
+        // Filter out the current keyword
+        const filteredKeywords = popularKeywords.filter(keyword => 
+            !currentKeyword.includes(keyword) && !keyword.includes(currentKeyword)
+        ).slice(0, 6);
+        
+        let html = '';
+        filteredKeywords.forEach(keyword => {
+            const keywordUrl = `/keywords?q=${keyword.replace(/ /g, '-')}`;
+            html += `<a href="${keywordUrl}" class="bg-gray-800 px-3 py-1 rounded-full text-sm hover:bg-gray-700 transition">${keyword}</a>`;
+        });
+        
+        popularContainer.innerHTML = html;
+    }
+
+    // Add related keywords links
+    function addRelatedKeywords(currentKeyword) {
+        const relatedContainer = document.getElementById('related-searches');
+        if (!relatedContainer) return;
+        
+        // Define related keywords based on current keyword
+        let relatedKeywords = [];
+        
+        if (currentKeyword.includes('png')) {
+            relatedKeywords = ['tiktok emojis download', 'tiktok stickers png', 'transparent tiktok emojis', 'tiktok emoji images'];
+        } else if (currentKeyword.includes('code')) {
+            relatedKeywords = ['tiktok emoji unicode', 'tiktok emoji html codes', 'tiktok emoji symbols', 'emoji code list'];
+        } else if (currentKeyword.includes('happy')) {
+            relatedKeywords = ['tiktok smile emoji', 'tiktok laugh emoji', 'tiktok joy emoji', 'tiktok grin emoji'];
+        } else if (currentKeyword.includes('sad')) {
+            relatedKeywords = ['tiktok crying emoji', 'tiktok tears emoji', 'tiktok depressed emoji', 'tiktok sad face emoji'];
+        } else if (currentKeyword.includes('special')) {
+            relatedKeywords = ['tiktok unique emojis', 'tiktok secret emojis', 'tiktok rare emojis', 'tiktok exclusive emojis'];
+        } else {
+            // Default related keywords
+            relatedKeywords = [
+                'tiktok comment emojis',
+                'how to use tiktok emojis',
+                'tiktok secret emojis',
+                'trending tiktok emojis'
+            ];
+        }
+        
+        let html = '';
+        relatedKeywords.forEach(keyword => {
+            const keywordUrl = `/keywords?q=${keyword.replace(/ /g, '-')}`;
+            html += `<a href="${keywordUrl}" class="bg-gray-800 px-3 py-1 rounded-full text-sm hover:bg-gray-700 transition">${keyword}</a>`;
+        });
+        
+        relatedContainer.innerHTML = html;
+    }
+
+    // Update app initialization to handle keyword pages
+    function initApp() {
+        // Initialize emoji data
+        loadEmojiData();
+        
+        // Set up event listeners for search and filters
+        setupEventListeners();
+        
+        // Check if we're on a keyword page
+        if (isKeywordPage()) {
+            // Handle keyword specific page
+            createKeywordSpecificContent();
+        } else {
+            // Regular page initialization
+            updateEmojiCount(emojiData.length);
+            displayEmojis(emojiData);
+        }
+        
+        // Check URL for emoji parameter
+        checkUrlForEmojiParam();
+    }
+
+    // Set up event listeners
+    function setupEventListeners() {
+        // Search input
+        const searchInput = document.getElementById('search');
+        if (searchInput) {
+            searchInput.addEventListener('input', handleSearch);
+        }
+        
+        // Category buttons
+        const categoryButtons = document.querySelectorAll('.category-btn');
+        categoryButtons.forEach(button => {
+            button.addEventListener('click', handleCategoryClick);
+        });
+        
+        // Shape buttons
+        const shapeButtons = document.querySelectorAll('.shape-btn');
+        shapeButtons.forEach(button => {
+            button.addEventListener('click', handleShapeClick);
+        });
+        
+        // Close modal button
+        const closeModalButton = document.getElementById('close-modal');
+        if (closeModalButton) {
+            closeModalButton.addEventListener('click', () => {
+                const modal = document.getElementById('emoji-modal');
+                if (modal) modal.classList.add('hidden');
+            });
+        }
+    }
+
+    // Handle search input
+    function handleSearch(event) {
+        const searchTerm = event.target.value.toLowerCase();
+        
+        // If on keyword page, use keyword filtering logic
+        if (isKeywordPage()) {
+            const keyword = getKeywordFromUrl() + ' ' + searchTerm;
+            createKeywordSpecificContent(keyword);
+            return;
+        }
+        
+        // Regular search logic for main page
+        const filteredEmojis = emojiData.filter(emoji => {
+            return emoji.emoji.includes(searchTerm) || 
+                   emoji.name.toLowerCase().includes(searchTerm) || 
+                   emoji.category.toLowerCase().includes(searchTerm);
+        });
+        
+        updateEmojiCount(filteredEmojis.length);
+        displayEmojis(filteredEmojis);
+    }
+
+    // Handle category button click
+    function handleCategoryClick(event) {
+        const selectedCategory = event.target.getAttribute('data-category');
+        
+        // Update active state
+        document.querySelectorAll('.category-btn').forEach(btn => {
+            btn.classList.remove('active');
+        });
+        event.target.classList.add('active');
+        
+        // Filter emojis by category
+        let filteredEmojis = emojiData;
+        if (selectedCategory !== 'all') {
+            if (selectedCategory === 'trending') {
+                filteredEmojis = emojiData.filter(emoji => emoji.trending === 'yes');
+            } else {
+                filteredEmojis = emojiData.filter(emoji => 
+                    emoji.category.toLowerCase().includes(selectedCategory.toLowerCase())
+                );
+            }
+        }
+        
+        // If on keyword page, combine with keyword filter
+        if (isKeywordPage()) {
+            const keyword = getKeywordFromUrl();
+            filteredEmojis = filteredEmojis.filter(emoji => {
+                return emoji.name.toLowerCase().includes(keyword) || 
+                       emoji.category.toLowerCase().includes(keyword);
+            });
+        }
+        
+        updateEmojiCount(filteredEmojis.length);
+        displayEmojis(filteredEmojis);
+    }
+
+    // Handle shape button click
+    function handleShapeClick(event) {
+        const selectedShape = event.target.getAttribute('data-shape');
+        
+        // Update active state
+        document.querySelectorAll('.shape-btn').forEach(btn => {
+            btn.classList.remove('active');
+        });
+        event.target.classList.add('active');
+        
+        // Filter emojis by shape
+        let filteredEmojis = emojiData;
+        if (selectedShape !== 'all') {
+            filteredEmojis = emojiData.filter(emoji => getEmojiShape(emoji) === selectedShape);
+        }
+        
+        // If on keyword page, combine with keyword filter
+        if (isKeywordPage()) {
+            const keyword = getKeywordFromUrl();
+            filteredEmojis = filteredEmojis.filter(emoji => {
+                return emoji.name.toLowerCase().includes(keyword) || 
+                       emoji.category.toLowerCase().includes(keyword);
+            });
+        }
+        
+        updateEmojiCount(filteredEmojis.length);
+        displayEmojis(filteredEmojis);
+    }
+
+    // Initialize the app when DOM is loaded
+    document.addEventListener('DOMContentLoaded', initApp);
 }); 
 // Updated script - 2023 

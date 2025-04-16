@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="TikTok表情大全 - 查找和使用流行的TikTok表情符号集合">
+    <meta name="keywords" content="TikTok表情, 抖音表情, 表情符号, 表情包, emoji">
+    <title>TikTok表情 - 关键词搜索</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+</head>
+<body>
+    <header>
+        <div class="header-container">
+            <div class="logo-container">
+                <a href="index.html">
+                    <img src="assets/logo.png" alt="TikTok表情" class="logo">
+                    <h1>TikTok<span>表情</span></h1>
+                </a>
+            </div>
+            <div class="search-container">
+                <input type="text" id="searchInput" placeholder="搜索表情...">
+                <button id="searchButton">
+                    <img src="assets/search-icon.png" alt="搜索">
+                </button>
+            </div>
+        </div>
+        <nav>
+            <div class="category-buttons">
+                <button class="category-button" data-category="all">全部</button>
+                <button class="category-button" data-category="trending">热门</button>
+                <button class="category-button" data-category="happy">开心</button>
+                <button class="category-button" data-category="love">爱情</button>
+                <button class="category-button" data-category="sad">悲伤</button>
+                <button class="category-button" data-category="angry">生气</button>
+                <button class="category-button" data-category="surprise">惊讶</button>
+                <button class="category-button" data-category="other">其他</button>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section class="keyword-section">
+            <div class="keyword-header">
+                <h2 id="keywordTitle">表情关键词</h2>
+                <p id="emojiCount">加载中...</p>
+            </div>
+            <div id="keywordDescription" class="keyword-description">
+                <p>这里是关于当前关键词表情的描述信息...</p>
+            </div>
+            <div class="emoji-container" id="emojiContainer">
+                <!-- 表情卡片将通过JavaScript动态生成 -->
+                <div class="loading-spinner" id="loadingSpinner">
+                    <div class="spinner"></div>
+                </div>
+            </div>
+        </section>
+
+        <section class="related-keywords">
+            <h3>相关关键词</h3>
+            <div class="keyword-tags" id="relatedKeywords">
+                <!-- 相关关键词将通过JavaScript动态生成 -->
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="footer-container">
+            <div class="footer-section">
+                <h3>TikTok表情</h3>
+                <p>最全面的TikTok表情符号集合，让您的社交媒体内容更加生动有趣！</p>
+            </div>
+            <div class="footer-section">
+                <h3>快速链接</h3>
+                <ul>
+                    <li><a href="index.html">首页</a></li>
+                    <li><a href="index.html#trending">热门表情</a></li>
+                    <li><a href="index.html#categories">分类浏览</a></li>
+                    <li><a href="index.html#faq">常见问题</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>联系我们</h3>
+                <p>有问题或建议？请随时联系我们！</p>
+                <a href="mailto:contact@tiktokemojis.com">contact@tiktokemojis.com</a>
+            </div>
+        </div>
+        <div class="copyright">
+            <p>&copy; 2023 TikTok表情. 保留所有权利。</p>
+        </div>
+    </footer>
+
+    <!-- 表情模态框 -->
+    <div id="emojiModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <div class="modal-emoji-content" id="modalEmojiContent">
+                <!-- 表情详情将通过JavaScript动态生成 -->
+            </div>
+        </div>
+    </div>
+
+    <!-- 通知提示 -->
+    <div id="toast" class="toast"></div>
+
+    <!-- 脚本引用 -->
+    <script src="keyword-template.js"></script>
+</body>
+</html> 
