@@ -20,20 +20,6 @@ document.addEventListener('DOMContentLoaded', function() {
     // 检查emoji_png文件夹是否存在, 如果不存在则创建
     checkAndCreateEmojiFolder();
 
-    // 修复路径函数 - 确保表情图片路径正确
-    function fixEmojiPath(path) {
-        // 检查路径是否已经包含emoji_png
-        if (path.indexOf('emoji_png/') === 0) {
-            return path;
-        }
-        
-        // 添加路径前缀
-        if (!path.startsWith('/')) {
-            return `emoji_png/${path}`;
-        }
-        return path;
-    }
-
     // 检查和创建emoji文件夹的函数
     function checkAndCreateEmojiFolder() {
         const folderPath = 'emoji_png';
@@ -43,30 +29,6 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // 在客户端无法直接创建文件夹，这里仅作为提示
         console.log('Note: Make sure the emoji_png folder exists in your root directory');
-        
-        // 路径检查
-        console.log('Debug: Current path = ' + window.location.pathname);
-    }
-
-    // 修正表情显示 - 当图片无法加载时使用文字表情符号替代
-    function handleMissingImage(img, emoji) {
-        img.onerror = function() {
-            // 如果图片加载失败，显示文字表情符号
-            this.src = ''; // 清除错误的src
-            this.style.fontSize = '40px';
-            this.style.display = 'flex';
-            this.style.alignItems = 'center';
-            this.style.justifyContent = 'center';
-            this.style.height = '100%';
-            this.alt = emoji.emoji || emoji.name;
-            
-            // 创建一个文本节点替代图片
-            const textNode = document.createTextNode(emoji.emoji || '😊');
-            this.parentNode.appendChild(textNode);
-            this.parentNode.removeChild(this);
-            
-            console.log('Image failed to load: ' + emoji.name);
-        };
     }
 
     // 判断表情是圆形还是方形
@@ -105,128 +67,6 @@ document.addEventListener('DOMContentLoaded', function() {
         } else {
             return 'square'; // 默认为方形
         }
-    }
-    
-    // 创建表情卡片 - 修改以确保图片正确显示
-    function createEmojiCards(emojis) {
-        emojiGrid.innerHTML = '';
-        
-        if (emojis.length === 0) {
-            emojiGrid.innerHTML = '<div class="col-span-full text-center py-10 text-gray-500">No emojis found matching your search.</div>';
-            return;
-        }
-        
-        // 更新排序逻辑：首先按形状分组，然后在每个形状组内按名称排序
-        const roundEmojis = emojis.filter(emoji => emoji.shape === 'round');
-        const squareEmojis = emojis.filter(emoji => emoji.shape === 'square');
-        const specialEmojis = emojis.filter(emoji => emoji.shape === 'special');
-        
-        // 按名称对每个组内的表情进行排序
-        roundEmojis.sort((a, b) => a.name.localeCompare(b.name));
-        squareEmojis.sort((a, b) => a.name.localeCompare(b.name));
-        specialEmojis.sort((a, b) => a.name.localeCompare(b.name));
-        
-        // 根据当前选择的形状筛选器决定显示顺序
-        let sortedEmojis = [];
-        
-        if (currentShape === 'all') {
-            // 如果选择"全部"，则按圆形->方形->特殊表情的顺序显示
-            sortedEmojis = [...roundEmojis, ...squareEmojis, ...specialEmojis];
-        } else if (currentShape === 'special') {
-            sortedEmojis = specialEmojis;
-        } else if (currentShape === 'square') {
-            sortedEmojis = squareEmojis;
-        } else if (currentShape === 'round') {
-            sortedEmojis = roundEmojis;
-        }
-        
-        // 直接创建表情卡片而不用Promise，提高速度
-        sortedEmojis.forEach(emoji => {
-            // 确定图片路径
-            // 1. 优先使用emoji.image如果存在
-            // 2. 否则构建默认路径
-            let imagePath = emoji.image;
-            if (!imagePath) {
-                imagePath = `emoji_png/${emoji.name}.png`;
-            }
-            
-            // 修正路径，确保正确引用emoji_png目录
-            // 检查当前路径是否在子目录中
-            if (window.location.pathname.includes('/keywords/') || 
-                window.location.pathname.includes('/keyword-template')) {
-                // 在子目录中，需要上一级
-                if (!imagePath.startsWith('../')) {
-                    imagePath = '../' + imagePath;
-                }
-            }
-            
-            // 直接创建表情卡片
-            createAndAppendEmojiCard(emoji, imagePath);
-        });
-        
-        // 添加懒加载
-        lazyLoadImages();
-    }
-
-    // 修改后的create and append function，添加错误处理
-    function createAndAppendEmojiCard(emoji, imagePath) {
-        // 确定卡片的样式类
-        let cardClass = 'emoji-card';
-        if (emoji.trending) {
-            cardClass += ' trending';
-        }
-        if (emoji.shape === 'round') {
-            cardClass += ' round-emoji';
-        } else if (emoji.shape === 'square') {
-            cardClass += ' square-emoji';
-        } else if (emoji.shape === 'special') {
-            cardClass += ' special-emoji ' + emoji.name.replace(/ /g, '_');
-        }
-        
-        // 创建表情卡片HTML
-        const card = document.createElement('div');
-        card.className = cardClass;
-        card.setAttribute('data-category', emoji.category);
-        card.setAttribute('data-shape', emoji.shape || 'square');
-        
-        // 确保emoji.emoji存在，否则使用空字符串
-        const emojiChar = emoji.emoji || '';
-        
-        // 创建表情图片和信息HTML
-        card.innerHTML = `
-            <div class="emoji-image">
-                <img src="${imagePath}" alt="${emoji.name}" loading="lazy" class="lazy-load" 
-                     onerror="this.onerror=null; this.parentNode.innerHTML='${emojiChar}'; this.parentNode.style.fontSize='40px'; this.parentNode.style.display='flex'; this.parentNode.style.alignItems='center'; this.parentNode.style.justifyContent='center';">
-            </div>
-            <div class="emoji-info">
-                <div class="emoji-name">${emoji.name.replace(/_/g, ' ')}</div>
-                <div class="emoji-unicode font-mono text-sm">${emoji.unicode || 'Custom'}</div>
-                <div class="emoji-category">${emoji.category}</div>
-            </div>
-            <div class="emoji-actions">
-                <button class="emoji-btn copy-btn" data-emoji="${emojiChar}" aria-label="Copy emoji">
-                    <i class="fas fa-copy"></i>
-                </button>
-                <button class="emoji-btn download-btn" data-image="${imagePath}" data-name="${emoji.name}" aria-label="Download emoji">
-                    <i class="fas fa-download"></i>
-                </button>
-                <button class="emoji-btn info-btn" data-name="${emoji.name}" data-unicode="${emoji.unicode || 'Custom'}" data-description="${emoji.description || ''}" aria-label="Show emoji info">
-                    <i class="fas fa-info-circle"></i>
-                </button>
-            </div>
-        `;
-        
-        // 添加事件监听器
-        const copyBtn = card.querySelector('.copy-btn');
-        const downloadBtn = card.querySelector('.download-btn');
-        const infoBtn = card.querySelector('.info-btn');
-        
-        copyBtn.addEventListener('click', copyEmoji);
-        downloadBtn.addEventListener('click', downloadEmoji);
-        infoBtn.addEventListener('click', showEmojiInfo);
-        
-        // 添加到网格
-        emojiGrid.appendChild(card);
     }
 
     // 为emoji添加适当的分类和形状
@@ -889,6 +729,134 @@ document.addEventListener('DOMContentLoaded', function() {
             };
             img.src = imagePath;
         });
+    }
+
+    // Create emoji card elements
+    function createEmojiCards(emojis) {
+        emojiGrid.innerHTML = '';
+        
+        if (emojis.length === 0) {
+            emojiGrid.innerHTML = '<div class="col-span-full text-center py-10 text-gray-500">No emojis found matching your search.</div>';
+            return;
+        }
+        
+        // 更新排序逻辑：首先按形状分组，然后在每个形状组内按名称排序
+        const roundEmojis = emojis.filter(emoji => emoji.shape === 'round');
+        const squareEmojis = emojis.filter(emoji => emoji.shape === 'square');
+        const specialEmojis = emojis.filter(emoji => emoji.shape === 'special');
+        
+        // 按名称对每个组内的表情进行排序
+        roundEmojis.sort((a, b) => a.name.localeCompare(b.name));
+        squareEmojis.sort((a, b) => a.name.localeCompare(b.name));
+        specialEmojis.sort((a, b) => a.name.localeCompare(b.name));
+        
+        // 根据当前选择的形状筛选器决定显示顺序
+        let sortedEmojis = [];
+        
+        if (currentShape === 'all') {
+            // 如果选择"全部"，则按圆形->方形->特殊表情的顺序显示
+            sortedEmojis = [...roundEmojis, ...squareEmojis, ...specialEmojis];
+        } else if (currentShape === 'special') {
+            sortedEmojis = specialEmojis;
+        } else if (currentShape === 'square') {
+            sortedEmojis = squareEmojis;
+        } else if (currentShape === 'round') {
+            sortedEmojis = roundEmojis;
+        }
+        
+        const createEmojisPromises = sortedEmojis.map(emoji => {
+            return new Promise((resolve) => {
+                // 优先使用emoji.image中指定的PNG图片
+                let imagePath = emoji.image;
+                
+                // 检查图片是否存在
+                const img = new Image();
+                img.onload = function() {
+                    // 图片加载成功，使用该图片
+                    createAndAppendEmojiCard(emoji, imagePath);
+                    resolve();
+                };
+                img.onerror = function() {
+                    // 图片加载失败，对于特殊表情尝试使用动态生成
+                    if (emoji.name.includes('_') || emoji.shape === 'special') {
+                        // 特殊表情使用动态生成
+                        const canvas = createDynamicEmojiImage(emoji);
+                        createAndAppendEmojiCard(emoji, canvas.toDataURL('image/png'));
+                    } else {
+                        // 普通表情使用文字渲染
+                        const canvas = document.createElement('canvas');
+                        const ctx = canvas.getContext('2d');
+                        canvas.width = 128;
+                        canvas.height = 128;
+                        
+                        ctx.font = "90px Arial";
+                        ctx.textAlign = "center";
+                        ctx.textBaseline = "middle";
+                        ctx.fillText(emoji.emoji, canvas.width/2, canvas.height/2);
+                        
+                        createAndAppendEmojiCard(emoji, canvas.toDataURL('image/png'));
+                    }
+                    resolve();
+                };
+                img.src = imagePath;
+            });
+        });
+        
+        Promise.all(createEmojisPromises).then(() => {
+            // 所有表情卡片加载完成后执行懒加载
+            lazyLoadImages();
+        });
+        
+        function createAndAppendEmojiCard(emoji, imagePath) {
+            // 确定卡片的样式类
+            let cardClass = 'emoji-card';
+            if (emoji.shape === 'round') {
+                cardClass += ' round-emoji';
+            } else if (emoji.shape === 'square') {
+                cardClass += ' square-emoji';
+            } else if (emoji.shape === 'special') {
+                cardClass += ' special-emoji';
+            }
+            
+            // 创建表情卡片HTML
+            const card = document.createElement('div');
+            card.className = cardClass;
+            
+            // 创建表情图片和信息HTML
+            card.innerHTML = `
+                <div class="emoji-image">
+                    <img src="${imagePath}" alt="${emoji.name}" loading="lazy" class="lazy-load">
+                </div>
+                <div class="emoji-info">
+                    <div class="emoji-name">${emoji.name.replace(/_/g, ' ')}</div>
+                    <div class="emoji-unicode font-mono text-sm">${emoji.unicode}</div>
+                    <div class="emoji-category">${emoji.category}</div>
+                </div>
+                <div class="emoji-actions">
+                    <button class="emoji-btn copy-btn" data-emoji="${emoji.emoji}" aria-label="Copy emoji">
+                        <i class="fas fa-copy"></i>
+                    </button>
+                    <button class="emoji-btn download-btn" data-image="${imagePath}" data-name="${emoji.name}" aria-label="Download emoji">
+                        <i class="fas fa-download"></i>
+                    </button>
+                    <button class="emoji-btn info-btn" data-name="${emoji.name}" data-unicode="${emoji.unicode}" data-description="${emoji.description || ''}" aria-label="Show emoji info">
+                        <i class="fas fa-info-circle"></i>
+                    </button>
+                </div>
+            `;
+            
+            // 添加事件监听器
+            const copyBtn = card.querySelector('.copy-btn');
+            const downloadBtn = card.querySelector('.download-btn');
+            const infoBtn = card.querySelector('.info-btn');
+            
+            copyBtn.addEventListener('click', copyEmoji);
+            downloadBtn.addEventListener('click', downloadEmoji);
+            infoBtn.addEventListener('click', showEmojiInfo);
+            
+            // 添加到网格
+            emojiGrid.appendChild(card);
+        }
     }
 
     // Initialize emojis
@@ -1804,310 +1772,5 @@ document.addEventListener('DOMContentLoaded', function() {
         // 仅用于开发调试
         // console.log('表情使用统计:', usageData);
     }
-
-    // Check if we're on a keyword page
-    function isKeywordPage() {
-        return window.location.pathname.includes('/keywords') || window.location.pathname.includes('/keyword-template.html');
-    }
-
-    // Function to get keyword from URL
-    function getKeywordFromUrl() {
-        const urlParams = new URLSearchParams(window.location.search);
-        const keyword = urlParams.get('q') || 'tiktok-emojis';
-        return keyword.replace(/-/g, ' ');
-    }
-
-    // Function to filter emojis based on keyword
-    function filterEmojisByKeyword(keyword) {
-        if (!keyword) return emojiData;
-        
-        keyword = keyword.toLowerCase();
-        const keywordTerms = keyword.split(' ');
-        
-        // Create filters based on common keywords
-        let categoryFilter = null;
-        let shapeFilter = null;
-        let nameFilter = null;
-        let specialFilter = false;
-        
-        // Determine filters based on keyword terms
-        keywordTerms.forEach(term => {
-            if (['happy', 'sad', 'angry', 'love', 'cool', 'cute'].includes(term)) {
-                categoryFilter = term;
-            }
-            if (['round', 'square', 'special'].includes(term)) {
-                shapeFilter = term;
-            }
-            if (['png', 'sticker', 'download', 'image'].includes(term)) {
-                // These terms indicate user wants to download images
-                specialFilter = 'download';
-            }
-            if (['code', 'unicode', 'html'].includes(term)) {
-                // These terms indicate user wants to see code values
-                specialFilter = 'code';
-            }
-            if (['trending', 'popular', 'viral'].includes(term)) {
-                // Filter for trending emojis
-                specialFilter = 'trending';
-            }
-        });
-        
-        // Apply filters to emoji data
-        return emojiData.filter(emoji => {
-            // Always include base check for keyword match in name or category
-            const basicMatch = emoji.name.toLowerCase().includes(keyword) || 
-                               emoji.category.toLowerCase().includes(keyword) ||
-                               keywordTerms.some(term => emoji.name.toLowerCase().includes(term));
-            
-            // Apply additional filters if specified
-            const categoryMatch = categoryFilter ? emoji.category.toLowerCase().includes(categoryFilter) : true;
-            const shapeMatch = shapeFilter ? getEmojiShape(emoji) === shapeFilter : true;
-            
-            // Special filter logic
-            let specialMatch = true;
-            if (specialFilter === 'trending') {
-                specialMatch = emoji.trending === 'yes';
-            } else if (specialFilter === 'code' || specialFilter === 'download') {
-                // For code/download, we prioritize but don't filter out
-                specialMatch = true;
-            }
-            
-            return basicMatch && categoryMatch && shapeMatch && specialMatch;
-        });
-    }
-
-    // Function to create keyword-specific content
-    function createKeywordSpecificContent(keyword) {
-        if (!isKeywordPage()) return;
-        
-        const formattedKeyword = keyword || getKeywordFromUrl();
-        const filteredEmojis = filterEmojisByKeyword(formattedKeyword);
-        
-        // Update emoji count
-        updateEmojiCount(filteredEmojis.length);
-        
-        // Clear current emoji grid
-        const emojiGrid = document.getElementById('emoji-grid');
-        if (emojiGrid) emojiGrid.innerHTML = '';
-        
-        // Display filtered emojis
-        displayEmojis(filteredEmojis);
-        
-        // Add popular keywords
-        addPopularKeywords(formattedKeyword);
-        
-        // Add related keywords
-        addRelatedKeywords(formattedKeyword);
-    }
-
-    // Add popular keywords links
-    function addPopularKeywords(currentKeyword) {
-        const popularKeywords = [
-            'tiktok emojis png',
-            'tiktok emojis code',
-            'tiktok emojis list',
-            'tiktok emojis discord',
-            'tiktok emojis names',
-            'tiktok emojis happy',
-            'tiktok emojis stickers',
-            'tiktok emojis shock',
-            'tiktok emojis hehe',
-            'tiktok emojis crying'
-        ];
-        
-        const popularContainer = document.getElementById('popular-searches');
-        if (!popularContainer) return;
-        
-        // Filter out the current keyword
-        const filteredKeywords = popularKeywords.filter(keyword => 
-            !currentKeyword.includes(keyword) && !keyword.includes(currentKeyword)
-        ).slice(0, 6);
-        
-        let html = '';
-        filteredKeywords.forEach(keyword => {
-            const keywordUrl = `/keywords?q=${keyword.replace(/ /g, '-')}`;
-            html += `<a href="${keywordUrl}" class="bg-gray-800 px-3 py-1 rounded-full text-sm hover:bg-gray-700 transition">${keyword}</a>`;
-        });
-        
-        popularContainer.innerHTML = html;
-    }
-
-    // Add related keywords links
-    function addRelatedKeywords(currentKeyword) {
-        const relatedContainer = document.getElementById('related-searches');
-        if (!relatedContainer) return;
-        
-        // Define related keywords based on current keyword
-        let relatedKeywords = [];
-        
-        if (currentKeyword.includes('png')) {
-            relatedKeywords = ['tiktok emojis download', 'tiktok stickers png', 'transparent tiktok emojis', 'tiktok emoji images'];
-        } else if (currentKeyword.includes('code')) {
-            relatedKeywords = ['tiktok emoji unicode', 'tiktok emoji html codes', 'tiktok emoji symbols', 'emoji code list'];
-        } else if (currentKeyword.includes('happy')) {
-            relatedKeywords = ['tiktok smile emoji', 'tiktok laugh emoji', 'tiktok joy emoji', 'tiktok grin emoji'];
-        } else if (currentKeyword.includes('sad')) {
-            relatedKeywords = ['tiktok crying emoji', 'tiktok tears emoji', 'tiktok depressed emoji', 'tiktok sad face emoji'];
-        } else if (currentKeyword.includes('special')) {
-            relatedKeywords = ['tiktok unique emojis', 'tiktok secret emojis', 'tiktok rare emojis', 'tiktok exclusive emojis'];
-        } else {
-            // Default related keywords
-            relatedKeywords = [
-                'tiktok comment emojis',
-                'how to use tiktok emojis',
-                'tiktok secret emojis',
-                'trending tiktok emojis'
-            ];
-        }
-        
-        let html = '';
-        relatedKeywords.forEach(keyword => {
-            const keywordUrl = `/keywords?q=${keyword.replace(/ /g, '-')}`;
-            html += `<a href="${keywordUrl}" class="bg-gray-800 px-3 py-1 rounded-full text-sm hover:bg-gray-700 transition">${keyword}</a>`;
-        });
-        
-        relatedContainer.innerHTML = html;
-    }
-
-    // Update app initialization to handle keyword pages
-    function initApp() {
-        // Initialize emoji data
-        loadEmojiData();
-        
-        // Set up event listeners for search and filters
-        setupEventListeners();
-        
-        // Check if we're on a keyword page
-        if (isKeywordPage()) {
-            // Handle keyword specific page
-            createKeywordSpecificContent();
-        } else {
-            // Regular page initialization
-            updateEmojiCount(emojiData.length);
-            displayEmojis(emojiData);
-        }
-        
-        // Check URL for emoji parameter
-        checkUrlForEmojiParam();
-    }
-
-    // Set up event listeners
-    function setupEventListeners() {
-        // Search input
-        const searchInput = document.getElementById('search');
-        if (searchInput) {
-            searchInput.addEventListener('input', handleSearch);
-        }
-        
-        // Category buttons
-        const categoryButtons = document.querySelectorAll('.category-btn');
-        categoryButtons.forEach(button => {
-            button.addEventListener('click', handleCategoryClick);
-        });
-        
-        // Shape buttons
-        const shapeButtons = document.querySelectorAll('.shape-btn');
-        shapeButtons.forEach(button => {
-            button.addEventListener('click', handleShapeClick);
-        });
-        
-        // Close modal button
-        const closeModalButton = document.getElementById('close-modal');
-        if (closeModalButton) {
-            closeModalButton.addEventListener('click', () => {
-                const modal = document.getElementById('emoji-modal');
-                if (modal) modal.classList.add('hidden');
-            });
-        }
-    }
-
-    // Handle search input
-    function handleSearch(event) {
-        const searchTerm = event.target.value.toLowerCase();
-        
-        // If on keyword page, use keyword filtering logic
-        if (isKeywordPage()) {
-            const keyword = getKeywordFromUrl() + ' ' + searchTerm;
-            createKeywordSpecificContent(keyword);
-            return;
-        }
-        
-        // Regular search logic for main page
-        const filteredEmojis = emojiData.filter(emoji => {
-            return emoji.emoji.includes(searchTerm) || 
-                   emoji.name.toLowerCase().includes(searchTerm) || 
-                   emoji.category.toLowerCase().includes(searchTerm);
-        });
-        
-        updateEmojiCount(filteredEmojis.length);
-        displayEmojis(filteredEmojis);
-    }
-
-    // Handle category button click
-    function handleCategoryClick(event) {
-        const selectedCategory = event.target.getAttribute('data-category');
-        
-        // Update active state
-        document.querySelectorAll('.category-btn').forEach(btn => {
-            btn.classList.remove('active');
-        });
-        event.target.classList.add('active');
-        
-        // Filter emojis by category
-        let filteredEmojis = emojiData;
-        if (selectedCategory !== 'all') {
-            if (selectedCategory === 'trending') {
-                filteredEmojis = emojiData.filter(emoji => emoji.trending === 'yes');
-            } else {
-                filteredEmojis = emojiData.filter(emoji => 
-                    emoji.category.toLowerCase().includes(selectedCategory.toLowerCase())
-                );
-            }
-        }
-        
-        // If on keyword page, combine with keyword filter
-        if (isKeywordPage()) {
-            const keyword = getKeywordFromUrl();
-            filteredEmojis = filteredEmojis.filter(emoji => {
-                return emoji.name.toLowerCase().includes(keyword) || 
-                       emoji.category.toLowerCase().includes(keyword);
-            });
-        }
-        
-        updateEmojiCount(filteredEmojis.length);
-        displayEmojis(filteredEmojis);
-    }
-
-    // Handle shape button click
-    function handleShapeClick(event) {
-        const selectedShape = event.target.getAttribute('data-shape');
-        
-        // Update active state
-        document.querySelectorAll('.shape-btn').forEach(btn => {
-            btn.classList.remove('active');
-        });
-        event.target.classList.add('active');
-        
-        // Filter emojis by shape
-        let filteredEmojis = emojiData;
-        if (selectedShape !== 'all') {
-            filteredEmojis = emojiData.filter(emoji => getEmojiShape(emoji) === selectedShape);
-        }
-        
-        // If on keyword page, combine with keyword filter
-        if (isKeywordPage()) {
-            const keyword = getKeywordFromUrl();
-            filteredEmojis = filteredEmojis.filter(emoji => {
-                return emoji.name.toLowerCase().includes(keyword) || 
-                       emoji.category.toLowerCase().includes(keyword);
-            });
-        }
-        
-        updateEmojiCount(filteredEmojis.length);
-        displayEmojis(filteredEmojis);
-    }
-
-    // Initialize the app when DOM is loaded
-    document.addEventListener('DOMContentLoaded', initApp);
 }); 
 // Updated script - 2023 
