@@ -4,270 +4,354 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TikTok Emojis | Keyword Search Results</title>
-    <meta name="description" content="Find and browse TikTok emojis, copy and use the most popular TikTok emoji symbols.">
-    <link rel="stylesheet" href="styles.css">
-    <!-- Google Analytics脚本 -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXX"></script>
+    <meta name="description" content="Discover and copy the most popular TikTok emojis. Find trending emojis, special combinations and emoji meanings used in TikTok comments and videos.">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://www.tiktokemojis.com/">
+    <meta property="og:title" content="TikTok Emojis | Copy & Paste">
+    <meta property="og:description" content="Discover and copy the most popular TikTok emojis. Find trending emojis, special combinations and emoji meanings used in TikTok comments and videos.">
+    <meta property="og:image" content="https://www.tiktokemojis.com/assets/tiktok-emojis-og.jpg">
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://www.tiktokemojis.com/">
+    <meta property="twitter:title" content="TikTok Emojis | Copy & Paste">
+    <meta property="twitter:description" content="Discover and copy the most popular TikTok emojis. Find trending emojis, special combinations and emoji meanings used in TikTok comments and videos.">
+    <meta property="twitter:image" content="https://www.tiktokemojis.com/assets/tiktok-emojis-og.jpg">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="favicon.png">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
     <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-        gtag('config', 'G-XXXXXXXX');
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        tiktok: '#FE2C55',
+                        dark: {
+                            100: '#292929',
+                            200: '#222222',
+                            300: '#171717'
+                        }
+                    }
+                }
+            }
+        }
     </script>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #111;
+            color: #fff;
+        }
+        .emoji-card {
+            transition: transform 0.2s;
+        }
+        .emoji-card:hover {
+            transform: translateY(-5px);
+        }
+        .emoji-display {
+            font-size: 3.5rem;
+            height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .skeleton-card {
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: .5;
+            }
+        }
+    </style>
 </head>
-<body class="bg-black text-white">
-    <header class="bg-gray-800 shadow-lg">
-        <div class="container mx-auto px-4 py-6">
-            <div class="flex flex-col md:flex-row md:justify-between md:items-center">
-                <a href="index.html" class="text-2xl font-bold gradient-title mb-4 md:mb-0">
-                    TikTok Emojis
-                </a>
-                <div class="search-container w-full md:w-96">
-                    <div class="relative">
-                        <input type="text" id="searchInput" placeholder="Search emojis..." class="w-full px-4 py-2 bg-gray-800 rounded-full focus:outline-none focus:ring-2 focus:ring-pink-500">
-                        <button id="searchButton" class="absolute right-3 top-2 text-gray-400 hover:text-pink-500">
+<body class="min-h-screen flex flex-col">
+    <!-- Header -->
+    <header class="bg-gradient-to-r from-purple-600 to-pink-500 p-4 md:p-6">
+        <div class="container mx-auto flex flex-col md:flex-row items-center justify-between">
+            <div class="flex items-center mb-4 md:mb-0">
+                <img src="assets/tiktok-logo.png" alt="TikTok Logo" class="h-10 mr-3">
+                <h1 class="text-2xl md:text-3xl font-bold">TikTok Emojis</h1>
+            </div>
+            <div class="w-full md:w-auto">
+                <div class="flex flex-col md:flex-row gap-2">
+                    <div class="relative flex-grow">
+                        <input type="text" id="searchInput" placeholder="Search TikTok emojis..." class="w-full px-4 py-2 rounded-full bg-white/20 backdrop-blur-sm text-white placeholder-white/70 focus:outline-none focus:ring-2 focus:ring-white/50">
+                        <button id="searchButton" class="absolute right-2 top-1/2 transform -translate-y-1/2 text-white">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                             </svg>
                         </button>
                     </div>
+                    <a href="index.html" class="bg-white/20 backdrop-blur-sm hover:bg-white/30 text-white px-4 py-2 rounded-full text-center">
+                        Home
+                    </a>
                 </div>
-                <nav class="hidden md:block">
-                    <ul class="flex space-x-4">
-                        <li><a href="index.html" class="hover:text-pink-500">Home</a></li>
-                        <li><a href="keywords/index.html" class="hover:text-pink-500">Keyword Search</a></li>
-                        <li><a href="index.html#faq" class="hover:text-pink-500">FAQ</a></li>
-                    </ul>
-                </nav>
             </div>
         </div>
     </header>
 
-    <main class="container mx-auto px-4 py-10">
-        <div id="keywordTitle" class="mb-8 text-center">
-            <h1 class="text-3xl font-bold gradient-title" id="mainTitle">TikTok Emoji Search Results</h1>
-            <p class="mt-2 text-gray-400" id="subTitle">Loading...</p>
-        </div>
-
-        <div class="bg-gray-800 p-4 rounded-lg mb-8">
-            <h2 class="text-lg font-semibold mb-2">Emoji Filters</h2>
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-                <!-- Category filter buttons -->
-                <div>
-                    <label class="block text-sm mb-1">Category:</label>
-                    <select id="categoryFilter" class="w-full bg-gray-700 rounded p-2 text-sm">
-                        <option value="all">All Categories</option>
-                        <option value="happy">Happy</option>
-                        <option value="sad">Sad</option>
-                        <option value="love">Love</option>
-                        <option value="angry">Angry</option>
-                        <option value="special">Special</option>
-                    </select>
-                </div>
-                
-                <!-- Shape filter buttons -->
-                <div>
-                    <label class="block text-sm mb-1">Shape:</label>
-                    <select id="shapeFilter" class="w-full bg-gray-700 rounded p-2 text-sm">
-                        <option value="all">All Shapes</option>
-                        <option value="circle">Circle</option>
-                        <option value="square">Square</option>
-                        <option value="special">Special</option>
-                    </select>
-                </div>
-
-                <!-- Sort options -->
-                <div>
-                    <label class="block text-sm mb-1">Sort By:</label>
-                    <select id="sortOption" class="w-full bg-gray-700 rounded p-2 text-sm">
-                        <option value="trending">Trending</option>
-                        <option value="alphabetical">Alphabetical</option>
-                        <option value="recent">Recently Added</option>
-                    </select>
-                </div>
-
-                <!-- Display options -->
-                <div>
-                    <label class="block text-sm mb-1">Display:</label>
-                    <select id="displayOption" class="w-full bg-gray-700 rounded p-2 text-sm">
-                        <option value="all">All Emojis</option>
-                        <option value="trending">Trending Only</option>
-                        <option value="special">Special Only</option>
-                    </select>
+    <!-- Main Content -->
+    <main class="flex-grow">
+        <section class="container mx-auto px-4 py-8">
+            <div class="text-center mb-8">
+                <h1 id="mainTitle" class="text-3xl md:text-4xl font-bold mb-2">Loading...</h1>
+                <p id="subTitle" class="text-gray-400">Finding TikTok emojis for you...</p>
+            </div>
+            
+            <!-- Filters -->
+            <div class="bg-gray-800 rounded-lg p-4 mb-8">
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <div>
+                        <label for="categoryFilter" class="block text-sm font-medium text-gray-400 mb-1">Category</label>
+                        <select id="categoryFilter" class="w-full bg-gray-700 text-white rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-pink-500">
+                            <option value="all">All Categories</option>
+                            <option value="happy">Happy</option>
+                            <option value="sad">Sad</option>
+                            <option value="love">Love</option>
+                            <option value="angry">Angry</option>
+                            <option value="special">Special</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="shapeFilter" class="block text-sm font-medium text-gray-400 mb-1">Shape</label>
+                        <select id="shapeFilter" class="w-full bg-gray-700 text-white rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-pink-500">
+                            <option value="all">All Shapes</option>
+                            <option value="circle">Circle</option>
+                            <option value="square">Square</option>
+                            <option value="special">Special</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="sortOption" class="block text-sm font-medium text-gray-400 mb-1">Sort By</label>
+                        <select id="sortOption" class="w-full bg-gray-700 text-white rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-pink-500">
+                            <option value="relevance">Relevance</option>
+                            <option value="alphabetical">Alphabetical</option>
+                            <option value="trending">Trending First</option>
+                            <option value="recent">Recently Added</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="displayOption" class="block text-sm font-medium text-gray-400 mb-1">Display</label>
+                        <select id="displayOption" class="w-full bg-gray-700 text-white rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-pink-500">
+                            <option value="all">All Emojis</option>
+                            <option value="trending">Trending Only</option>
+                            <option value="special">Special Only</option>
+                        </select>
+                    </div>
                 </div>
             </div>
-        </div>
-
-        <!-- Emoji counter -->
-        <div class="mb-6 flex justify-between items-center">
-            <div id="emojiCount" class="text-gray-400">Loading...</div>
-            <div class="flex gap-2">
-                <button id="gridViewBtn" class="bg-pink-500 text-white px-3 py-1 rounded-full text-sm active">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 inline" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6z" />
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6z" />
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2z" />
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
-                    </svg>
-                    Grid View
-                </button>
-                <button id="listViewBtn" class="bg-gray-700 text-white px-3 py-1 rounded-full text-sm">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 inline" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-                    </svg>
-                    List View
-                </button>
+            
+            <!-- Emoji Count -->
+            <div class="flex justify-between items-center mb-4">
+                <p id="emojiCount" class="text-gray-400">Loading emojis...</p>
+                <div class="flex gap-2">
+                    <button id="gridViewBtn" class="bg-pink-500 text-white p-2 rounded">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+                        </svg>
+                    </button>
+                    <button id="listViewBtn" class="bg-gray-700 text-white p-2 rounded">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                        </svg>
+                    </button>
+                </div>
             </div>
-        </div>
-
-        <!-- Emoji display area -->
-        <div id="emojiContainer" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
-            <!-- Emoji cards will be dynamically added here -->
-            <div class="skeleton-card bg-gray-800 rounded-lg p-4 flex flex-col items-center animate-pulse">
-                <div class="w-16 h-16 mb-3 bg-gray-700 rounded-full"></div>
-                <div class="h-4 bg-gray-700 rounded w-2/3 mb-2"></div>
-                <div class="h-3 bg-gray-700 rounded w-1/2"></div>
+            
+            <!-- Emoji Container -->
+            <div id="emojiContainer" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 mb-8">
+                <!-- Skeleton loading placeholders -->
+                <div class="bg-gray-800 rounded-lg p-4 flex flex-col items-center skeleton-card">
+                    <div class="bg-gray-700 rounded-full w-16 h-16 mb-3"></div>
+                    <div class="bg-gray-700 rounded w-3/4 h-4 mb-1"></div>
+                    <div class="bg-gray-700 rounded w-1/2 h-3 mb-3"></div>
+                    <div class="flex gap-2 mt-auto w-full">
+                        <div class="bg-gray-700 rounded h-8 flex-1"></div>
+                        <div class="bg-gray-700 rounded h-8 flex-1"></div>
+                    </div>
+                </div>
+                <!-- Repeat skeleton cards to fill the grid -->
+                <div class="bg-gray-800 rounded-lg p-4 flex flex-col items-center skeleton-card">
+                    <div class="bg-gray-700 rounded-full w-16 h-16 mb-3"></div>
+                    <div class="bg-gray-700 rounded w-3/4 h-4 mb-1"></div>
+                    <div class="bg-gray-700 rounded w-1/2 h-3 mb-3"></div>
+                    <div class="flex gap-2 mt-auto w-full">
+                        <div class="bg-gray-700 rounded h-8 flex-1"></div>
+                        <div class="bg-gray-700 rounded h-8 flex-1"></div>
+                    </div>
+                </div>
+                <div class="bg-gray-800 rounded-lg p-4 flex flex-col items-center skeleton-card">
+                    <div class="bg-gray-700 rounded-full w-16 h-16 mb-3"></div>
+                    <div class="bg-gray-700 rounded w-3/4 h-4 mb-1"></div>
+                    <div class="bg-gray-700 rounded w-1/2 h-3 mb-3"></div>
+                    <div class="flex gap-2 mt-auto w-full">
+                        <div class="bg-gray-700 rounded h-8 flex-1"></div>
+                        <div class="bg-gray-700 rounded h-8 flex-1"></div>
+                    </div>
+                </div>
+                <div class="bg-gray-800 rounded-lg p-4 flex flex-col items-center skeleton-card">
+                    <div class="bg-gray-700 rounded-full w-16 h-16 mb-3"></div>
+                    <div class="bg-gray-700 rounded w-3/4 h-4 mb-1"></div>
+                    <div class="bg-gray-700 rounded w-1/2 h-3 mb-3"></div>
+                    <div class="flex gap-2 mt-auto w-full">
+                        <div class="bg-gray-700 rounded h-8 flex-1"></div>
+                        <div class="bg-gray-700 rounded h-8 flex-1"></div>
+                    </div>
+                </div>
+                <div class="bg-gray-800 rounded-lg p-4 flex flex-col items-center skeleton-card">
+                    <div class="bg-gray-700 rounded-full w-16 h-16 mb-3"></div>
+                    <div class="bg-gray-700 rounded w-3/4 h-4 mb-1"></div>
+                    <div class="bg-gray-700 rounded w-1/2 h-3 mb-3"></div>
+                    <div class="flex gap-2 mt-auto w-full">
+                        <div class="bg-gray-700 rounded h-8 flex-1"></div>
+                        <div class="bg-gray-700 rounded h-8 flex-1"></div>
+                    </div>
+                </div>
+                <div class="bg-gray-800 rounded-lg p-4 flex flex-col items-center skeleton-card">
+                    <div class="bg-gray-700 rounded-full w-16 h-16 mb-3"></div>
+                    <div class="bg-gray-700 rounded w-3/4 h-4 mb-1"></div>
+                    <div class="bg-gray-700 rounded w-1/2 h-3 mb-3"></div>
+                    <div class="flex gap-2 mt-auto w-full">
+                        <div class="bg-gray-700 rounded h-8 flex-1"></div>
+                        <div class="bg-gray-700 rounded h-8 flex-1"></div>
+                    </div>
+                </div>
             </div>
-            <div class="skeleton-card bg-gray-800 rounded-lg p-4 flex flex-col items-center animate-pulse">
-                <div class="w-16 h-16 mb-3 bg-gray-700 rounded-full"></div>
-                <div class="h-4 bg-gray-700 rounded w-2/3 mb-2"></div>
-                <div class="h-3 bg-gray-700 rounded w-1/2"></div>
+            
+            <!-- No Results Message -->
+            <div id="noResults" class="hidden text-center py-8">
+                <p class="text-xl text-gray-400 mb-2">No emojis found</p>
+                <p class="text-gray-500">Try adjusting your filters or search term</p>
             </div>
-            <div class="skeleton-card bg-gray-800 rounded-lg p-4 flex flex-col items-center animate-pulse">
-                <div class="w-16 h-16 mb-3 bg-gray-700 rounded-full"></div>
-                <div class="h-4 bg-gray-700 rounded w-2/3 mb-2"></div>
-                <div class="h-3 bg-gray-700 rounded w-1/2"></div>
+            
+            <!-- Keyword Info Section -->
+            <div class="bg-gray-800 rounded-lg p-6 mb-8">
+                <h2 id="keywordInfoTitle" class="text-xl md:text-2xl font-bold mb-4">About this keyword</h2>
+                <div id="keywordInfoContent" class="text-gray-300">
+                    <p class="mb-4">Discover the best TikTok emojis related to your search. Our collection includes popular emojis used in TikTok comments, videos, and bios.</p>
+                    <p>You can easily copy these emojis with a single click or download them as high-quality PNG images to use in your content.</p>
+                </div>
             </div>
-            <div class="skeleton-card bg-gray-800 rounded-lg p-4 flex flex-col items-center animate-pulse">
-                <div class="w-16 h-16 mb-3 bg-gray-700 rounded-full"></div>
-                <div class="h-4 bg-gray-700 rounded w-2/3 mb-2"></div>
-                <div class="h-3 bg-gray-700 rounded w-1/2"></div>
+            
+            <!-- Related Keywords -->
+            <div class="mb-8">
+                <h2 class="text-xl font-bold mb-4">Related Keywords</h2>
+                <div id="relatedKeywordsContainer" class="flex flex-wrap gap-2">
+                    <!-- Related keywords will be added dynamically -->
+                    <div class="bg-gray-700 px-3 py-1 rounded-full text-sm skeleton-card w-32"></div>
+                    <div class="bg-gray-700 px-3 py-1 rounded-full text-sm skeleton-card w-40"></div>
+                    <div class="bg-gray-700 px-3 py-1 rounded-full text-sm skeleton-card w-36"></div>
+                    <div class="bg-gray-700 px-3 py-1 rounded-full text-sm skeleton-card w-28"></div>
+                </div>
             </div>
-            <div class="skeleton-card bg-gray-800 rounded-lg p-4 flex flex-col items-center animate-pulse">
-                <div class="w-16 h-16 mb-3 bg-gray-700 rounded-full"></div>
-                <div class="h-4 bg-gray-700 rounded w-2/3 mb-2"></div>
-                <div class="h-3 bg-gray-700 rounded w-1/2"></div>
-            </div>
-            <div class="skeleton-card bg-gray-800 rounded-lg p-4 flex flex-col items-center animate-pulse">
-                <div class="w-16 h-16 mb-3 bg-gray-700 rounded-full"></div>
-                <div class="h-4 bg-gray-700 rounded w-2/3 mb-2"></div>
-                <div class="h-3 bg-gray-700 rounded w-1/2"></div>
-            </div>
-        </div>
-
-        <!-- Display when no results found -->
-        <div id="noResults" class="hidden text-center py-12">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mx-auto text-gray-600 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-            </svg>
-            <h3 class="text-xl font-semibold mb-2">No Emojis Found</h3>
-            <p class="text-gray-400">No emojis match your keyword. Please try a different keyword.</p>
-        </div>
-
-        <!-- Related keywords -->
-        <div id="relatedKeywords" class="mt-12 bg-gray-800 p-6 rounded-lg">
-            <h2 class="text-xl font-semibold mb-4 gradient-title">Related Keywords</h2>
-            <div class="flex flex-wrap gap-3" id="relatedKeywordsContainer">
-                <!-- Related keywords will be dynamically added here -->
-                <a href="#" class="bg-gray-700 px-3 py-1 rounded-full text-sm hover:bg-gray-600 transition">Loading...</a>
-            </div>
-        </div>
-
-        <!-- Popular keywords -->
-        <div id="popularKeywords" class="mt-8 bg-gray-800 p-6 rounded-lg">
-            <h2 class="text-xl font-semibold mb-4 gradient-title">Popular Keywords</h2>
-            <div class="flex flex-wrap gap-3" id="popularKeywordsContainer">
-                <!-- Popular keywords will be dynamically added here -->
-                <a href="#" class="bg-gray-700 px-3 py-1 rounded-full text-sm hover:bg-gray-600 transition">Loading...</a>
-            </div>
-        </div>
-
-        <!-- Keyword information -->
-        <section id="keywordInfo" class="mt-12 bg-gray-800 p-6 rounded-lg">
-            <h2 class="text-xl font-semibold mb-4 gradient-title" id="keywordInfoTitle">About TikTok Emojis</h2>
-            <div id="keywordInfoContent">
-                <p class="mb-4">Loading...</p>
+            
+            <!-- Popular Keywords -->
+            <div class="mb-8">
+                <h2 class="text-xl font-bold mb-4">Popular Keywords</h2>
+                <div id="popularKeywordsContainer" class="flex flex-wrap gap-2">
+                    <!-- Popular keywords will be added dynamically -->
+                    <div class="bg-gray-700 px-3 py-1 rounded-full text-sm skeleton-card w-32"></div>
+                    <div class="bg-gray-700 px-3 py-1 rounded-full text-sm skeleton-card w-40"></div>
+                    <div class="bg-gray-700 px-3 py-1 rounded-full text-sm skeleton-card w-36"></div>
+                    <div class="bg-gray-700 px-3 py-1 rounded-full text-sm skeleton-card w-28"></div>
+                </div>
             </div>
         </section>
     </main>
-
-    <!-- Emoji info modal -->
-    <div id="emojiModal" class="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50 hidden">
-        <div class="bg-gray-800 rounded-lg p-6 max-w-lg w-full mx-4">
-            <div class="flex justify-between items-start mb-4">
-                <h3 class="text-xl font-semibold" id="modalEmojiName">Emoji Name</h3>
+    
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-8">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-4 md:mb-0">
+                    <p class="text-lg font-bold mb-2">TikTok Emojis</p>
+                    <p class="text-gray-400 text-sm">The best collection of TikTok emojis</p>
+                </div>
+                <div class="flex gap-4">
+                    <a href="index.html" class="text-gray-400 hover:text-white">Home</a>
+                    <a href="#" class="text-gray-400 hover:text-white">Contact</a>
+                    <a href="#" class="text-gray-400 hover:text-white">Privacy Policy</a>
+                </div>
+            </div>
+            <div class="border-t border-gray-800 mt-6 pt-6 text-center text-gray-500 text-sm">
+                <p>© 2023 TikTok Emojis. All rights reserved.</p>
+                <p class="mt-2">Not affiliated with TikTok or ByteDance Ltd.</p>
+            </div>
+        </div>
+    </footer>
+    
+    <!-- Emoji Modal -->
+    <div id="emojiModal" class="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50 hidden">
+        <div class="bg-gray-800 rounded-lg p-6 max-w-md w-full mx-4">
+            <div class="flex justify-between items-center mb-4">
+                <h2 id="modalEmojiName" class="text-xl font-bold">Emoji Name</h2>
                 <button id="closeModal" class="text-gray-400 hover:text-white">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                     </svg>
                 </button>
             </div>
-            <div class="flex items-center mb-6">
-                <div id="modalEmojiImage" class="text-6xl mr-4">😊</div>
+            <div class="flex justify-center mb-6">
+                <div id="modalEmojiImage" class="text-6xl">😊</div>
+            </div>
+            <div class="grid grid-cols-2 gap-4 mb-6">
                 <div>
-                    <p class="mb-2"><span class="text-gray-400">Unicode:</span> <span id="modalEmojiUnicode">U+1F600</span></p>
-                    <p class="mb-2"><span class="text-gray-400">Category:</span> <span id="modalEmojiCategory">Happy</span></p>
-                    <p><span class="text-gray-400">Trending on TikTok:</span> <span id="modalEmojiTrending">Yes</span></p>
+                    <p class="text-sm text-gray-400">Unicode</p>
+                    <p id="modalEmojiUnicode" class="font-medium">U+1F60A</p>
+                </div>
+                <div>
+                    <p class="text-sm text-gray-400">Category</p>
+                    <p id="modalEmojiCategory" class="font-medium">Happy</p>
+                </div>
+                <div>
+                    <p class="text-sm text-gray-400">Trending</p>
+                    <p id="modalEmojiTrending" class="font-medium">Yes</p>
                 </div>
             </div>
             <div class="mb-6">
-                <h4 class="text-lg font-semibold mb-2">Emoji Description</h4>
-                <p id="modalEmojiDescription" class="text-gray-300">This emoji represents...</p>
+                <p class="text-sm text-gray-400 mb-1">Description</p>
+                <p id="modalEmojiDescription" class="text-gray-300">This is a smiling face showing happiness and positivity. It's commonly used to express joy or agreement.</p>
             </div>
             <div class="mb-6">
-                <h4 class="text-lg font-semibold mb-2">Usage on TikTok</h4>
-                <p id="modalEmojiTikTokUsage" class="text-gray-300">On TikTok, this emoji is typically used for...</p>
+                <p class="text-sm text-gray-400 mb-1">TikTok Usage</p>
+                <p id="modalEmojiTikTokUsage" class="text-gray-300">On TikTok, this emoji is often used in comments to show appreciation for a video or to express happiness.</p>
             </div>
-            <div class="flex flex-wrap gap-3">
-                <button id="modalCopyEmoji" class="bg-pink-500 hover:bg-pink-600 text-white px-4 py-2 rounded-lg flex items-center">
+            <div class="flex gap-3">
+                <button id="modalCopyEmoji" class="bg-pink-500 hover:bg-pink-600 text-white px-4 py-2 rounded flex-1 flex justify-center items-center">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" />
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2" />
                     </svg>
-                    Copy Emoji
+                    Copy
                 </button>
-                <button id="modalDownloadEmoji" class="bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded-lg flex items-center">
+                <button id="modalDownloadEmoji" class="bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded flex-1 flex justify-center items-center">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
                     </svg>
-                    Download PNG
+                    Download
                 </button>
             </div>
         </div>
     </div>
-
-    <!-- Toast notification -->
-    <div id="toast" class="fixed bottom-4 right-4 bg-gray-800 text-white px-4 py-2 rounded-lg shadow-lg transform translate-y-10 opacity-0 transition-all duration-300 z-50">
+    
+    <!-- Toast Notification -->
+    <div id="toast" class="fixed bottom-4 right-4 bg-gray-800 text-white px-4 py-2 rounded shadow-lg transition-all transform translate-y-10 opacity-0">
         Emoji copied to clipboard!
     </div>
-
-    <footer class="bg-gray-800 text-gray-400 py-8 mt-16">
-        <div class="container mx-auto px-4">
-            <div class="grid md:grid-cols-3 gap-8">
-                <div>
-                    <h3 class="text-xl font-semibold mb-4 gradient-title">TikTok Emojis</h3>
-                    <p>Browse, copy and download the most popular TikTok emojis to make your comments more engaging!</p>
-                </div>
-                <div>
-                    <h3 class="text-xl font-semibold mb-4">Quick Links</h3>
-                    <ul class="space-y-2">
-                        <li><a href="index.html" class="hover:text-pink-500">Home</a></li>
-                        <li><a href="index.html#trending" class="hover:text-pink-500">Trending Emojis</a></li>
-                        <li><a href="index.html#faq" class="hover:text-pink-500">FAQ</a></li>
-                    </ul>
-                </div>
-                <div>
-                    <h3 class="text-xl font-semibold mb-4">Contact Us</h3>
-                    <p>If you have any questions or suggestions, feel free to contact us.</p>
-                    <p class="mt-2">Email: contact@tiktokemojis.com</p>
-                </div>
-            </div>
-            <div class="mt-8 pt-8 border-t border-gray-700 text-center">
-                <p>&copy; 2023 TikTok Emojis. All rights reserved.</p>
-            </div>
-        </div>
-    </footer>
     
+    <!-- Scripts -->
+    <!-- 先加载主脚本确保emoji数据可用 -->
     <script src="script.js"></script>
+    <!-- 然后加载关键词页面的专用脚本 -->
     <script src="keyword-script.js"></script>
 </body>
 </html> 

@@ -1,68 +1,77 @@
-// keyword-script.js - 为关键词页面提供功能支持
+// keyword-script.js - Functions for keyword page
 
 document.addEventListener('DOMContentLoaded', function() {
-    // 获取URL中的关键词参数
+    // Get keyword parameter from URL
     const urlParams = new URLSearchParams(window.location.search);
-    const keyword = urlParams.get('q') || '热门表情';
+    const keyword = urlParams.get('q') || 'trending emojis';
     
-    // 初始化页面
+    // 检查是否主脚本已经加载了表情数据
+    if (typeof emojiData === 'undefined') {
+        console.error('Emoji data not found! Main script might not be loaded.');
+        document.getElementById('emojiCount').textContent = 'Error: Emoji data not loaded. Please refresh the page.';
+        return;
+    }
+    
+    // Initialize page
     initKeywordPage(keyword);
     
-    // 添加事件监听器
+    // Add event listeners
     setupEventListeners();
 });
 
-// 初始化页面
+// Initialize page
 function initKeywordPage(keyword) {
-    // 更新页面标题
+    // Update page title
     updatePageTitle(keyword);
     
-    // 获取表情数据并显示
+    // Fetch and display emojis
     fetchAndDisplayEmojis(keyword);
     
-    // 更新关键词详情
+    // Update keyword info
     updateKeywordInfo(keyword);
     
-    // 加载相关关键词
+    // Load related keywords
     loadRelatedKeywords(keyword);
     
-    // 加载热门关键词
+    // Load popular keywords
     loadPopularKeywords();
 }
 
-// 更新页面标题
+// Update page title
 function updatePageTitle(keyword) {
-    document.title = `${keyword} | TikTok表情搜索结果`;
+    document.title = `${keyword} | TikTok Emojis Search Results`;
     document.getElementById('mainTitle').textContent = keyword;
-    document.getElementById('subTitle').textContent = `${keyword}相关的TikTok表情符号`;
-    document.getElementById('keywordInfoTitle').textContent = `关于"${keyword}"`;
+    document.getElementById('subTitle').textContent = `TikTok emojis related to ${keyword}`;
+    document.getElementById('keywordInfoTitle').textContent = `About "${keyword}"`;
 }
 
-// 获取并显示表情
+// Fetch and display emojis
 async function fetchAndDisplayEmojis(keyword) {
     try {
-        // 这里假设emojiData已经在全局作用域中可用
-        // 如果不可用，可以从服务器或本地数据源加载
-        if (typeof emojiData === 'undefined') {
-            console.error('表情数据未找到！');
+        // 确保有表情数据
+        if (typeof emojiData === 'undefined' || !Array.isArray(emojiData)) {
+            console.error('有效的表情数据不可用');
+            document.getElementById('emojiCount').textContent = 'Error: Invalid emoji data.';
             return;
         }
         
-        // 根据关键词过滤表情
+        // 筛选符合关键词的表情
         const filteredEmojis = filterEmojisByKeyword(emojiData, keyword);
         
         // 更新表情计数
         updateEmojiCount(filteredEmojis.length);
         
-        // 清除加载骨架屏
+        // 清除骨架加载器
         clearSkeletonLoaders();
         
-        // 显示表情
-        displayEmojis(filteredEmojis);
-        
-        // 如果没有结果，显示无结果信息
+        // 如果没有结果，显示无结果消息
         if (filteredEmojis.length === 0) {
             document.getElementById('noResults').classList.remove('hidden');
+        } else {
+            document.getElementById('noResults').classList.add('hidden');
+            
+            // 显示表情
+            displayEmojis(filteredEmojis);
         }
     } catch (error) {
         console.error('加载表情数据时出错:', error);
@@ -70,53 +79,56 @@ async function fetchAndDisplayEmojis(keyword) {
     }
 }
 
-// 根据关键词过滤表情
+// Filter emojis by keyword
 function filterEmojisByKeyword(emojis, keyword) {
     const keywordLower = keyword.toLowerCase();
     
     return emojis.filter(emoji => {
-        // 搜索名称、描述和类别
+        // Search name, description and category
         const nameMatch = emoji.name.toLowerCase().includes(keywordLower);
         const categoryMatch = emoji.category.toLowerCase().includes(keywordLower);
         const descriptionMatch = emoji.description && emoji.description.toLowerCase().includes(keywordLower);
         
-        // 如果是特殊关键词，进行特殊处理
-        if (keywordLower === '热门表情' || keywordLower === '热门') {
+        // Special keyword handling
+        if (keywordLower === 'trending emojis' || keywordLower === 'trending') {
             return emoji.trending === true;
-        } else if (keywordLower === '特殊表情' || keywordLower === '特殊') {
+        } else if (keywordLower === 'special emojis' || keywordLower === 'special') {
             return emoji.category === 'special';
-        } else if (keywordLower === '开心表情' || keywordLower === '开心') {
+        } else if (keywordLower === 'happy emojis' || keywordLower === 'happy') {
             return emoji.category === 'happy';
-        } else if (keywordLower === '伤心表情' || keywordLower === '伤心') {
+        } else if (keywordLower === 'sad emojis' || keywordLower === 'sad') {
             return emoji.category === 'sad';
-        } else if (keywordLower === '爱心表情' || keywordLower === '爱心') {
+        } else if (keywordLower === 'love emojis' || keywordLower === 'love') {
             return emoji.category === 'love';
-        } else if (keywordLower === '生气表情' || keywordLower === '生气') {
+        } else if (keywordLower === 'angry emojis' || keywordLower === 'angry') {
             return emoji.category === 'angry';
         }
         
-        // 默认搜索匹配
+        // Default search matching
         return nameMatch || categoryMatch || descriptionMatch;
     });
 }
 
-// 清除骨架屏加载器
+// Clear skeleton loaders
 function clearSkeletonLoaders() {
     const skeletonCards = document.querySelectorAll('.skeleton-card');
     skeletonCards.forEach(card => card.remove());
 }
 
-// 显示表情
+// Display emojis
 function displayEmojis(emojis) {
     const container = document.getElementById('emojiContainer');
     
-    // 应用当前过滤器值
+    // Clear container first
+    container.innerHTML = '';
+    
+    // Apply current filter values
     const categoryFilter = document.getElementById('categoryFilter').value;
     const shapeFilter = document.getElementById('shapeFilter').value;
     const sortOption = document.getElementById('sortOption').value;
     const displayOption = document.getElementById('displayOption').value;
     
-    // 应用过滤器
+    // Apply filters
     let filteredEmojis = emojis;
     
     if (categoryFilter !== 'all') {
@@ -133,27 +145,24 @@ function displayEmojis(emojis) {
         filteredEmojis = filteredEmojis.filter(emoji => emoji.category === 'special');
     }
     
-    // 应用排序
+    // Apply sorting
     if (sortOption === 'alphabetical') {
         filteredEmojis.sort((a, b) => a.name.localeCompare(b.name));
     } else if (sortOption === 'recent') {
-        // 假设我们有一个添加日期字段，如果没有，可以使用ID或其他指标
+        // Assuming we have a dateAdded field, if not, use ID or other metric
         filteredEmojis.sort((a, b) => (b.dateAdded || 0) - (a.dateAdded || 0));
     } else if (sortOption === 'trending') {
-        // 热门优先排序
+        // Trending first sort
         filteredEmojis.sort((a, b) => {
             if (a.trending === b.trending) return 0;
             return a.trending ? -1 : 1;
         });
     }
     
-    // 更新表情计数
+    // Update emoji count
     updateEmojiCount(filteredEmojis.length);
     
-    // 清空容器
-    // container.innerHTML = '';
-    
-    // 如果没有结果，显示无结果信息
+    // If no results, show no results message
     if (filteredEmojis.length === 0) {
         document.getElementById('noResults').classList.remove('hidden');
         return;
@@ -161,14 +170,14 @@ function displayEmojis(emojis) {
         document.getElementById('noResults').classList.add('hidden');
     }
     
-    // 创建表情卡片
+    // Create emoji cards
     filteredEmojis.forEach(emoji => {
         const card = createEmojiCard(emoji);
         container.appendChild(card);
     });
 }
 
-// 创建表情卡片
+// Create emoji card
 function createEmojiCard(emoji) {
     const card = document.createElement('div');
     card.className = 'bg-gray-800 rounded-lg p-4 flex flex-col items-center emoji-card';
@@ -176,64 +185,76 @@ function createEmojiCard(emoji) {
     card.dataset.name = emoji.name;
     card.dataset.category = emoji.category;
     
-    // 表情图像或字符
+    // Emoji image or character
     const emojiDisplay = document.createElement('div');
     emojiDisplay.className = 'text-5xl mb-3 emoji-display';
-    emojiDisplay.textContent = emoji.emoji;
     
-    // 表情名称
+    // 处理特殊表情或普通表情
+    if (emoji.isSpecial || emoji.image) {
+        // 如果是特殊表情，创建图片元素
+        const img = document.createElement('img');
+        img.src = emoji.image || `emoji_png/${emoji.name.toLowerCase().replace(/\s+/g, '_')}.png`;
+        img.alt = emoji.name;
+        img.className = 'h-16 w-16 object-contain';
+        emojiDisplay.appendChild(img);
+    } else {
+        // 普通表情直接使用文本
+        emojiDisplay.textContent = emoji.emoji;
+    }
+    
+    // Emoji name
     const emojiName = document.createElement('h3');
     emojiName.className = 'text-center font-medium mb-1 text-sm';
     emojiName.textContent = emoji.name;
     
-    // 表情类别
+    // Emoji category
     const emojiCategory = document.createElement('p');
     emojiCategory.className = 'text-xs text-gray-400 mb-3';
     emojiCategory.textContent = emoji.category;
     
-    // 按钮容器
+    // Button container
     const btnContainer = document.createElement('div');
     btnContainer.className = 'flex gap-2 mt-auto w-full';
     
-    // 复制按钮
+    // Copy button
     const copyBtn = document.createElement('button');
     copyBtn.className = 'bg-pink-500 hover:bg-pink-600 text-white px-2 py-1 rounded text-xs flex-1 flex justify-center items-center';
     copyBtn.innerHTML = `
         <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2" />
         </svg>
-        复制
+        Copy
     `;
     copyBtn.addEventListener('click', (e) => {
         e.stopPropagation();
         copyEmoji(emoji.emoji);
     });
     
-    // 详情按钮
+    // Details button
     const infoBtn = document.createElement('button');
     infoBtn.className = 'bg-gray-700 hover:bg-gray-600 text-white px-2 py-1 rounded text-xs flex-1 flex justify-center items-center';
     infoBtn.innerHTML = `
         <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
         </svg>
-        详情
+        Details
     `;
     infoBtn.addEventListener('click', (e) => {
         e.stopPropagation();
         showEmojiModal(emoji);
     });
     
-    // 添加到按钮容器
+    // Add to button container
     btnContainer.appendChild(copyBtn);
     btnContainer.appendChild(infoBtn);
     
-    // 添加到卡片
+    // Add to card
     card.appendChild(emojiDisplay);
     card.appendChild(emojiName);
     card.appendChild(emojiCategory);
     card.appendChild(btnContainer);
     
-    // 点击卡片显示详情
+    // Click card to show details
     card.addEventListener('click', () => {
         showEmojiModal(emoji);
     });
@@ -243,292 +264,348 @@ function createEmojiCard(emoji) {
 
 // 复制表情
 function copyEmoji(emoji) {
-    navigator.clipboard.writeText(emoji)
-        .then(() => {
-            showToast('已复制表情到剪贴板！');
-        })
-        .catch(err => {
-            console.error('复制失败:', err);
-            showToast('复制失败，请手动复制表情。');
-        });
+    // 尝试使用Clipboard API
+    if (navigator.clipboard) {
+        navigator.clipboard.writeText(emoji)
+            .then(() => {
+                showToast('表情符号已复制到剪贴板！');
+                // 如果在主脚本中存在，更新使用统计
+                if (typeof updateEmojiUsage === 'function') {
+                    updateEmojiUsage(emoji);
+                }
+            })
+            .catch(err => {
+                console.error('复制表情失败:', err);
+                showToast('复制失败，请手动复制');
+            });
+    } else {
+        // 回退方法
+        const textarea = document.createElement('textarea');
+        textarea.value = emoji;
+        textarea.style.position = 'fixed';  // 避免滚动到页面底部
+        document.body.appendChild(textarea);
+        textarea.focus();
+        textarea.select();
+        
+        try {
+            const successful = document.execCommand('copy');
+            if (successful) {
+                showToast('表情符号已复制到剪贴板！');
+                // 如果在主脚本中存在，更新使用统计
+                if (typeof updateEmojiUsage === 'function') {
+                    updateEmojiUsage(emoji);
+                }
+            } else {
+                showToast('复制失败，请手动复制');
+            }
+        } catch (err) {
+            console.error('复制表情失败:', err);
+            showToast('复制失败，请手动复制');
+        }
+        
+        document.body.removeChild(textarea);
+    }
 }
 
-// 下载表情图像
+// 下载表情图片
 function downloadEmoji(emoji) {
-    // 创建Canvas元素
+    // 如果主脚本中有下载函数，优先使用它
+    if (typeof downloadEmojiImage === 'function') {
+        downloadEmojiImage(emoji);
+        return;
+    }
+    
+    // 自己实现的下载方法
+    // 创建画布
     const canvas = document.createElement('canvas');
     const ctx = canvas.getContext('2d');
-    canvas.width = 256;
-    canvas.height = 256;
+    canvas.width = 128;
+    canvas.height = 128;
     
-    // 设置背景透明
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    // 背景色
+    ctx.fillStyle = '#36363c';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
     
     // 绘制表情
-    ctx.font = '200px Arial';
+    ctx.font = '80px Arial';
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
-    ctx.fillText(emoji, canvas.width / 2, canvas.height / 2);
-    
-    // 将Canvas转换为图像URL
-    const imageUrl = canvas.toDataURL('image/png');
+    ctx.fillStyle = 'white';
+    ctx.fillText(emoji.emoji || emoji, canvas.width/2, canvas.height/2);
     
     // 创建下载链接
-    const downloadLink = document.createElement('a');
-    downloadLink.href = imageUrl;
-    downloadLink.download = 'tiktok-emoji.png';
-    document.body.appendChild(downloadLink);
-    downloadLink.click();
-    document.body.removeChild(downloadLink);
+    const link = document.createElement('a');
+    link.download = `tiktok-emoji-${emoji.name.toLowerCase().replace(/\s+/g, '_')}.png`;
+    link.href = canvas.toDataURL('image/png');
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
     
-    showToast('表情下载成功！');
+    showToast('表情已成功下载！');
 }
 
 // 获取表情形状
 function getEmojiShape(emoji) {
-    // 简单形状判断，根据表情的特点进行判断
-    // 这里只是示例，实际应用可以有更复杂的逻辑
-    if (emoji.category === 'special') {
-        return 'special';
-    }
+    // 如果表情对象已经有shape属性，直接使用
+    if (emoji.shape) return emoji.shape;
     
-    // 默认为圆形
-    return 'circle';
+    // 类别为special的表情或者长度超过2的表情视为特殊形状
+    if (emoji.category === 'special' || emoji.emoji.length > 2) {
+        return 'special';
+    } else {
+        return 'circle'; // 默认形状
+    }
 }
 
-// 显示表情信息模态框
+// 显示表情弹窗
 function showEmojiModal(emoji) {
+    // 获取弹窗元素
     const modal = document.getElementById('emojiModal');
+    const modalEmojiName = document.getElementById('modalEmojiName');
+    const modalEmojiImage = document.getElementById('modalEmojiImage');
+    const modalEmojiUnicode = document.getElementById('modalEmojiUnicode');
+    const modalEmojiCategory = document.getElementById('modalEmojiCategory');
+    const modalEmojiTrending = document.getElementById('modalEmojiTrending');
+    const modalEmojiDescription = document.getElementById('modalEmojiDescription');
+    const modalEmojiTikTokUsage = document.getElementById('modalEmojiTikTokUsage');
     
-    // 更新模态框内容
-    document.getElementById('modalEmojiName').textContent = emoji.name;
-    document.getElementById('modalEmojiImage').textContent = emoji.emoji;
-    document.getElementById('modalEmojiUnicode').textContent = `U+${emoji.unicode || '不可用'}`;
-    document.getElementById('modalEmojiCategory').textContent = emoji.category;
-    document.getElementById('modalEmojiTrending').textContent = emoji.trending ? '是' : '否';
+    // 填充弹窗内容
+    modalEmojiName.textContent = emoji.name || '自定义表情';
     
-    // 表情描述
-    const description = emoji.description || `这是一个${emoji.category}类别的表情，可用于表达相关情感。`;
-    document.getElementById('modalEmojiDescription').textContent = description;
+    // 处理表情图像显示
+    if (emoji.isSpecial || emoji.image) {
+        modalEmojiImage.innerHTML = '';
+        const img = document.createElement('img');
+        img.src = emoji.image || `emoji_png/${emoji.name.toLowerCase().replace(/\s+/g, '_')}.png`;
+        img.alt = emoji.name;
+        img.className = 'h-24 w-24 object-contain';
+        modalEmojiImage.appendChild(img);
+    } else {
+        modalEmojiImage.textContent = emoji.emoji;
+    }
     
-    // TikTok用法
-    const tiktokUsage = emoji.tiktokUsage || `在TikTok中，这个表情常用于${emoji.category === 'happy' ? '表达开心和愉悦的情绪' : emoji.category === 'sad' ? '表达伤心和难过的情绪' : emoji.category === 'love' ? '表达爱意和喜欢' : emoji.category === 'angry' ? '表达生气和不满' : '各种场合'}。`;
-    document.getElementById('modalEmojiTikTokUsage').textContent = tiktokUsage;
+    modalEmojiUnicode.textContent = emoji.unicode || '自定义';
+    modalEmojiCategory.textContent = emoji.category || '其他';
+    modalEmojiTrending.textContent = emoji.trending ? '是' : '否';
+    modalEmojiDescription.textContent = emoji.description || '标准TikTok表情。';
+    modalEmojiTikTokUsage.textContent = emoji.tiktokUsage || '通常用于TikTok评论和视频中。';
     
-    // 绑定按钮事件
-    document.getElementById('modalCopyEmoji').onclick = () => copyEmoji(emoji.emoji);
-    document.getElementById('modalDownloadEmoji').onclick = () => downloadEmoji(emoji.emoji);
+    // 设置复制按钮
+    document.getElementById('modalCopyEmoji').onclick = () => {
+        copyEmoji(emoji.emoji);
+    };
     
-    // 显示模态框
+    // 设置下载按钮
+    document.getElementById('modalDownloadEmoji').onclick = () => {
+        downloadEmoji(emoji);
+    };
+    
+    // 显示弹窗
     modal.classList.remove('hidden');
 }
 
 // 更新表情计数
 function updateEmojiCount(count) {
-    document.getElementById('emojiCount').textContent = `找到 ${count} 个表情`;
+    document.getElementById('emojiCount').textContent = `显示 ${count} 个表情${count !== 1 ? 's' : ''}`;
 }
 
-// 显示提示框
+// 显示提示消息
 function showToast(message, duration = 3000) {
     const toast = document.getElementById('toast');
     toast.textContent = message;
     
-    // 显示提示框
-    toast.classList.remove('translate-y-10', 'opacity-0');
-    toast.classList.add('translate-y-0', 'opacity-100');
+    // 显示提示
+    toast.classList.remove('opacity-0', 'translate-y-10');
+    toast.classList.add('opacity-100', 'translate-y-0');
     
-    // 设置定时器，自动隐藏提示框
+    // 持续时间后隐藏提示
     setTimeout(() => {
-        toast.classList.remove('translate-y-0', 'opacity-100');
-        toast.classList.add('translate-y-10', 'opacity-0');
+        toast.classList.remove('opacity-100', 'translate-y-0');
+        toast.classList.add('opacity-0', 'translate-y-10');
     }, duration);
 }
 
-// 更新关键词详情
+// 更新关键词信息
 function updateKeywordInfo(keyword) {
+    const keywordInfoContent = document.getElementById('keywordInfoContent');
     const keywordLower = keyword.toLowerCase();
-    let infoContent = '';
     
-    // 根据不同关键词提供不同内容
-    if (keywordLower.includes('热门') || keywordLower.includes('trending')) {
-        infoContent = `
-            <p class="mb-4">TikTok热门表情是指在平台上频繁使用并广受欢迎的表情符号。这些表情经常出现在评论区、视频回复和用户之间的互动中。</p>
-            <p class="mb-4">热门表情通常能够更好地表达情感，增加评论的可见度。使用热门表情可以让您的互动更紧跟潮流，提高与其他TikTok用户的共鸣。</p>
-            <p>我们定期更新热门表情列表，确保您能够获取到最新的流行表情。</p>
+    // 默认内容
+    let content = `
+        <p class="mb-4">探索与"${keyword}"相关的最佳TikTok表情。我们的集合包括TikTok评论、视频和个人简介中使用的流行表情。</p>
+        <p class="mb-4">您可以轻松地单击复制这些表情，或将它们下载为高质量的PNG图像，以用于您的内容创作。</p>
+    `;
+    
+    // 针对特定关键词的内容
+    if (keywordLower.includes('trending') || keywordLower.includes('popular')) {
+        content = `
+            <p class="mb-4">热门TikTok表情是当前平台上最流行的表情。这些表情经常出现在病毒视频、评论中，并被流行创作者使用。</p>
+            <p class="mb-4">通过在您的内容中使用这些表情，跟上最新的TikTok趋势。只需点击任何表情即可将其复制到剪贴板。</p>
         `;
-    } else if (keywordLower.includes('特殊') || keywordLower.includes('special')) {
-        infoContent = `
-            <p class="mb-4">TikTok特殊表情是指那些不同于普通单个表情符号的组合或独特表情。这些特殊表情通常由多个Unicode字符组合而成，创造出独特的视觉效果。</p>
-            <p class="mb-4">特殊表情在TikTok上非常受欢迎，因为它们能够表达复杂的情感或成为特定梗的一部分。例如"👁️👄👁️"成为了表示震惊或不知所措的热门表情。</p>
-            <p>使用这些特殊表情可以让您的评论脱颖而出，增加被创作者注意到的机会。</p>
+    } else if (keywordLower.includes('special')) {
+        content = `
+            <p class="mb-4">特殊TikTok表情包括在TikTok上流行的独特组合和自定义表情。这些特殊表情可以帮助您的评论和视频脱颖而出。</p>
+            <p class="mb-4">这些特殊表情组合在TikTok文化中有特定的含义。使用它们以更真实的方式与TikTok社区联系。</p>
         `;
-    } else if (keywordLower.includes('开心') || keywordLower.includes('happy')) {
-        infoContent = `
-            <p class="mb-4">开心类表情是TikTok上最常用的表情之一，用于表达各种积极情绪，如喜悦、愉快、兴奋和满足。</p>
-            <p class="mb-4">从基本的笑脸😊到大笑🤣，再到带有特殊元素的组合表情，开心类表情能够有效地传达您对视频内容的积极反应。</p>
-            <p>在TikTok上使用开心表情是与创作者建立良好互动的简单方式，也能增加您的评论获得回复的可能性。</p>
-        `;
-    } else if (keywordLower.includes('伤心') || keywordLower.includes('sad')) {
-        infoContent = `
-            <p class="mb-4">伤心类表情在TikTok上用于表达各种消极情绪，如悲伤、失望、遗憾或同情。</p>
-            <p class="mb-4">从流泪的表情😢到更夸张的大哭表情😭，这些表情符号能够让您表达对感人内容的情感共鸣或对不幸事件的同情。</p>
-            <p>在TikTok的情感视频或分享艰难经历的内容下，适当使用伤心表情能够表达您的理解和支持。</p>
-        `;
-    } else {
-        // 默认内容
-        infoContent = `
-            <p class="mb-4">TikTok表情是增强您在平台上互动体验的重要元素。无论是评论、私信还是创建视频，恰当的表情符号都能帮助您更好地表达情感和想法。</p>
-            <p class="mb-4">我们的集合包含了所有流行的TikTok表情，从标准Unicode表情到特殊的组合表情。您可以轻松复制这些表情并直接在TikTok上使用。</p>
-            <p>定期查看我们的更新，掌握最新的表情潮流，让您的TikTok互动更加丰富多彩。</p>
+    } else if (keywordLower.includes('download') || keywordLower.includes('png')) {
+        content = `
+            <p class="mb-4">将TikTok表情下载为高质量PNG图像，用于您的内容创作。这些图像非常适合缩略图、叠加层和其他创意项目。</p>
+            <p class="mb-4">所有PNG图像都是透明的，并针对数字使用进行了优化。点击任何表情上的下载按钮，将其保存到您的设备中。</p>
         `;
     }
     
-    document.getElementById('keywordInfoContent').innerHTML = infoContent;
+    keywordInfoContent.innerHTML = content;
 }
 
 // 加载相关关键词
 function loadRelatedKeywords(currentKeyword) {
-    // 定义相关关键词映射
-    const keywordRelations = {
-        '热门表情': ['特殊表情', '开心表情', '伤心表情', 'TikTok梗', '流行表情'],
-        '特殊表情': ['组合表情', '创意表情', '热门表情', 'TikTok专属表情', '表情符号艺术'],
-        '开心表情': ['笑脸表情', '欢乐表情', '喜悦表情', '积极表情', '大笑表情'],
-        '伤心表情': ['哭泣表情', '失望表情', '悲伤表情', '抑郁表情', '难过表情'],
-        '爱心表情': ['浪漫表情', '爱情表情', '喜欢表情', '心动表情', '表白表情'],
-        '生气表情': ['愤怒表情', '不满表情', '恼火表情', '暴怒表情', '烦躁表情']
-    };
-    
-    // 查找当前关键词的相关关键词
+    const container = document.getElementById('relatedKeywordsContainer');
+    const keywordLower = currentKeyword.toLowerCase();
     let relatedKeywords = [];
-    const currentKeywordLower = currentKeyword.toLowerCase();
     
-    // 根据当前关键词匹配
-    for (const [key, values] of Object.entries(keywordRelations)) {
-        if (currentKeywordLower.includes(key.toLowerCase())) {
-            relatedKeywords = values;
-            break;
-        }
+    // 根据当前关键词获取相关关键词
+    if (keywordLower.includes('trending') || keywordLower.includes('popular')) {
+        relatedKeywords = ['viral tiktok emojis', 'new tiktok emojis', 'tiktok emoji trends 2023', 'most used tiktok emojis'];
+    } else if (keywordLower.includes('special')) {
+        relatedKeywords = ['tiktok secret emojis', 'unique tiktok emojis', 'custom tiktok emojis', 'rare tiktok emojis'];
+    } else if (keywordLower.includes('happy') || keywordLower.includes('smile')) {
+        relatedKeywords = ['tiktok smile emojis', 'tiktok laugh emojis', 'tiktok joy emojis', 'tiktok funny emojis'];
+    } else if (keywordLower.includes('sad') || keywordLower.includes('cry')) {
+        relatedKeywords = ['tiktok crying emojis', 'tiktok tears emojis', 'tiktok sad face emojis', 'tiktok emotional emojis'];
+    } else if (keywordLower.includes('love')) {
+        relatedKeywords = ['tiktok heart emojis', 'tiktok romantic emojis', 'tiktok kiss emojis', 'tiktok couple emojis'];
+    } else if (keywordLower.includes('download') || keywordLower.includes('png')) {
+        relatedKeywords = ['tiktok emoji images', 'tiktok emoji stickers', 'transparent tiktok emojis', 'high quality tiktok emojis'];
+    } else {
+        // 默认相关关键词
+        relatedKeywords = ['trending tiktok emojis', 'special tiktok emojis', 'tiktok emoji meanings', 'tiktok emoji download'];
     }
     
-    // 如果没有找到匹配项，使用默认相关关键词
-    if (relatedKeywords.length === 0) {
-        relatedKeywords = ['热门表情', '特殊表情', '开心表情', '伤心表情', '爱心表情', '生气表情'];
-    }
-    
-    // 更新相关关键词容器
-    const relatedKeywordsContainer = document.getElementById('relatedKeywordsContainer');
-    relatedKeywordsContainer.innerHTML = '';
-    
+    // 创建链接
+    container.innerHTML = '';
     relatedKeywords.forEach(keyword => {
         const link = document.createElement('a');
         link.href = `keyword-template.html?q=${encodeURIComponent(keyword)}`;
         link.className = 'bg-gray-700 px-3 py-1 rounded-full text-sm hover:bg-gray-600 transition';
         link.textContent = keyword;
-        relatedKeywordsContainer.appendChild(link);
+        container.appendChild(link);
     });
 }
 
-// 加载热门关键词
+// 加载流行关键词
 function loadPopularKeywords() {
-    // 定义热门关键词
+    const container = document.getElementById('popularKeywordsContainer');
     const popularKeywords = [
-        '热门表情',
-        '特殊表情',
-        'TikTok梗',
-        '组合表情',
-        '笑脸表情',
-        '哭泣表情',
-        '爱心表情',
-        '生气表情',
-        '惊讶表情',
-        '表情符号艺术'
+        'trending tiktok emojis',
+        'special tiktok emojis',
+        'happy tiktok emojis',
+        'love tiktok emojis',
+        'sad tiktok emojis',
+        'tiktok emoji meanings',
+        'tiktok emoji png download',
+        'tiktok secret emojis'
     ];
     
-    // 更新热门关键词容器
-    const popularKeywordsContainer = document.getElementById('popularKeywordsContainer');
-    popularKeywordsContainer.innerHTML = '';
-    
+    // 创建链接
+    container.innerHTML = '';
     popularKeywords.forEach(keyword => {
         const link = document.createElement('a');
         link.href = `keyword-template.html?q=${encodeURIComponent(keyword)}`;
         link.className = 'bg-gray-700 px-3 py-1 rounded-full text-sm hover:bg-gray-600 transition';
         link.textContent = keyword;
-        popularKeywordsContainer.appendChild(link);
+        container.appendChild(link);
     });
 }
 
 // 设置事件监听器
 function setupEventListeners() {
-    // 搜索表单提交
-    const searchInput = document.getElementById('searchInput');
-    const searchButton = document.getElementById('searchButton');
-    
-    searchButton.addEventListener('click', () => {
-        const searchTerm = searchInput.value.trim();
-        if (searchTerm) {
-            window.location.href = `keyword-template.html?q=${encodeURIComponent(searchTerm)}`;
-        }
-    });
-    
-    searchInput.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter') {
-            const searchTerm = searchInput.value.trim();
-            if (searchTerm) {
-                window.location.href = `keyword-template.html?q=${encodeURIComponent(searchTerm)}`;
-            }
-        }
-    });
-    
-    // 过滤器变化
-    const filterElements = [
-        document.getElementById('categoryFilter'),
-        document.getElementById('shapeFilter'),
-        document.getElementById('sortOption'),
-        document.getElementById('displayOption')
-    ];
-    
-    filterElements.forEach(element => {
-        element.addEventListener('change', () => {
-            // 获取URL中的关键词参数
-            const urlParams = new URLSearchParams(window.location.search);
-            const keyword = urlParams.get('q') || '热门表情';
-            
-            // 获取并显示表情
-            fetchAndDisplayEmojis(keyword);
-        });
-    });
-    
-    // 视图切换按钮
-    const gridViewBtn = document.getElementById('gridViewBtn');
-    const listViewBtn = document.getElementById('listViewBtn');
-    
-    gridViewBtn.addEventListener('click', () => {
-        document.getElementById('emojiContainer').classList.remove('flex-col');
-        document.getElementById('emojiContainer').classList.add('grid');
-        gridViewBtn.classList.add('bg-pink-500');
-        gridViewBtn.classList.remove('bg-gray-700');
-        listViewBtn.classList.add('bg-gray-700');
-        listViewBtn.classList.remove('bg-pink-500');
-    });
-    
-    listViewBtn.addEventListener('click', () => {
-        document.getElementById('emojiContainer').classList.remove('grid');
-        document.getElementById('emojiContainer').classList.add('flex-col');
-        listViewBtn.classList.add('bg-pink-500');
-        listViewBtn.classList.remove('bg-gray-700');
-        gridViewBtn.classList.add('bg-gray-700');
-        gridViewBtn.classList.remove('bg-pink-500');
-    });
-    
-    // 关闭模态框
+    // 关闭弹窗
     document.getElementById('closeModal').addEventListener('click', () => {
         document.getElementById('emojiModal').classList.add('hidden');
     });
     
-    // 点击模态框外部关闭模态框
-    document.getElementById('emojiModal').addEventListener('click', (e) => {
-        if (e.target === document.getElementById('emojiModal')) {
-            document.getElementById('emojiModal').classList.add('hidden');
-        }
+    // 类别筛选器
+    document.getElementById('categoryFilter').addEventListener('change', function() {
+        // 获取当前关键词
+        const urlParams = new URLSearchParams(window.location.search);
+        const keyword = urlParams.get('q') || 'trending emojis';
+        
+        // 重新加载表情
+        fetchAndDisplayEmojis(keyword);
+    });
+    
+    // 形状筛选器
+    document.getElementById('shapeFilter').addEventListener('change', function() {
+        // 获取当前关键词
+        const urlParams = new URLSearchParams(window.location.search);
+        const keyword = urlParams.get('q') || 'trending emojis';
+        
+        // 重新加载表情
+        fetchAndDisplayEmojis(keyword);
+    });
+    
+    // 排序选项
+    document.getElementById('sortOption').addEventListener('change', function() {
+        // 获取当前关键词
+        const urlParams = new URLSearchParams(window.location.search);
+        const keyword = urlParams.get('q') || 'trending emojis';
+        
+        // 重新加载表情
+        fetchAndDisplayEmojis(keyword);
+    });
+    
+    // 显示选项
+    document.getElementById('displayOption').addEventListener('change', function() {
+        // 获取当前关键词
+        const urlParams = new URLSearchParams(window.location.search);
+        const keyword = urlParams.get('q') || 'trending emojis';
+        
+        // 重新加载表情
+        fetchAndDisplayEmojis(keyword);
+    });
+    
+    // 搜索输入
+    const searchInput = document.getElementById('searchInput');
+    if (searchInput) {
+        searchInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                const keyword = searchInput.value.trim();
+                if (keyword) {
+                    window.location.href = `keyword-template.html?q=${encodeURIComponent(keyword)}`;
+                }
+            }
+        });
+    }
+    
+    // 搜索按钮
+    const searchButton = document.getElementById('searchButton');
+    if (searchButton) {
+        searchButton.addEventListener('click', function() {
+            const keyword = searchInput.value.trim();
+            if (keyword) {
+                window.location.href = `keyword-template.html?q=${encodeURIComponent(keyword)}`;
+            }
+        });
+    }
+    
+    // 列表/网格视图切换
+    document.getElementById('gridViewBtn').addEventListener('click', function() {
+        const container = document.getElementById('emojiContainer');
+        container.className = 'grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 mb-8';
+        
+        this.classList.add('bg-pink-500');
+        this.classList.remove('bg-gray-700');
+        document.getElementById('listViewBtn').classList.add('bg-gray-700');
+        document.getElementById('listViewBtn').classList.remove('bg-pink-500');
+    });
+    
+    document.getElementById('listViewBtn').addEventListener('click', function() {
+        const container = document.getElementById('emojiContainer');
+        container.className = 'flex flex-col gap-4 mb-8';
+        
+        this.classList.add('bg-pink-500');
+        this.classList.remove('bg-gray-700');
+        document.getElementById('gridViewBtn').classList.add('bg-gray-700');
+        document.getElementById('gridViewBtn').classList.remove('bg-pink-500');
     });
 } 
